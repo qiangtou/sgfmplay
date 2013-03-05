@@ -1,0 +1,78 @@
+
+<body>
+
+<div id="d1">
+name:<span class="name"></span>
+<br/>
+age:<span class="age"></span>
+<br/>
+<label ><input type="text" name="" class="changeName"/>按回车改变name</label>
+</div>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="sgfmmvc.js"></script>
+<script type="text/javascript" >
+var a = new sgfmmvc.Model({
+		idArr:"tId",
+		defaults : {
+			'name' : "tom",
+			'age' : 6666,
+			'tId' : 99
+		}
+	});
+
+var v = new sgfmmvc.View({
+		$ : $('#d1'),
+		model : a,
+		init : function () {
+			var $this=this.$;
+			this.name = $this.children('.name');
+			this.age = $this.children('.age');
+			this.cn = $this.find('.changeName');
+
+			this.listenTo(this.model, "change:name", this.cName);
+			//this.listenTo(this.model, "change:age", this.cAge);
+			this.listenTo(this.model, "change", this.any);
+			this.render();
+		},
+		render : function () {
+			//view的绘制
+			this.name.html(this.model.get('name'));
+			this.age.html(this.model.get('age'));
+		},
+		/*
+		 *事件的批量绑定,
+		 *字符串为自身，如"print"则会调用this.print
+		 *也可绑定函数
+		 */
+		events : {
+			".changeName keypress" : "changeName",
+			".name click" : "print",
+			".age click" : function (e) {
+				this.print(e);
+			}
+		},
+		changeName : function (e) {
+			if (e.keyCode == 13) {
+				this.model.set("name", this.cn.val());
+			}
+		},
+		print : function (e) {
+			console.log(e.target.innerHTML);
+		},
+		cAge : function () {
+			console.log("cAge");
+		},
+		any : function () {
+			console.log("any");
+		},
+		cName : function (key, oldV, newV) {
+			console.log("cName");
+			if (this[key]) {
+				//TODO something!!!
+				this[key].html(newV);
+			}
+		}
+	});
+	</script>
+</body>

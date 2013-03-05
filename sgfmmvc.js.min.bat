@@ -1,0 +1,1 @@
+java -jar js.jar --js=sgfmmvc.js --js_output_file=sgfmmvc.min.js

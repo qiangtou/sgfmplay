@@ -1,0 +1,2534 @@
+body {
+	background: rgb(255, 255, 255); text-align: left; font-family: "Î¢ÈíÑÅºÚ", Verdana, Arial, Helvetica, sans-serif;
+}
+body {
+	margin: 0px; padding: 0px;
+}
+form {
+	margin: 0px; padding: 0px;
+}
+ul {
+	margin: 0px; padding: 0px;
+}
+dl {
+	margin: 0px; padding: 0px;
+}
+ol {
+	margin: 0px; padding: 0px;
+}
+dt {
+	margin: 0px; padding: 0px;
+}
+dd {
+	margin: 0px; padding: 0px;
+}
+ul {
+	list-style: none;
+}
+dl {
+	list-style: none;
+}
+ol {
+	list-style: none;
+}
+* {
+	font-size: 12px;
+}
+label {
+	vertical-align: middle; display: inline-block; _display: inline;
+}
+.a_clear {
+	
+}
+.a_clear::after {
+	height: 0px; overflow: hidden; clear: both; display: block; visibility: hidden; content: " ";
+}
+* html .a_clear {
+	height: 1%;
+}
+* + html .a_clear {
+	height: 1%;
+}
+.a_clear {
+	display: inline-block;
+}
+.clear {
+	height: 1px; line-height: 1px; overflow: hidden; clear: both; display: block;
+}
+a {
+	color: rgb(0, 0, 0); text-decoration: none;
+}
+a:hover {
+	color: rgb(255, 102, 0); text-decoration: underline; cursor: pointer;
+}
+.f369 {
+	color: rgb(51, 102, 153); text-decoration: none;
+}
+a.f369:link {
+	color: rgb(51, 102, 153); text-decoration: none;
+}
+a.f369:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.f090 {
+	color: rgb(0, 153, 0); text-decoration: none;
+}
+a.f090:link {
+	color: rgb(0, 153, 0); text-decoration: none;
+}
+a.f090:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.f69c {
+	color: rgb(102, 153, 204); text-decoration: none;
+}
+a.f69c:link {
+	color: rgb(102, 153, 204); text-decoration: none;
+}
+a.f69c:hover {
+	color: rgb(255, 102, 0); text-decoration: none;
+}
+.f39f {
+	color: rgb(51, 153, 255); text-decoration: underline;
+}
+a.f39f:link {
+	color: rgb(51, 153, 255); text-decoration: none;
+}
+a.f39f:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.f39f_n {
+	color: rgb(51, 153, 255); text-decoration: none;
+}
+a.f39f_n:link {
+	color: rgb(51, 153, 255); text-decoration: none;
+}
+a.f39f_n:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.fccc {
+	color: rgb(204, 204, 204); text-decoration: none;
+}
+a.fccc:link {
+	color: rgb(204, 204, 204); text-decoration: none;
+}
+a.fccc:hover {
+	color: rgb(0, 0, 0); text-decoration: none;
+}
+.f30 {
+	color: rgb(255, 51, 0); text-decoration: none;
+}
+a.f30:link {
+	color: rgb(255, 51, 0); text-decoration: none;
+}
+a.f30:hover {
+	color: rgb(0, 153, 255); text-decoration: underline;
+}
+.fred {
+	color: red; text-decoration: none;
+}
+a.fred:link {
+	color: red; text-decoration: none;
+}
+a.fred:hover {
+	color: rgb(0, 153, 255); text-decoration: underline;
+}
+.f900 {
+	color: rgb(153, 0, 0); text-decoration: none;
+}
+a.f900:link {
+	color: rgb(153, 0, 0); text-decoration: none;
+}
+a.f900:hover {
+	color: rgb(0, 153, 255); text-decoration: underline;
+}
+.fff {
+	color: rgb(255, 255, 255); text-decoration: none;
+}
+a.fff:link {
+	color: rgb(255, 255, 255); text-decoration: none;
+}
+a.fff:hover {
+	color: rgb(255, 255, 255); text-decoration: underline;
+}
+.f999 {
+	color: rgb(153, 153, 153); font-size: 12px; text-decoration: none;
+}
+a.f999:link {
+	color: rgb(153, 153, 153); text-decoration: none;
+}
+a.f999:hover {
+	color: rgb(153, 153, 153); text-decoration: underline;
+}
+.f666 {
+	color: rgb(102, 102, 102); font-size: 12px; text-decoration: none;
+}
+a.f666:link {
+	color: rgb(102, 102, 102); text-decoration: none;
+}
+a.f666:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.f666t {
+	background: url("../images/stime2.gif") no-repeat left; color: rgb(102, 102, 102); padding-left: 12px; font-size: 12px; text-decoration: none;
+}
+.userlogin {
+	background: url("../images/top_bg_s.gif") repeat-x; height: 28px; display: block; position: relative; z-index: 1;
+}
+.user_acing {
+	top: 0px; height: 28px; text-align: right; right: 5px; line-height: 28px; white-space: nowrap; position: absolute;
+}
+.user_acing label {
+	margin: 0px; padding: 0px; height: 28px; line-height: 28px;
+}
+.user_acing label slect {
+	margin: 0px; padding: 0px;
+}
+#wrap {
+	padding-left: 10px; min-width: 800px;
+}
+#wrap_help {
+	min-width: 800px;
+}
+#help_top {
+	background: url("../images/top_bg.gif") repeat-x left -11px; height: 66px; position: relative;
+}
+#help_logo {
+	background: url("../images/logo.gif") no-repeat left -10px; left: 0px; top: 0px; width: 207px; height: 60px; position: absolute;
+}
+#help_title {
+	left: 210px; top: 32px; height: 20px; color: rgb(51, 102, 153); line-height: 20px; font-size: 16px; font-weight: bold; position: absolute;
+}
+#help_language {
+	top: 32px; height: 20px; text-align: right; right: 10px; line-height: 20px; position: absolute;
+}
+#help_body {
+	padding: 10px;
+}
+.help_ol {
+	list-style: decimal; margin: 0px 0px 0px 20px; padding: 0px;
+}
+.help_ol li {
+	border-width: 1px; border-style: solid solid dashed; border-color: rgb(255, 255, 255) rgb(255, 255, 255) rgb(204, 204, 204); padding: 5px 8px; line-height: 18px; margin-bottom: 5px;
+}
+.help_ol li:hover {
+	border: 1px solid rgb(204, 204, 204);
+}
+.help_ol li .sub_num {
+	padding: 2px 0px 2px 10px; display: block;
+}
+.help_ol li .sub_num:hover {
+	color: red;
+}
+.help_ol li img {
+	display: block;
+}
+.help_ico {
+	background: url("../images/help_ico.gif") no-repeat left; padding: 0px 12px 0px 16px; height: 24px; line-height: 24px; font-weight: normal; float: right;
+}
+#wrap_g {
+	
+}
+#left_frame {
+	width: 190px; overflow: hidden;
+}
+#right_frame {
+	background: rgb(255, 255, 255); width: 99.6%; padding-top: 5px; min-width: 780px;
+}
+#user_info {
+	background: url("../images/top_bg.jpg") no-repeat left top; width: 190px; height: 45px; margin-bottom: 5px; z-index: -9999;
+}
+.nav {
+	padding: 5px 0px 0px 30px; position: relative; z-index: 1000;
+}
+.nav li {
+	margin: 0px; padding: 0px; float: left; position: relative;
+}
+.nav li a {
+	padding: 2px; color: rgb(51, 102, 153); text-decoration: none; display: block;
+}
+.nav li a:link {
+	padding: 2px; color: rgb(51, 102, 153); text-decoration: none; display: block;
+}
+.nav li a:active {
+	padding: 2px; color: rgb(51, 102, 153); text-decoration: none; display: block;
+}
+.nav li a:visited {
+	padding: 2px; color: rgb(51, 102, 153); text-decoration: none; display: block;
+}
+.nav li a:hover {
+	background: rgb(51, 102, 153); color: rgb(255, 255, 255);
+}
+#nav-one li:hover a {
+	background: rgb(51, 102, 153); padding: 2px; color: rgb(255, 255, 255);
+}
+#nav-one li.sfHover a {
+	background: rgb(51, 102, 153); padding: 2px; color: rgb(255, 255, 255);
+}
+#nav-one li:hover ul a {
+	background: rgb(51, 102, 153); color: rgb(255, 255, 255);
+}
+#nav-one li.sfHover ul a {
+	background: rgb(51, 102, 153); color: rgb(255, 255, 255);
+}
+#nav-one li:hover ul a:hover {
+	background: rgb(51, 102, 153); color: rgb(255, 102, 0);
+}
+#nav-one li.sfHover ul a:hover {
+	background: rgb(51, 102, 153); color: rgb(255, 102, 0);
+}
+.nav ul {
+	background: rgb(51, 102, 153); left: 0px; top: -999em; position: absolute;
+}
+.nav li:hover ul {
+	top: 16px;
+}
+.nav li.sfHover ul {
+	top: 16px;
+}
+.nav ul li {
+	padding: 0px; border: 0px currentColor; float: none;
+}
+.nav ul a {
+	text-align: left; color: rgb(255, 255, 255); border-bottom-color: currentColor; border-bottom-width: 0px; border-bottom-style: none; white-space: nowrap;
+}
+.nav ul a:hover {
+	color: rgb(0, 0, 0);
+}
+.menu_list {
+	background: rgb(255, 255, 255); border-top-color: rgb(75, 136, 172); border-right-color: rgb(75, 136, 172); border-left-color: rgb(75, 136, 172); border-top-width: 1px; border-right-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-left-style: solid;
+}
+.menu_player {
+	width: 188px; overflow: auto; border-bottom-color: rgb(75, 136, 172); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.menu_msg {
+	width: 188px;
+}
+.menu_list dl dt {
+	padding: 5px; color: rgb(51, 102, 153); line-height: 16px; font-weight: bold;
+}
+.menu_list dl dt:hover {
+	background: rgb(255, 255, 204);
+}
+.menu_list dl dt.main_tit {
+	background: rgb(37, 138, 210); color: rgb(255, 255, 255);
+}
+.category {
+	border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.hot {
+	border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.hot a {
+	color: rgb(255, 51, 0);
+}
+.sub_0 {
+	padding-left: 5px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.sub_0 a {
+	color: rgb(51, 102, 153); padding-left: 5px;
+}
+.sub_1 {
+	background: rgb(233, 235, 243); padding-left: 5px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.sub_1 a {
+	color: rgb(102, 102, 102); padding-left: 5px;
+}
+.sub_2 {
+	background: rgb(255, 255, 255); padding-left: 5px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.sub_2 a {
+	color: rgb(51, 102, 153); padding-left: 5px;
+}
+.sub_3 {
+	margin: 0px 5px 0px 15px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed; display: block;
+}
+.sub_3 a {
+	font-weight: normal;
+}
+.sub_4 {
+	border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.sub_4 a {
+	padding: 0px 5px; font-weight: normal;
+}
+.sub_5 {
+	margin: 0px 5px 0px 15px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed; display: block;
+}
+.sub_5 a {
+	color: rgb(51, 102, 153); font-weight: normal;
+}
+.hot_img {
+	background: url("../images/hot.gif") no-repeat left; width: 28px; height: 16px; display: inline-block;
+}
+.new_img {
+	background: url("../images/new.gif") no-repeat left; width: 28px; height: 16px; display: inline-block;
+}
+.new_img_2 {
+	background: url("../images/new1.gif") no-repeat left; width: 26px; height: 16px; display: inline-block;
+}
+.active_ball {
+	background: url("../images/activeball.gif") no-repeat center; width: 16px; height: 16px; display: inline-block;
+}
+.active_lock {
+	background: url("../images/whole_lock.gif") no-repeat center; width: 16px; height: 16px; display: inline-block;
+}
+.menu_list dl dd {
+	line-height: 18px;
+}
+.menu_list dl dd.msg {
+	height: 24px; line-height: 24px; padding-left: 10px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.loading {
+	background: url("../images/loading.gif") no-repeat 15px rgb(255, 255, 255); height: 22px; color: rgb(204, 204, 204); padding-top: 6px; padding-left: 40px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.errinfo {
+	background: url("../images/errinfo.gif") no-repeat 15px rgb(255, 255, 255); height: 22px; color: red; padding-top: 6px; padding-left: 40px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.adad {
+	margin-bottom: 5px;
+}
+.adad a img {
+	border: currentColor;
+}
+dl.manage_menu {
+	padding: 2px 10px 5px; color: rgb(51, 102, 153); _padding: 6px 10px 5px 10px;
+}
+dl.manage_menu dt {
+	margin: 5px 0px; height: 28px; color: rgb(51, 102, 153); line-height: 28px; padding-left: 20px; font-weight: bold; border-bottom-color: rgb(217, 230, 240); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+dl.manage_menu dt span {
+	background: url("../images/ico.gif") no-repeat; left: 0px; top: 6px; width: 16px; height: 16px; position: absolute;
+}
+dl.manage_menu dt span.m1 {
+	
+}
+dl.manage_menu dt span.s1 {
+	background-position: -20px top;
+}
+dl.manage_menu dd {
+	margin: 0px 5px 0px 10px; height: 23px; line-height: 23px; position: relative;
+}
+dl.manage_menu dd span {
+	background: url("../images/ico.gif") no-repeat; left: 0px; top: 4px; width: 14px; height: 14px; position: absolute;
+}
+dl.manage_menu dd span.m11 {
+	background-position: left -20px;
+}
+dl.manage_menu dd span.m12 {
+	background-position: left -40px;
+}
+dl.manage_menu dd span.m13 {
+	background-position: left -60px;
+}
+dl.manage_menu dd span.m14 {
+	background-position: left -80px;
+}
+dl.manage_menu dd span.s11 {
+	background-position: -20px -20px;
+}
+dl.manage_menu dd span.s12 {
+	background-position: -20px -40px;
+}
+dl.manage_menu dd a {
+	color: rgb(51, 102, 153); padding-left: 20px; text-decoration: none; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid; display: block; white-space: nowrap;
+}
+dl.manage_menu dd a:hover {
+	height: 23px; color: rgb(255, 102, 0); line-height: 23px; text-decoration: none; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+dl.manage_menu dd.ons a {
+	height: 23px; color: rgb(51, 102, 153); line-height: 23px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+#play_info_index {
+	background: url("../images/sr_bar.gif") repeat-x; border: 1px solid rgb(137, 178, 210); width: 780px; height: 38px; overflow: hidden; margin-bottom: 5px; position: relative;
+}
+#play_info {
+	background: url("../images/sr_bar.gif") repeat-x; border: 1px solid rgb(137, 178, 210); height: 38px; overflow: hidden; margin-right: 8px; margin-bottom: 5px; position: relative; min-width: 780px;
+}
+#play_info_all {
+	background: url("../images/sr_bar.gif") repeat-x left; padding: 0px 10px; border: 1px solid rgb(137, 178, 210); height: 27px; line-height: 27px; overflow: hidden; margin-top: 7px; position: relative; min-width: 780px;
+}
+#play_info_playlist {
+	background: url("../images/sr_bar.gif") repeat-x left; padding: 0px 10px; border: 1px solid rgb(137, 178, 210); height: 27px; line-height: 27px; overflow: hidden; margin-top: 7px; min-width: 780px;
+}
+#play_info_all .right_ac {
+	top: 0px; height: 27px; right: 4px; line-height: 27px; vertical-align: middle; display: inline-block; position: absolute; _top: 2px;
+}
+#play_info_all .right_ac .selected {
+	background: url("../images/page_copy.gif") no-repeat left; padding-left: 18px;
+}
+#play_info_all .right_ac .selected a {
+	border-bottom-color: rgb(153, 153, 153); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+#play_info_all .right_ac .refresh_top {
+	padding: 0px 20px 0px 10px;
+}
+#play_info_playlist .right_ac {
+	height: 27px; line-height: 27px; vertical-align: middle; float: right; display: inline-block;
+}
+.play_frame_tit {
+	background: url("../images/list_bg.jpg") repeat-x left top; height: 30px; color: rgb(255, 255, 255); line-height: 30px; position: relative;
+}
+.play_frame_tit .tit_L {
+	background: url("../images/list_bg.jpg") no-repeat left -30px; left: 0px; top: 0px; height: 30px; position: absolute;
+}
+.play_frame_tit .tit_L .tit_h {
+	background: url("../images/list_bg.jpg") no-repeat left -60px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: bold; white-space: nowrap;
+}
+.play_frame_tit .tit_L .tit_h_c {
+	background: url("../images/list_bg.jpg") no-repeat left -90px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; white-space: nowrap;
+}
+.play_frame_tit .tit_R {
+	background: url("../images/list_bg.jpg") no-repeat right -120px; height: 30px; text-align: right; padding-right: 15px;
+}
+.play_frame_tit .tit_R .play_data {
+	margin: 0px; height: 16px; color: rgb(255, 255, 255); line-height: 16px; overflow: hidden; display: inline-block;
+}
+.play_frame_tit .tit_R .refresh {
+	background: url("../images/top_bg.jpg") no-repeat -224px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.play_frame_tit .palybe_1 {
+	background: url("../images/playbe_ico.gif") no-repeat bottom; top: -5px; width: 200px; height: 24px; text-align: center; right: 430px; line-height: 24px; overflow: hidden; margin-top: 7px; display: inline-block; position: absolute;
+}
+.play_frame_tit .palybe_2 {
+	background: url("../images/playbe_ico.gif") no-repeat bottom; top: -5px; width: 200px; height: 24px; text-align: center; right: 60px; line-height: 24px; overflow: hidden; margin-top: 7px; display: inline-block; position: absolute;
+}
+.play_frame_tit .tit_R .refresh_none {
+	background: url("../images/top_bg.jpg") no-repeat -282px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.gp_frame_tit {
+	background: url("../images/list_bg3.jpg") repeat-x left top; height: 30px; color: rgb(255, 255, 255); line-height: 30px; position: relative;
+}
+.gp_frame_tit .tit_L {
+	background: url("../images/list_bg3.jpg") no-repeat left -30px; left: 0px; top: 0px; height: 30px; position: absolute;
+}
+.gp_frame_tit .tit_L .tit_h {
+	background: url("../images/list_bg3.jpg") no-repeat left -60px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: bold; white-space: nowrap;
+}
+.gp_frame_tit .tit_L .tit_h_c {
+	background: url("../images/list_bg3.jpg") no-repeat left -90px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; white-space: nowrap;
+}
+.gp_frame_tit .tit_R {
+	background: url("../images/list_bg3.jpg") no-repeat right -120px; height: 30px; text-align: right; padding-right: 15px;
+}
+.gp_frame_tit .tit_R .play_data {
+	margin: 0px; height: 16px; color: rgb(255, 255, 255); line-height: 16px; overflow: hidden; display: inline-block;
+}
+.gp_frame_tit .tit_R .refresh {
+	background: url("../images/top_bg.jpg") no-repeat -224px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.gp_frame_tit .palybe_1 {
+	background: url("../images/playbe_ico.gif") no-repeat bottom; top: -5px; width: 200px; height: 24px; text-align: center; right: 430px; line-height: 24px; overflow: hidden; margin-top: 7px; display: inline-block; position: absolute;
+}
+.gp_frame_tit .palybe_2 {
+	background: url("../images/playbe_ico.gif") no-repeat bottom; top: -5px; width: 200px; height: 24px; text-align: center; right: 60px; line-height: 24px; overflow: hidden; margin-top: 7px; display: inline-block; position: absolute;
+}
+.gp_frame_tit .tit_R .refresh_none {
+	background: url("../images/top_bg.jpg") no-repeat -282px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.play_frame_tit_lock {
+	background: url("../images/list_bg_lock.jpg") repeat-x left top; height: 30px; color: rgb(255, 255, 255); line-height: 30px; position: relative;
+}
+.play_frame_tit_lock .tit_L {
+	background: url("../images/list_bg_lock.jpg") no-repeat left -30px; left: 0px; top: 0px; height: 30px; position: absolute;
+}
+.play_frame_tit_lock .tit_L .tit_h {
+	background: url("../images/list_bg_lock.jpg") no-repeat left -60px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: normal; white-space: nowrap;
+}
+.play_frame_tit_lock .tit_L .tit_h_c {
+	background: url("../images/list_bg_lock.jpg") no-repeat left -90px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: normal; white-space: nowrap;
+}
+.play_frame_tit_lock .tit_R {
+	background: url("../images/list_bg_lock.jpg") no-repeat right -120px; height: 30px; text-align: right; padding-right: 15px;
+}
+.play_frame_tit_lock .tit_R .play_data {
+	margin: 0px; height: 16px; color: rgb(255, 255, 255); line-height: 16px; overflow: hidden; display: inline-block;
+}
+.play_frame_tit_lock .tit_R .refresh {
+	background: url("../images/top_bg.jpg") no-repeat -224px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.play_frame_tit_lock .tit_R .refresh_none {
+	background: url("../images/top_bg.jpg") no-repeat -282px -29px; width: 16px; height: 16px; line-height: 16px; overflow: hidden; margin-top: 7px; margin-left: 10px; display: inline-block;
+}
+.play_input_tit {
+	background: url("../images/list_bg.jpg") repeat-x left top; height: 30px; color: rgb(255, 255, 255); line-height: 30px; position: relative;
+}
+.play_input_tit .tit_L {
+	background: url("../images/list_bg.jpg") no-repeat left -30px; left: 0px; top: 0px; height: 30px; position: absolute;
+}
+.play_input_tit .tit_L .tit_h {
+	background: url("../images/list_bg.jpg") no-repeat left -90px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: normal;
+}
+.play_input_tit .tit_L .tit_h_c {
+	background: url("../images/list_bg.jpg") no-repeat left -60px; margin: 0px 0px 0px 15px; padding: 0px 0px 0px 20px; font-size: 12px; font-weight: normal;
+}
+.play_input_tit .tit_R {
+	background: url("../images/list_bg.jpg") no-repeat right -120px; height: 30px; text-align: right; padding-right: 15px;
+}
+.play_input_tit .tit_R .refresh {
+	background: url("../images/top_bg.jpg") no-repeat -224px -29px; width: 16px; height: 16px; overflow: hidden; margin-top: 7px; display: inline-block;
+}
+.play_input_tit .tit_R .refresh a {
+	width: 16px; display: block;
+}
+.play_input_tit .tit_R .refresh a:hover {
+	text-decoration: none;
+}
+.h_select {
+	left: 12px; top: 9px; height: 20px; line-height: 20px; font-size: 12px; position: absolute;
+}
+.h_player {
+	margin: 0px; padding: 0px 0px 0px 15px; height: 40px; line-height: 40px; font-size: 14px; font-weight: normal;
+}
+.ac_mag {
+	background: rgb(255, 255, 153); border: 1px solid rgb(255, 204, 102); height: 26px; text-align: center; color: rgb(0, 0, 0); line-height: 26px; margin-bottom: 5px;
+}
+.sub_select_h {
+	top: 9px; height: 20px; text-align: right; right: 10px; line-height: 20px; position: absolute;
+}
+.quick_play {
+	width: 782px; clear: both; margin-bottom: 10px;
+}
+.quick_body {
+	border: 1px solid rgb(204, 204, 204); height: 179px; margin-top: 1px;
+}
+.hot_body {
+	background: rgb(255, 255, 255); width: 388px; height: 179px; overflow: hidden; float: left;
+}
+.hot_ul li {
+	background: url("../images/list_bg.gif") repeat-x left -120px; width: 388px; height: 30px; line-height: 30px; overflow: hidden; float: right;
+}
+.hot_ul li span {
+	padding-left: 5px; display: inline-block;
+}
+.hot_ul li a {
+	padding-left: 10px; border-right-color: rgb(204, 204, 204); border-right-width: 1px; border-right-style: solid; display: block;
+}
+.hot_ul li a span {
+	color: red; padding-right: 6px; font-weight: normal; float: right; display: inline-block;
+}
+.hot_ul li a:hover {
+	background: url("../images/list_bg.gif") repeat-x left -150px; color: rgb(0, 153, 255); text-decoration: none; border-right-color: rgb(204, 204, 204); border-right-width: 1px; border-right-style: solid;
+}
+.hot_ul li a:hover span {
+	color: rgb(255, 51, 0);
+}
+.hot_ul li.ons {
+	background: url("../images/list_bg.gif") repeat-x left -150px; color: rgb(0, 102, 255); text-decoration: none;
+}
+.hot_ul li.ons a {
+	color: rgb(0, 102, 255); text-decoration: none; border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid;
+}
+.hot_ul li.ons a span {
+	color: rgb(255, 102, 0);
+}
+.hot_ul li.ons a:hover {
+	border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid;
+}
+.about_play {
+	background: rgb(255, 246, 234); margin: 5px 5px 2px; padding: 5px 8px; color: rgb(0, 0, 0); line-height: 16px;
+}
+.more_play {
+	margin: 0px 5px; padding: 0px 8px 10px; line-height: 16px;
+}
+.player_list_ul li {
+	margin: 0px 10px; width: 362px; height: 22px; line-height: 22px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.player_list_ul li:hover {
+	background: rgb(255, 255, 204);
+}
+.player_list_ul li .bn {
+	background: url("../images/date_ico1.gif") no-repeat left 4px; width: 16px; height: 20px; display: inline-block;
+}
+.player_list_ul li .bn a {
+	width: 16px; display: block;
+}
+.player_list_ul li .bn a:hover {
+	text-decoration: none;
+}
+.player_list_ul li.time {
+	border: 1px solid rgb(255, 255, 255); color: rgb(102, 102, 102);
+}
+.player_list_ul li.time:hover {
+	background: rgb(255, 255, 255);
+}
+.player_list_ul li .other_th {
+	top: 1px; width: 60px; height: 19px; text-align: right; right: 100px; color: rgb(0, 102, 0); line-height: 19px; position: absolute;
+}
+.player_list_ul li .buy {
+	top: 1px; width: 60px; height: 19px; text-align: center; right: 40px; color: rgb(0, 0, 0); line-height: 19px; position: absolute;
+}
+.player_list_ul li .sell {
+	top: 1px; width: 60px; height: 19px; text-align: center; right: -10px; color: rgb(0, 0, 0); line-height: 19px; position: absolute;
+}
+.player_list_ul li .other_data {
+	background: url("../images/arrow_right.gif") no-repeat right; width: 60px; height: 19px; text-align: right; right: 100px; color: rgb(0, 102, 0); line-height: 19px; padding-right: 15px; position: absolute;
+}
+.player_list_ul li .buyon {
+	background: url("../images/top_bg.jpg") no-repeat -185px -1px; top: 1px; width: 45px; height: 20px; text-align: center; right: 45px; color: rgb(0, 0, 0); line-height: 20px; position: absolute;
+}
+.player_list_ul li .buyon a {
+	height: 20px; display: block;
+}
+.player_list_ul li .sellon {
+	background: url("../images/top_bg.jpg") no-repeat -233px -1px; top: 1px; width: 45px; height: 20px; text-align: center; right: -5px; line-height: 20px; position: absolute;
+}
+.player_list_ul li .sellon a {
+	height: 20px; display: block;
+}
+.ing_menu {
+	width: 200px; position: relative; z-index: 9999;
+}
+.tablist {
+	height: 30px; overflow: hidden; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.tablist ul {
+	padding-top: 1px;
+}
+.tablist ul li {
+	width: 99px; height: 30px; text-align: center; color: rgb(153, 153, 153); line-height: 30px; float: left; cursor: pointer; _padding-top: 8px; _overflow: hidden;
+}
+.tablist ul li img {
+	margin-right: 2px; vertical-align: middle;
+}
+.tablist ul li.ons {
+	background: rgb(204, 204, 204); color: rgb(51, 102, 153);
+}
+.ing_top {
+	background: url("../images/ing_top.gif") no-repeat left top; width: 200px; height: 45px; text-align: right; line-height: 50px; overflow: hidden;
+}
+.ing_top .backto {
+	background: url("../images/arrow_left.gif") no-repeat left; margin: 0px 10px 0px 0px; color: rgb(255, 255, 255); padding-left: 16px; text-decoration: none;
+}
+.ing_top .backto:hover {
+	color: rgb(0, 0, 0); padding-left: 18px;
+}
+.ing_action {
+	background: url("../images/ing_top.gif") no-repeat right bottom; top: 6px; width: 18px; height: 52px; right: -18px; overflow: hidden; position: absolute;
+}
+.active_open {
+	background: url("../images/active_top.gif") no-repeat left top; top: 8px; width: 18px; height: 60px; right: -18px; overflow: hidden; position: absolute; cursor: pointer;
+}
+.active_close {
+	background: url("../images/active_top.gif") no-repeat right top; top: 8px; width: 18px; height: 60px; right: -18px; overflow: hidden; position: absolute; cursor: pointer;
+}
+.ing_list {
+	background: rgb(255, 255, 255); border-width: medium 1px 1px; border-style: none solid solid; border-color: currentColor rgb(31, 84, 188) rgb(31, 84, 188); clear: both;
+}
+.activeing_list {
+	background: rgb(255, 255, 255); border-width: medium 1px 1px; border-style: none solid solid; border-color: currentColor rgb(139, 208, 233) rgb(139, 208, 233); clear: both;
+}
+.ing_player {
+	width: 198px; overflow: auto;
+}
+.ing_list dl dt {
+	padding: 5px; color: rgb(51, 102, 153); line-height: 16px; font-weight: bold;
+}
+.ing_list dl dt.category {
+	background: rgb(227, 227, 227);
+}
+.ing_list dl dt.main_tit {
+	background: rgb(97, 167, 219); color: rgb(255, 255, 255);
+}
+.ing_list dl dd {
+	line-height: 18px;
+}
+.ing_list dl dd.msg {
+	height: 24px; line-height: 24px; padding-left: 10px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+#right_g {
+	overflow: auto; margin-left: 25px;
+}
+.playing_about {
+	margin: 5px 0px; width: 975px; height: 90px; position: relative;
+}
+.playing_data {
+	background: url("../images/playing_bg.gif") no-repeat left top; width: 975px; height: 92px; overflow: hidden;
+}
+.player_tem {
+	height: 24px; margin-top: 5px; position: relative;
+}
+.pb_num_1 {
+	background: url("../images/pbnum_.gif") no-repeat; width: 31px; height: 28px; text-align: center; color: rgb(255, 255, 0); line-height: 28px; font-size: 24px; font-weight: bold; position: absolute;
+}
+.pb_num_2 {
+	background: url("../images/pbnum_.gif") no-repeat; width: 31px; height: 28px; text-align: center; color: rgb(255, 255, 0); line-height: 28px; font-size: 24px; font-weight: bold; position: absolute;
+}
+.pb_num_1 {
+	left: 400px; top: -3px;
+}
+.pb_num_2 {
+	top: -3px; right: 400px;
+}
+.playing_time_1 {
+	width: 105px; text-align: center; overflow: hidden; position: absolute;
+}
+.playing_time_2 {
+	width: 105px; text-align: center; overflow: hidden; position: absolute;
+}
+.playing_time_1 {
+	left: 435px; top: -2px; height: 14px; color: rgb(204, 204, 204); line-height: 14px; border-bottom-color: rgb(51, 102, 153); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.playing_time_2 {
+	left: 435px; top: 15px; color: rgb(255, 255, 255); line-height: 14px;
+}
+.player_1 {
+	width: 390px; height: 20px; color: rgb(255, 255, 255); line-height: 20px; font-size: 14px; font-weight: bold; position: absolute;
+}
+.player_2 {
+	width: 390px; height: 20px; color: rgb(255, 255, 255); line-height: 20px; font-size: 14px; font-weight: bold; position: absolute;
+}
+.player_1 {
+	left: 0px; top: 2px; text-align: right;
+}
+.player_2 {
+	top: 2px; text-align: left; right: 0px;
+}
+.playes_data {
+	height: 20px; margin-top: 23px; margin-left: 55px;
+}
+.halftime {
+	background: url("../images/timebarbg.gif") repeat-x left 4px; width: 423px; height: 20px; margin-right: 10px; float: left; display: inline; position: relative;
+}
+.half_1 {
+	height: 12px; color: rgb(51, 204, 153); line-height: 12px; position: absolute;
+}
+.half_2 {
+	height: 12px; color: rgb(51, 204, 153); line-height: 12px; position: absolute;
+}
+.half_1 {
+	left: -42px; top: 5px;
+}
+.half_2 {
+	top: 5px; right: -42px;
+}
+.line_name_1 {
+	height: 12px; text-align: left; color: rgb(227, 227, 227); line-height: 12px; position: absolute;
+}
+.line_name_2 {
+	height: 12px; text-align: left; color: rgb(227, 227, 227); line-height: 12px; position: absolute;
+}
+.line_name_1 {
+	left: 15px; top: 40px;
+}
+.line_name_2 {
+	left: 15px; top: 76px;
+}
+.aa {
+	top: -12px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.bb {
+	top: -12px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.cc {
+	top: -12px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.dd {
+	top: -12px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.aa {
+	background: url("../images/timebarpoint.gif") no-repeat left bottom; left: 45px;
+}
+.bb {
+	background: url("../images/timebarred.gif") no-repeat left bottom; left: 75px;
+}
+.cc {
+	background: url("../images/timebaryr.gif") no-repeat left bottom; left: 95px;
+}
+.dd {
+	left: 145px;
+}
+.aa_z {
+	top: 18px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.bb_z {
+	top: 18px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.cc_z {
+	top: 18px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.dd_z {
+	top: 18px; width: 10px; height: 18px; overflow: hidden; position: absolute; z-index: 30;
+}
+.aa_z {
+	background: url("../images/timebarpoint_z.gif") no-repeat left top; left: 35px;
+}
+.bb_z {
+	background: url("../images/timebarred_z.gif") no-repeat left top; left: 45px;
+}
+.cc_z {
+	background: url("../images/timebaryr_z.gif") no-repeat left top; left: 55px;
+}
+.dd_z {
+	left: 145px;
+}
+.playes_data ul {
+	margin: 0px; padding: 0px; left: 0px; top: 0px; height: 20px; overflow: hidden; display: block; position: absolute; z-index: 20;
+}
+.playes_data ul li {
+	background: url("../images/playing_bg.gif") no-repeat -974px -2px; margin: 6px 0px 0px; padding: 0px; height: 12px; text-align: center; color: rgb(217, 217, 217); line-height: 12px; overflow: hidden; float: left; display: inline;
+}
+.palytimebar {
+	background: url("../images/timebarac.gif") repeat-x; margin: 4px 0px 0px; left: 0px; top: 0px; height: 16px; position: absolute; z-index: 10;
+}
+#play_g_body {
+	overflow: auto; min-width: 995px;
+}
+.all_play {
+	float: left; min-height: 10px; min-width: 500px;
+}
+.ing_play {
+	width: 660px; overflow: hidden; float: left; min-height: 100px;
+}
+.play_list_frame {
+	min-height: 10px;
+}
+.play_list_frame .s_frame {
+	background: rgb(255, 255, 255); padding: 0px 8px 8px; border: 1px solid rgb(204, 204, 204); margin-bottom: 8px;
+}
+.s_frame ul li {
+	height: 32px; line-height: 32px; padding-left: 2px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.s_frame ul li:hover {
+	background: rgb(255, 255, 204);
+}
+.s_frame ul li.tit:hover {
+	background: rgb(255, 255, 255);
+}
+.s_frame ul li .other_th {
+	top: 8px; width: 250px; height: 24px; text-align: right; right: 310px; color: rgb(0, 51, 0); line-height: 24px; padding-right: 5px; white-space: nowrap; position: absolute;
+}
+.s_frame ul li .buy_th {
+	top: 8px; width: 150px; height: 24px; text-align: right; right: 152px; line-height: 24px; position: absolute;
+}
+.s_frame ul li .sell_th {
+	top: 8px; width: 150px; height: 24px; right: 0px; line-height: 24px; position: absolute;
+}
+.s_frame ul li .bn {
+	background: url("../images/date_ico1.gif") no-repeat left 10px; width: 16px; height: 32px; text-decoration: none; display: inline-block;
+}
+.s_frame ul li .bn a {
+	width: 16px; text-decoration: none; display: block;
+}
+.s_frame ul li .bn a:hover {
+	text-decoration: none;
+}
+.s_frame ul li .buy {
+	background: rgb(255, 255, 255); top: 1px; width: 150px; height: 28px; text-align: right; right: 152px; position: absolute;
+}
+.s_frame ul li .other_data {
+	background: url("../images/arrow_right.gif") no-repeat right; top: 2px; width: 60px; height: 28px; text-align: right; right: 310px; color: rgb(0, 102, 0); line-height: 28px; padding-right: 15px; position: absolute;
+}
+.s_frame ul li .other_data:hover {
+	color: rgb(255, 102, 0);
+}
+.s_frame ul li .buy .span {
+	background: rgb(236, 237, 237); width: 48px; height: 27px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.s_frame ul li .sell .span {
+	background: rgb(236, 237, 237); width: 48px; height: 27px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.s_frame ul li .buy a b {
+	width: 48px; color: rgb(0, 0, 0); display: block;
+}
+.s_frame ul li .buy a:hover b {
+	color: rgb(51, 153, 255);
+}
+.s_frame ul li .buy .ons {
+	background: rgb(221, 233, 255); width: 48px; height: 27px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.s_frame ul li .sell {
+	background: rgb(255, 255, 255); top: 1px; width: 152px; height: 28px; right: 0px; position: absolute;
+}
+.s_frame ul li .sell a b {
+	width: 48px; color: rgb(0, 0, 0); display: block;
+}
+.s_frame ul li .sell a:hover b {
+	color: red;
+}
+.s_frame ul li .sell .ons {
+	background: rgb(255, 225, 225); width: 48px; height: 27px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.s_frame ul li .buy .flicker {
+	background-color: rgb(255, 255, 153);
+}
+.s_frame ul li .sell .flicker {
+	background-color: rgb(255, 255, 153);
+}
+.all_input {
+	background: rgb(255, 255, 255); margin-left: 8px; float: left; display: inline; min-height: 10px; min-width: 272px;
+}
+.ing_input {
+	background: rgb(255, 255, 255); width: 310px; overflow: hidden; margin-left: 5px; float: left; display: inline;
+}
+.jiaoy_t {
+	margin: 0px; padding: 3px; height: 20px; color: rgb(102, 102, 102); line-height: 20px; font-size: 12px; font-weight: normal; position: relative;
+}
+.jiaoy_t .refresh_jiaoy {
+	background: url("../images/re.gif") no-repeat; top: 5px; width: 16px; height: 16px; right: 3px; position: absolute;
+}
+.jiaoy_t .refresh_jiaoy a {
+	width: 16px; height: 16px; text-decoration: none; display: block;
+}
+.s_input_frame {
+	padding: 2px 3px; border: 1px solid rgb(204, 204, 204); margin-bottom: 8px;
+}
+.active_input {
+	border: currentColor; margin-bottom: 2px; _width: 292px; _position: relative;
+}
+.floatright {
+	float: right;
+}
+.floatleft {
+	float: left;
+}
+.s_input_frame ul li {
+	margin-top: 1px; _height: 10px;
+}
+.s_input_frame ul li.busok_tit {
+	background: url("../images/ico.gif") no-repeat -38px -58px; margin: 1px 0px; height: 20px; color: rgb(0, 102, 0); line-height: 20px; padding-left: 20px; font-weight: bold; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.s_input_frame ul li.busok {
+	padding: 2px 3px 6px 2px;
+}
+.s_input_frame ul li.busok p {
+	background: rgb(255, 255, 255); margin: 0px; padding: 2px; line-height: 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.s_input_frame ul li.busok p:hover {
+	background: rgb(255, 255, 204);
+}
+.s_input_frame ul li.busok p span {
+	padding-right: 10px; display: inline-block;
+}
+.s_input_frame ul li.buserr_tit {
+	background: url("../images/069.gif") no-repeat left; margin: 1px 0px; height: 20px; color: rgb(153, 0, 0); line-height: 20px; padding-left: 20px; font-weight: bold; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.s_input_frame ul li.buserr {
+	padding: 2px 3px 6px 2px;
+}
+.s_input_frame ul li.buserr p {
+	background: rgb(255, 255, 255); margin: 0px; padding: 2px; line-height: 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.s_input_frame ul li.buserr p:hover {
+	background: rgb(255, 221, 221);
+}
+.s_input_frame ul li.buserr p span {
+	padding-right: 10px; display: inline-block;
+}
+.s_input_frame ul li.buytit {
+	background: url("../images/buytit.gif") no-repeat left; height: 18px; line-height: 18px; padding-left: 18px; margin-top: 6px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; white-space: nowrap;
+}
+.s_input_frame ul li.selltit {
+	background: url("../images/selltit.gif") no-repeat left; height: 18px; line-height: 18px; padding-left: 18px; margin-top: 6px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; white-space: nowrap;
+}
+.s_input_frame ul li.action {
+	padding: 6px 5px;
+}
+.s_input_frame ul li.action span {
+	padding-right: 5px;
+}
+.s_input_frame ul li.none {
+	background: rgb(239, 244, 247); padding: 5px; border: 1px solid rgb(227, 237, 245); color: rgb(0, 0, 0); line-height: 20px;
+}
+.s_input_frame ul li.jiao {
+	background: rgb(251, 247, 235); padding: 5px; border: 1px solid rgb(228, 215, 177); color: rgb(51, 51, 51); line-height: 20px; position: relative;
+}
+.s_input_frame ul li.jiao .close_j {
+	top: 3px; height: 16px; right: 4px; line-height: 16px; position: absolute;
+}
+.s_input_frame ul li.jiao .close_j a {
+	text-decoration: none; display: inline-block;
+}
+.s_input_frame ul li.jiao .close_j a:hover {
+	text-decoration: none; display: inline-block;
+}
+.s_input_frame ul li.jiao p {
+	margin: 0px 15px 0px 0px; padding: 1px 2px; line-height: 16px;
+}
+.s_input_frame ul li.buy {
+	background: rgb(208, 229, 246); padding: 3px; border: 1px solid rgb(202, 221, 236);
+}
+.s_input_frame ul li .p_tit {
+	height: 22px; line-height: 22px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.s_input_frame ul li .play_n_tit_1 {
+	background: rgb(255, 255, 255); display: block;
+}
+.s_input_frame ul li .play_n_tit_2 {
+	background: rgb(255, 255, 255); padding-left: 16px; display: block;
+}
+.s_input_frame ul li.sell {
+	background: rgb(255, 234, 232); padding: 3px; border: 1px solid rgb(247, 226, 224);
+}
+.s_input_frame ul li.disabled {
+	background: url("../images/list_bg_lock.jpg") no-repeat right -152px rgb(227, 227, 227); border: 1px solid rgb(204, 204, 204); color: rgb(153, 153, 153);
+}
+.s_input_frame ul li.disabled .play_n_tit_1 {
+	padding-right: 12px; display: block;
+}
+.s_input_frame ul li.disabled .play_n_tit_2 {
+	padding-left: 16px; display: block;
+}
+.s_input_frame ul li .p_body {
+	line-height: 20px; display: block;
+}
+.input_bs_num {
+	margin-right: 2px; position: relative;
+}
+.input_bs_num .mun_up a {
+	background: url("../images/num_ac2.gif") no-repeat left top; left: 40px; top: 0px; width: 11px; height: 9px; overflow: hidden; text-decoration: none; position: absolute; _top: 3px;
+}
+* + html .input_bs_num .mun_up a {
+	background: url("../images/num_ac2.gif") no-repeat left top; left: 40px; top: 1px; width: 11px; height: 9px; overflow: hidden; text-decoration: none; position: absolute; _top: 3px;
+}
+.input_bs_num .mun_up a:hover {
+	background: url("../images/num_ac2.gif") no-repeat right top;
+}
+.input_bs_num .mun_down a {
+	background: url("../images/num_ac2.gif") no-repeat left -9px; left: 40px; top: 9px; width: 11px; height: 9px; overflow: hidden; text-decoration: none; position: absolute; _top: 12px;
+}
+* + html .input_bs_num .mun_down a {
+	background: url("../images/num_ac2.gif") no-repeat left -9px; left: 40px; top: 10px; width: 11px; height: 9px; overflow: hidden; text-decoration: none; position: absolute; _top: 12px;
+}
+.input_bs_num .mun_down a:hover {
+	background: url("../images/num_ac2.gif") no-repeat right -9px;
+}
+.s_input_frame ul li .p_body .input {
+	background: rgb(255, 255, 255); padding: 0px 2px; border: 1px solid rgb(204, 204, 204); width: 40px; height: 16px; line-height: 16px;
+}
+.s_input_frame ul li .p_body .input_red {
+	background: red; padding: 0px 1px; border: 1px solid rgb(204, 204, 204); width: 40px; height: 16px; color: rgb(255, 255, 255); line-height: 16px;
+}
+.s_input_frame ul li .p_body select {
+	margin: -2px -1px -1px -2px; width: 53px; height: 20px; _margin-top: -2px;
+}
+.s_input_frame ul li .p_body .select_k {
+	border: 1px solid rgb(204, 204, 204); width: 49px; height: 16px; overflow: hidden; display: inline-block;
+}
+.s_input_frame ul li .p_body .sub_line {
+	background: rgb(199, 223, 242); padding: 2px 5px; display: block;
+}
+.s_input_frame ul li .p_body .sub_line .outtime {
+	background: rgb(255, 255, 255); margin: 3px 5px 3px 36px; padding: 3px; border: 1px solid rgb(204, 204, 204); line-height: 16px; display: block;
+}
+.s_input_frame ul li.sell .p_body .sub_line {
+	background: rgb(253, 226, 223); padding: 2px 5px; display: block;
+}
+.s_input_frame ul li .p_bewrite {
+	padding: 5px; color: rgb(51, 51, 51); display: block; _display: inline;
+}
+.s_input_frame ul li .p_bewrite ul li {
+	height: 20px; line-height: 20px; overflow: hidden; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: dashed; white-space: nowrap; position: relative;
+}
+.s_input_frame ul li .p_bewrite ul li .win {
+	background: rgb(255, 255, 255); top: 0px; height: 18px; text-align: right; right: 0px; color: rgb(0, 102, 0); line-height: 18px; position: absolute;
+}
+.s_input_frame ul li .p_bewrite ul li .lost {
+	background: rgb(255, 255, 255); top: 0px; height: 18px; text-align: right; right: 0px; color: rgb(255, 102, 0); line-height: 18px; position: absolute;
+}
+.tab_ul {
+	padding: 4px 0px 0px 8px; _padding: 4px 0 0 2px;
+}
+.tab_ul li {
+	width: auto; height: 26px; line-height: 26px; font-weight: bold; float: left; white-space: nowrap; cursor: pointer; _width: 1px; _margin: 0 2px;
+}
+.tab_ul li span {
+	padding: 0px 6px; display: block;
+}
+.tab_ul li span span {
+	padding: 0px; width: 80px; text-align: center; overflow: hidden;
+}
+.tab_ul li.ons {
+	background: url("../images/list_bg2.jpg") no-repeat -9px -150px rgb(255, 255, 255); color: rgb(0, 0, 0); font-weight: bold; cursor: auto;
+}
+.tab_ul li.ons span {
+	background: url("../images/list_bg2.jpg") no-repeat right -150px; height: 26px; display: block;
+}
+.tab_ul li.ons span span {
+	padding: 0px; width: 80px; text-align: center; overflow: hidden;
+}
+.input_jiaoy_y {
+	padding: 0px 1px; border: 1px solid rgb(228, 215, 177); width: 40px; height: 16px; color: rgb(255, 102, 0);
+}
+.input_jiaoy_num {
+	width: 45px; margin-right: 5px; position: relative;
+}
+.input_jiaoy_num .mun_up a {
+	background: url("../images/num_ac.gif") no-repeat left top; top: 0px; width: 11px; height: 9px; right: -4px; overflow: hidden; text-decoration: none; position: absolute; _top: 2px; _right: 210px;
+}
+.input_jiaoy_num .mun_up a:hover {
+	background: url("../images/num_ac.gif") no-repeat right top;
+}
+.input_jiaoy_num .mun_down a {
+	background: url("../images/num_ac.gif") no-repeat left -9px; top: 9px; width: 11px; height: 9px; right: -4px; overflow: hidden; text-decoration: none; position: absolute; _top: 11px; _right: 210px;
+}
+.input_jiaoy_num .mun_down a:hover {
+	background: url("../images/num_ac.gif") no-repeat right -9px;
+}
+.input_jiaoy_n {
+	background: rgb(251, 247, 235); padding: 0px 1px; border: 1px solid rgb(251, 247, 235); width: 40px; height: 16px; color: rgb(255, 102, 0);
+}
+.jiaoy_bt {
+	background: rgb(174, 84, 2); border: currentColor; height: 18px; color: rgb(255, 255, 255); line-height: 16px; font-size: 12px; cursor: pointer;
+}
+.p_path {
+	margin: 0px 8px 5px 0px; padding: 1px 0px 0px; height: 26px; line-height: 26px; font-size: 12px; font-weight: normal; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; position: relative; min-width: 780px;
+}
+.sub_select {
+	top: 3px; height: 20px; text-align: right; right: 0px; line-height: 20px; position: absolute;
+}
+.ac_all {
+	padding: 8px; text-align: right;
+}
+.user_active {
+	border: 1px solid rgb(204, 204, 204); margin-top: 40px; position: relative;
+}
+.user_active .active_th {
+	left: -1px; top: -22px; position: absolute; _top: -21px;
+}
+.user_active .active_th ul li {
+	background: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204); width: 50px; height: 20px; text-align: center; line-height: 22px; overflow: hidden; margin-right: 2px; float: left; display: inline;
+}
+.user_active .active_th ul li.ons {
+	height: 21px; border-bottom-color: currentColor; border-bottom-width: medium; border-bottom-style: none;
+}
+.user_active .close {
+	border: 1px solid rgb(204, 204, 204); top: -20px; width: 40px; height: 18px; text-align: center; right: 0px; line-height: 18px; display: inline-block; position: absolute; _top: -19px;
+}
+.user_active h4 {
+	margin: 0px; padding: 10px; line-height: 20px; font-size: 12px;
+}
+.a_069 {
+	background: url("../images/069.gif") no-repeat left; margin: 5px; padding: 2px 2px 0px 20px; color: red; text-decoration: none; display: block;
+}
+a.a_069 {
+	color: red; text-decoration: none;
+}
+a.a_069:hover {
+	color: rgb(51, 51, 51); text-decoration: none;
+}
+.a_stime {
+	background: url("../images/stime.gif") no-repeat left; padding: 2px 2px 2px 18px;
+}
+a.a_stime {
+	color: rgb(204, 204, 204);
+}
+a.a_stime:hover {
+	color: rgb(153, 153, 153); text-decoration: none; border-bottom-color: rgb(255, 51, 0); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.a_modify {
+	background: url("../images/ico.gif") no-repeat -40px -75px; padding: 2px 2px 2px 18px;
+}
+a.a_modify {
+	color: rgb(51, 102, 153);
+}
+a.a_modify:hover {
+	color: rgb(255, 0, 0);
+}
+.a_del {
+	background: url("../images/ico.gif") no-repeat -40px -38px; padding: 2px 2px 2px 18px;
+}
+a.a_del {
+	color: rgb(51, 102, 153);
+}
+a.a_del:hover {
+	color: rgb(255, 0, 0);
+}
+.a_del_2 {
+	background: url("../images/del.gif") no-repeat left 2px; padding: 2px 6px;
+}
+a.a_del_2 {
+	color: rgb(51, 102, 153); text-decoration: none;
+}
+a.a_del_2:hover {
+	color: rgb(255, 0, 0); text-decoration: none;
+}
+.a_yet {
+	background: url("../images/ico.gif") no-repeat -40px -60px; padding: 2px 2px 2px 18px;
+}
+a.a_yet {
+	color: rgb(51, 102, 153);
+}
+a.a_yet:hover {
+	color: rgb(255, 0, 0);
+}
+.a_flag_y {
+	background: url("../images/ico.gif") no-repeat -40px 0px; padding: 2px 2px 2px 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+a.a_flag_y {
+	color: rgb(51, 51, 51); text-decoration: none;
+}
+a.a_flag_y:hover {
+	color: rgb(255, 102, 0); border-bottom-color: rgb(255, 102, 0); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.a_flag_n {
+	background: url("../images/ico.gif") no-repeat -40px -20px; padding: 2px 2px 2px 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+a.a_flag_n {
+	color: rgb(204, 204, 204); text-decoration: none;
+}
+a.a_flag_n:hover {
+	color: rgb(0, 102, 0); border-bottom-color: rgb(0, 102, 0); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.a_data {
+	background: url("../images/top_bg.jpg") no-repeat -204px -26px; width: 16px; height: 16px; text-decoration: none; display: inline-block;
+}
+a.a_data {
+	width: 16px; display: block;
+}
+a.a_data:hover {
+	text-decoration: none;
+}
+.a_tohome {
+	background: url("../images/m_bg_m.gif") no-repeat left 7px; height: 28px; line-height: 28px; padding-right: 6px; padding-left: 16px; text-decoration: none; display: inline-block;
+}
+a.a_tohome {
+	color: rgb(51, 102, 153);
+}
+a.a_tohome:hover {
+	color: red; text-decoration: underline;
+}
+.a_totoday {
+	background: url("../images/m_bg_m.gif") no-repeat left -15px; height: 28px; line-height: 28px; padding-right: 6px; padding-left: 17px; text-decoration: none; display: inline-block;
+}
+a.a_totoday {
+	color: rgb(51, 102, 153);
+}
+a.a_totoday:hover {
+	color: red; text-decoration: underline;
+}
+.a_tods {
+	background: url("../images/m_bg_m.gif") no-repeat left -38px; height: 28px; line-height: 28px; padding-right: 6px; padding-left: 16px; text-decoration: none; display: inline-block;
+}
+a.a_tods {
+	color: rgb(51, 102, 153);
+}
+a.a_tods:hover {
+	color: red; text-decoration: underline;
+}
+.a_togq {
+	background: url("../images/p_goal.gif") no-repeat left 8px; height: 28px; line-height: 28px; padding-right: 6px; padding-left: 16px; text-decoration: none; display: inline-block;
+}
+a.a_togq {
+	color: rgb(51, 102, 153);
+}
+a.a_togq:hover {
+	color: red; text-decoration: underline;
+}
+.a_tofo {
+	background: url("../images/m_bg_m.gif") no-repeat left -87px; height: 28px; line-height: 28px; padding-right: 10px; padding-left: 16px; text-decoration: none; display: inline-block;
+}
+a.a_tofo {
+	color: rgb(51, 102, 153);
+}
+a.a_tofo:hover {
+	color: red; text-decoration: underline;
+}
+.a_tofo_no {
+	background: url("../images/m_bg_m.gif") no-repeat left -108px; height: 28px; color: rgb(153, 153, 153); line-height: 28px; padding-right: 10px; padding-left: 16px; text-decoration: none; display: inline-block;
+}
+a.a_tofo_no {
+	color: rgb(153, 153, 153); text-decoration: none;
+}
+a.a_tofo_no:hover {
+	color: rgb(153, 153, 153); text-decoration: none; cursor: default;
+}
+.ac_table_0 {
+	margin: 5px; width: 355px; text-align: left;
+}
+.ac_table_0 thead th {
+	background: rgb(0, 102, 204); padding: 5px; color: rgb(255, 255, 255);
+}
+.ac_table_0 .ac_buy th {
+	background: rgb(214, 220, 236); padding: 6px 5px;
+}
+.ac_table_0 .ac_buy td {
+	background: rgb(221, 232, 255); padding: 5px; line-height: 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ac_table_0 .ac_buy tr:hover td {
+	background: rgb(207, 221, 254);
+}
+.ac_table_0 .ac_buy td .input_1 {
+	padding: 0px 2px; border: 1px solid rgb(204, 204, 204); height: 18px; text-align: center; color: rgb(0, 0, 102);
+}
+.ac_table_0 .ac_close {
+	background: url("../images/del.gif") no-repeat left top; width: 15px; height: 16px; overflow: hidden; text-decoration: none; display: inline-block;
+}
+.ac_table_0 .ac_close a {
+	width: 14px; display: block;
+}
+.ac_table_0 .ac_close a:hover {
+	text-decoration: none;
+}
+.ac_table_0 .ac_buy td .play_name {
+	height: 15px; line-height: 15px; overflow: hidden; display: inline-block;
+}
+.ac_table_0 .ac_buy td .bewrite {
+	color: rgb(153, 153, 153); padding-left: 24px; display: block;
+}
+.ac_table_0 .ac_sell th {
+	background: rgb(248, 170, 170); padding: 6px 5px;
+}
+.ac_table_0 .ac_sell td {
+	background: rgb(248, 197, 198); padding: 5px; line-height: 18px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ac_table_0 .ac_sell tr:hover td {
+	background: rgb(255, 211, 176);
+}
+.ac_table_0 .ac_sell td .input_1 {
+	padding: 0px 2px; border: 1px solid rgb(204, 204, 204); height: 18px; text-align: center; color: rgb(0, 0, 102);
+}
+.ac_table_0 .ac_sell td .play_name {
+	height: 15px; line-height: 15px; overflow: hidden; display: inline-block;
+}
+.ac_table_0 .ac_sell td .bewrite {
+	color: rgb(153, 153, 153); padding-left: 24px; display: block;
+}
+.ac_bt_1 {
+	background: url("../images/ac_bt.gif") repeat-x left top; border: 1px solid rgb(218, 108, 0); height: 26px; color: rgb(255, 255, 255); cursor: pointer;
+}
+.ac_bt_2 {
+	background: url("../images/ac_bt.gif") repeat-x left -26px; border: 1px solid rgb(227, 227, 227); height: 26px; color: rgb(194, 194, 194);
+}
+.quick_active {
+	background: url("../images/q_bg.gif") repeat-y right 0px; width: 365px; min-height: 20px; _height: 20px;
+}
+.quick_tit {
+	background: url("../images/q_bg.gif") no-repeat left top; height: 22px; margin-top: -4px; position: relative; _margin: 0; _background: none; _border-top: 1px #999 solid;
+}
+.quick_tit .q_close {
+	background: url("../images/ico.gif") no-repeat -40px -100px; top: 8px; width: 14px; height: 14px; right: 8px; overflow: hidden; position: absolute;
+}
+.quick_tit .q_close a {
+	display: block;
+}
+.quick_tit .q_close a:hover {
+	text-decoration: none;
+}
+.quick_tit ul {
+	margin: 0px 6px; height: 23px; padding-top: 8px; padding-left: 10px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.quick_tit ul li {
+	border: 1px solid rgb(227, 227, 227); width: 50px; height: 22px; text-align: center; line-height: 22px; float: left; _margin-bottom: -1px;
+}
+.quick_tit ul li.ons {
+	border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid; _background: #EAEAEA;
+}
+.quick_active h4 {
+	margin: 0px; padding: 5px 6px; line-height: 20px; clear: both; font-size: 12px;
+}
+.quick_active_body {
+	background: url("../images/q_bg.gif") no-repeat -365px bottom; width: 365px; padding-bottom: 5px; margin-bottom: -4px; position: relative; _margin: 0; _background: none; _border-bottom: 1px #999 solid;
+}
+.quick_active_body .ar_left {
+	background: url("../images/q_left.gif") no-repeat right top; left: -14px; top: 45px; width: 15px; height: 30px; position: absolute;
+}
+.quick_active_body .ar_right {
+	background: url("../images/q_left.gif") no-repeat left top; top: 45px; width: 15px; height: 30px; right: -14px; position: absolute; _right: -15px;
+}
+.b_frame {
+	background: rgb(255, 255, 255); border: 1px solid rgb(211, 219, 231); clear: both; margin-top: 5px; margin-bottom: 10px; min-height: 60px; _height: 60px;
+}
+.b_frame .tit {
+	background: rgb(232, 236, 238); margin: 0px; padding: 0px 0px 0px 10px; height: 26px; text-align: left; color: rgb(0, 0, 0); line-height: 26px; font-size: 12px; font-weight: bold; border-bottom-color: rgb(211, 219, 231); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.b_frame .tit .b_back {
+	background: url("../images/arrow_left.gif") no-repeat left; top: 4px; height: 20px; text-align: right; right: 8px; line-height: 20px; padding-left: 16px; font-weight: normal; position: absolute;
+}
+.tit .b_close {
+	background: url("../images/ico.gif") no-repeat -40px -100px; top: 6px; width: 14px; height: 14px; right: 6px; overflow: hidden; position: absolute;
+}
+.tit .b_close a {
+	display: block;
+}
+.b_frame .key_body {
+	background: rgb(255, 255, 255); margin: 10px;
+}
+.rpg_border {
+	padding: 15px 15px 5px 0px; border: 1px solid rgb(102, 102, 102); clear: both; margin-top: 20px; position: relative;
+}
+.rpg_border .sub_tit {
+	background: rgb(238, 238, 238); padding: 0px 10px; border: 1px solid rgb(102, 102, 102); left: 10px; top: -11px; height: 20px; color: rgb(0, 0, 0); line-height: 20px; position: absolute;
+}
+.rpg_sub {
+	padding: 15px 15px 5px 0px; border: 1px solid rgb(153, 153, 153); clear: both; margin-top: 20px; margin-left: 15px; position: relative;
+}
+.rpg_sub .sub_tit2 {
+	background: rgb(255, 255, 255); padding: 0px 10px; border: 1px solid rgb(153, 153, 153); left: 10px; top: -11px; height: 18px; color: rgb(0, 0, 0); line-height: 18px; position: absolute;
+}
+.search_list {
+	padding-bottom: 5px;
+}
+.search_list li {
+	padding: 4px 0px; text-align: left; line-height: 20px;
+}
+.search_list li .st_1 {
+	text-align: right; display: inline-block; min-width: 65px;
+}
+.t_input {
+	padding: 0px 2px; border: 1px solid rgb(204, 204, 204); height: 18px; line-height: 18px;
+}
+.search_list li.sub {
+	background: rgb(240, 240, 240); color: rgb(153, 153, 153); padding-left: 10px; margin-left: 0px;
+}
+.search_list li.s_more {
+	background: rgb(240, 240, 240); border: 1px solid rgb(227, 227, 227);
+}
+.search_ac {
+	padding: 8px 5px 0px 76px; clear: both; border-top-color: rgb(227, 227, 227); border-top-width: 1px; border-top-style: solid;
+}
+.b_frame2 {
+	border: 1px solid rgb(211, 219, 231); margin-bottom: 10px; min-height: 400px;
+}
+.b_frame2 .tit {
+	background: rgb(255, 255, 255); margin: 0px; padding: 0px 0px 0px 10px; height: 28px; text-align: left; color: rgb(51, 102, 153); line-height: 28px; font-size: 12px; font-weight: normal; border-bottom-color: rgb(211, 219, 231); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.b_frame2 .key_body {
+	background: rgb(255, 255, 255); margin: 10px; overflow: auto;
+}
+.rpg_list {
+	padding-bottom: 5px;
+}
+.rpg_list li {
+	padding: 4px 0px; text-align: left; color: rgb(51, 51, 51); line-height: 20px;
+}
+.rpg_list li span.tips {
+	background: url("../images/left_po.gif") no-repeat 10px; color: rgb(255, 102, 0); padding-left: 20px; display: none;
+}
+.rpg_list li:hover {
+	background: rgb(235, 255, 221); color: rgb(0, 0, 0);
+}
+.rpg_list li:hover span.tips {
+	display: inline-block;
+}
+.rpg_list li .st_1 {
+	text-align: right; line-height: 20px; padding-left: 10px; display: inline-block; white-space: nowrap; min-width: 76px;
+}
+.rpg_list li .st_2 {
+	text-align: right; padding-left: 10px; display: inline-block; white-space: nowrap; min-width: 20px;
+}
+.rpg_list li.sub {
+	background: rgb(240, 240, 240); color: rgb(153, 153, 153); padding-left: 10px; margin-left: 0px;
+}
+.rpg_ac {
+	padding: 5px; text-align: center; clear: both;
+}
+.bt_search {
+	width: 70px; height: 30px;
+}
+.ac_user_line {
+	margin: 0px; padding: 5px 2px; text-align: left; line-height: 20px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.table_1 {
+	margin: 5px; width: 98%; _width: 442px;
+}
+.table_1 th {
+	background: rgb(236, 243, 255); border: 1px solid rgb(227, 227, 227); height: 26px; text-align: center;
+}
+.table_1 td {
+	padding: 5px 10px; border-bottom-color: rgb(227, 227, 227); border-left-color: rgb(227, 227, 227); border-bottom-width: 1px; border-left-width: 1px; border-bottom-style: solid; border-left-style: solid;
+}
+.table_2 {
+	margin: 5px 0px; width: 100%;
+}
+.table_2 td {
+	padding: 2px; color: rgb(102, 102, 102); line-height: 22px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; border-collapse: collapse;
+}
+.table_2 tr:hover {
+	background: rgb(255, 255, 225);
+}
+.table_2 tr:hover td {
+	color: rgb(0, 0, 0);
+}
+.table_2 .tbody td:hover {
+	background: rgb(255, 255, 255);
+}
+.table_2_1 {
+	margin: 5px 0px; width: 100%;
+}
+.table_2_1 td {
+	padding: 2px; color: rgb(102, 102, 102); line-height: 22px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; border-collapse: collapse;
+}
+.table_2_1 tr:hover {
+	background: rgb(223, 255, 206);
+}
+.table_2_1 tr:hover td {
+	color: rgb(0, 0, 0);
+}
+.table_3 {
+	width: 100%; border-top-color: rgb(227, 227, 227); border-left-color: rgb(227, 227, 227); border-top-width: 1px; border-left-width: 1px; border-top-style: solid; border-left-style: solid;
+}
+.table_3 td {
+	padding: 4px 2px; line-height: 20px; border-right-color: rgb(227, 227, 227); border-bottom-color: rgb(227, 227, 227); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid; border-collapse: collapse;
+}
+.table_3 td .input_1 {
+	background: rgb(255, 255, 255); padding: 0px 2px; border: 1px solid rgb(204, 204, 204); height: 16px; line-height: 16px;
+}
+.table_4 {
+	width: 778px; margin-top: 10px; margin-left: 1px; border-top-color: rgb(211, 219, 231); border-left-color: rgb(211, 219, 231); border-top-width: 1px; border-left-width: 1px; border-top-style: solid; border-left-style: solid; border-collapse: collapse;
+}
+.table_4 th {
+	background: rgb(232, 236, 238); padding: 0px 5px; height: 26px; line-height: 26px; border-right-color: rgb(211, 219, 231); border-bottom-color: rgb(211, 219, 231); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+.table_4 td {
+	padding: 5px; border-right-color: rgb(211, 219, 231); border-bottom-color: rgb(211, 219, 231); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+.table_4 td .paly_tree_frame {
+	width: 230px; height: 600px; overflow: auto;
+}
+.table_4 td .c_search {
+	height: 26px; position: relative;
+}
+.table_4 td .c_search .input_1 {
+	padding: 0px 2px; border: 1px solid rgb(204, 204, 204); width: 120px; height: 20px; line-height: 20px;
+}
+.table_4 td .c_search .c_search_bt {
+	top: 0px; right: 0px; position: absolute; _right: -14px;
+}
+.play_tree_b {
+	width: 230px; float: left;
+}
+.play_tree_b .b_frame {
+	margin: 0px; border: 1px solid rgb(227, 227, 227);
+}
+.play_tree_b .b_frame h4 {
+	background: rgb(239, 239, 239); border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.play_tree_ac {
+	float: right; min-width: 540px;
+}
+.play_tree_ac .c_search {
+	height: 26px; margin-bottom: 1px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.play_tree_ac .c_search .input_1 {
+	padding: 0px 2px; border: 1px solid rgb(204, 204, 204); width: 120px; height: 20px; line-height: 20px;
+}
+.play_tree_ac .c_search .c_search_bt {
+	top: 0px; right: 0px; position: absolute; _right: -14px;
+}
+.play_tree_ac .b_frame {
+	margin: 0px; border: 1px solid rgb(227, 227, 227);
+}
+.table_5 {
+	margin: 10px 15px; width: 96%;
+}
+.table_5 th {
+	background: rgb(255, 255, 255); padding: 2px; height: 24px; color: rgb(0, 51, 153); line-height: 24px; font-weight: normal; border-bottom-color: rgb(153, 177, 196); border-bottom-width: 2px; border-bottom-style: solid;
+}
+.table_5 td {
+	padding: 2px; color: rgb(0, 0, 0); line-height: 22px; border-bottom-color: rgb(227, 227, 227); border-bottom-width: 1px; border-bottom-style: solid; border-collapse: collapse;
+}
+.table_5 tr:hover {
+	background: rgb(255, 251, 232);
+}
+.table_5 tr:hover td {
+	color: rgb(0, 0, 0);
+}
+.table_5 .tbody td:hover {
+	background: rgb(255, 255, 255);
+}
+.table_5 .tbody .sub_list td:hover {
+	background: rgb(255, 255, 225);
+}
+.table_6 {
+	margin: 10px 0px; width: 100%; border-top-color: rgb(153, 153, 153); border-right-color: rgb(153, 153, 153); border-top-width: 1px; border-right-width: 1px; border-top-style: solid; border-right-style: solid; border-collapse: collapse;
+}
+.table_6 th {
+	background: rgb(37, 138, 210); padding: 4px; color: rgb(255, 255, 255); line-height: 18px; border-bottom-color: rgb(204, 204, 204); border-left-color: rgb(204, 204, 204); border-bottom-width: 1px; border-left-width: 1px; border-bottom-style: solid; border-left-style: solid; white-space: nowrap;
+}
+.table_6 td {
+	padding: 4px 2px; color: rgb(0, 0, 0); line-height: 20px; border-bottom-color: rgb(204, 204, 204); border-left-color: rgb(204, 204, 204); border-bottom-width: 1px; border-left-width: 1px; border-bottom-style: solid; border-left-style: solid;
+}
+.table_6 tr:hover {
+	background: rgb(255, 255, 225);
+}
+.table_6 tr:hover td {
+	color: rgb(0, 0, 0);
+}
+.table_6 .tbody td:hover {
+	background: rgb(255, 255, 255);
+}
+.table_6 .tbody .sub_list td:hover {
+	background: rgb(255, 255, 225);
+}
+.pt_show {
+	background: rgb(250, 250, 235); margin: 5px 120px 10px 50px; padding: 5px 10px; border: 1px solid rgb(55, 90, 144); text-align: left; line-height: 20px; position: relative; min-height: 40px; _height: 40px;
+}
+.pt_show_2 {
+	background: rgb(255, 255, 255); margin: 5px 100px 10px 60px; padding: 5px 10px; border: 1px solid rgb(55, 90, 144); text-align: left; line-height: 20px; position: relative; min-height: 40px; _height: 40px;
+}
+.pt_show_ut {
+	background: url("../images/ico.gif") no-repeat left -100px; left: 4%; top: -5px; width: 7px; height: 5px; position: absolute; _top: -6px;
+}
+.rpg_bewrite {
+	background: rgb(255, 255, 255); padding: 2px 4px; border: 1px solid rgb(204, 204, 204); line-height: 18px; margin-top: 3px;
+}
+.paly_info {
+	margin: 0px; padding: 2px 5px; line-height: 20px;
+}
+.paly_info .pline {
+	width: 150px; margin-right: 20px; display: inline-block;
+}
+.sub_list {
+	width: 99.6%;
+}
+.table_x {
+	width: 100%;
+}
+.table_x th {
+	background: rgb(239, 239, 239); border-width: medium medium 2px; border-style: none none solid; border-color: currentColor currentColor rgb(206, 210, 221); padding: 0px 5px; height: 24px; color: rgb(0, 0, 0); line-height: 24px; font-weight: normal;
+}
+.table_x td {
+	border-width: medium medium 1px; border-style: none none solid; border-color: currentColor currentColor rgb(227, 227, 227); padding: 2px 5px; color: rgb(0, 0, 0); line-height: 22px; border-collapse: collapse;
+}
+.table_x td a img {
+	border: currentColor; vertical-align: middle;
+}
+.table_x tr:hover {
+	background: rgb(255, 255, 225);
+}
+.table_x tr:hover td {
+	color: rgb(0, 0, 0);
+}
+.table_x .tbody td:hover {
+	background: rgb(255, 255, 255);
+}
+.quotes {
+	margin: 5px 0px; padding: 3px; text-align: center; color: rgb(102, 102, 102); line-height: 26px; clear: both; border-top-color: rgb(204, 204, 204); border-top-width: 1px; border-top-style: solid;
+}
+.quotes a {
+	padding: 2px 5px; border: 1px solid rgb(221, 221, 221); color: rgb(102, 102, 102); text-decoration: none; margin-right: 2px;
+}
+.quotes a:hover {
+	padding: 2px 5px; border: 1px solid rgb(255, 102, 0); margin-right: 2px;
+}
+.quotes a.ons {
+	padding: 2px 5px; border: 1px solid rgb(255, 102, 0); color: rgb(255, 102, 0); margin-right: 2px;
+}
+#player_data {
+	margin: 10px 0px 0px 10px; padding: 10px; border: 1px solid rgb(227, 227, 227); width: 220px; float: left; display: inline;
+}
+#player_data ul li {
+	padding: 4px;
+}
+#player_data_list {
+	margin: 10px 0px 0px 10px; border: 1px solid rgb(227, 227, 227); width: 470px; height: 420px; overflow: scroll; float: left; display: inline;
+}
+.player_date_top {
+	margin: 0px 1px; height: 22px;
+}
+.player_date_top ul li {
+	background: rgb(255, 255, 255); width: 80px; height: 22px; text-align: center; color: rgb(102, 102, 102); line-height: 22px; float: left; display: inline;
+}
+.player_date_top ul li a {
+	width: 80px; display: block;
+}
+.player_date_top ul li a:hover {
+	color: rgb(255, 102, 0); text-decoration: none;
+}
+.player_date_top ul li.ons {
+	background: rgb(41, 117, 192); color: rgb(0, 51, 153);
+}
+.player_date_top ul li.ons a {
+	color: rgb(255, 255, 255);
+}
+.p_table_1 {
+	margin: 0px 1px; border: 1px solid rgb(227, 227, 227); width: 99.8%; clear: both; border-collapse: collapse;
+}
+.p_table_1 th {
+	background: rgb(103, 161, 215); padding: 0px 5px; height: 24px; color: rgb(255, 255, 255); border-right-color: rgb(41, 117, 192); border-bottom-color: rgb(41, 117, 192); border-right-width: 1px; border-bottom-width: 2px; border-right-style: solid; border-bottom-style: solid;
+}
+.p_table_1 td {
+	padding: 2px 5px; border: 1px solid rgb(227, 227, 227); line-height: 20px;
+}
+.p_table_1 tr:hover {
+	background: rgb(255, 244, 215);
+}
+.active_menu {
+	width: 300px; padding-top: 8px; position: relative; z-index: 9999;
+}
+#right_all {
+	padding-right: 5px; margin-right: 2px; margin-left: 25px; min-width: 975px;
+}
+#right_all_playlist {
+	padding-right: 5px; margin-right: 2px; margin-left: 25px; min-width: 975px;
+}
+.ss_list {
+	overflow: auto; margin-top: 6px; _position: relative; _height: 400px; _font-family: "ËÎÌå";
+}
+.zoom {
+	_zoom: 1;
+}
+.gq_title {
+	background: rgb(244, 127, 81); height: 40px; font-weight: bold; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.ds_title {
+	background: rgb(76, 105, 184); height: 40px; font-weight: bold; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.gq_player {
+	background: rgb(246, 114, 84); height: 24px; border-bottom-color: rgb(224, 90, 83); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.ds_player {
+	background: rgb(51, 102, 153); height: 24px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.player_name {
+	left: 52px; top: 0px; height: 24px; color: rgb(255, 255, 255); line-height: 24px; font-size: 14px; font-weight: bold; position: absolute;
+}
+.re_time {
+	top: 0px; height: 24px; right: 5px; color: rgb(255, 255, 255); line-height: 24px; position: absolute;
+}
+.s_odds_1 {
+	height: 40px; text-align: center; color: rgb(255, 255, 255); line-height: 40px;
+}
+.s_hdp {
+	height: 40px; text-align: center; color: rgb(255, 255, 255); line-height: 40px;
+}
+.s_odds_2 {
+	height: 40px; text-align: center; color: rgb(255, 255, 255); line-height: 40px;
+}
+.s_bsp {
+	height: 40px; text-align: center; color: rgb(255, 255, 255); line-height: 40px;
+}
+.gq_title .s_odds_1 {
+	background: rgb(244, 142, 102); display: table;
+}
+.gq_title .s_odds_2 {
+	background: rgb(244, 142, 102); display: table;
+}
+.ds_title .s_odds_1 {
+	background: rgb(98, 121, 183); display: table;
+}
+.ds_title .s_odds_2 {
+	background: rgb(98, 121, 183); display: table;
+}
+.name_h4 {
+	background: url("../images/live_a2.gif") no-repeat left; left: 6px; top: 0px; height: 40px; color: rgb(255, 255, 255); line-height: 40px; padding-left: 28px; font-size: 14px; position: absolute;
+}
+.name_h6 {
+	background: url("../images/live_a0.gif") no-repeat 6px; left: 6px; top: 0px; height: 40px; color: rgb(255, 255, 255); line-height: 40px; padding-left: 28px; font-size: 14px; position: absolute;
+}
+.s_odds_1 {
+	top: 0px; width: 88px; right: 704px; border-right-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); border-right-width: 1px; border-left-width: 1px; border-right-style: solid; border-left-style: solid; position: absolute;
+}
+.s_odds_1 .conter_1 {
+	vertical-align: middle; display: table-cell;
+}
+.s_odds_2 .conter_1 {
+	vertical-align: middle; display: table-cell;
+}
+.s_odds_1 .conter_1 .conter_2 {
+	line-height: 16px;
+}
+.s_odds_2 .conter_1 .conter_2 {
+	line-height: 16px;
+}
+.s_hdp {
+	background: url("../images/bs_titbg.gif") repeat-y -8px; top: 0px; width: 302px; right: 400px; border-right-color: rgb(255, 255, 255); border-right-width: 2px; border-right-style: solid; position: absolute;
+}
+.gq_title .s_hdp .top1 {
+	background: rgb(244, 127, 81); height: 20px; line-height: 20px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.gq_title .s_hdp .top2 {
+	width: 150px; height: 20px; text-align: right; color: rgb(0, 153, 255); line-height: 18px; float: left; display: block;
+}
+.gq_title .s_hdp .top3 {
+	width: 150px; height: 20px; text-align: left; color: rgb(255, 51, 0); line-height: 18px; float: right; display: block;
+}
+.gq_title .s_bsp .top1 {
+	background: rgb(244, 127, 81); height: 20px; line-height: 20px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.gq_title .s_bsp .top2 {
+	width: 150px; height: 20px; text-align: right; color: rgb(0, 153, 255); line-height: 18px; float: left; display: block;
+}
+.gq_title .s_bsp .top3 {
+	width: 150px; height: 20px; text-align: left; color: rgb(255, 51, 0); line-height: 18px; float: right; display: block;
+}
+.s_odds_2 {
+	top: 0px; width: 96px; right: 302px; border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid; position: absolute;
+}
+.ds_title .s_hdp .top1 {
+	background: rgb(76, 105, 184); height: 20px; line-height: 20px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ds_title .s_hdp .top2 {
+	width: 150px; height: 20px; text-align: right; color: rgb(0, 153, 255); line-height: 18px; float: left; display: block;
+}
+.ds_title .s_hdp .top3 {
+	width: 150px; height: 20px; text-align: left; color: rgb(255, 51, 0); line-height: 18px; float: right; display: block;
+}
+.ds_title .s_bsp .top1 {
+	background: rgb(76, 105, 184); height: 20px; line-height: 20px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ds_title .s_bsp .top2 {
+	width: 150px; height: 20px; text-align: right; color: rgb(0, 153, 255); line-height: 18px; float: left; display: block;
+}
+.ds_title .s_bsp .top3 {
+	width: 150px; height: 20px; text-align: left; color: rgb(255, 51, 0); line-height: 18px; float: right; display: block;
+}
+.s_bsp {
+	background: url("../images/bs_titbg.gif") repeat-y -10px; top: 0px; width: 301px; right: 0px; border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid; position: absolute;
+}
+.collect_tit_no {
+	background: url("../images/collect_all_tit.gif") no-repeat left top; left: 25px; top: 4px; width: 18px; height: 16px; display: block; position: absolute;
+}
+.collect_tit_no:hover {
+	background: url("../images/collect_all_tit.gif") no-repeat left -20px; text-decoration: none; cursor: pointer;
+}
+.collect_tit_yes {
+	background: url("../images/collect_all_tit.gif") no-repeat left -60px; left: 25px; top: 4px; width: 18px; height: 16px; display: block; position: absolute;
+}
+.collect_tit_yes:hover {
+	background: url("../images/collect_all_tit.gif") no-repeat left -80px; text-decoration: none; cursor: pointer;
+}
+.open_ac {
+	background: url("../images/oc_ico.gif") no-repeat left bottom; left: 6px; top: 10px; width: 9px; height: 5px; display: block; position: absolute;
+}
+.close_ac {
+	background: url("../images/oc_ico.gif") no-repeat left top; left: 10px; top: 8px; width: 5px; height: 9px; display: block; position: absolute;
+}
+.gq_player_list {
+	background: rgb(255, 153, 102); padding: 2px 2px 1px; margin-bottom: 1px; display: block;
+}
+.gq_player_list li {
+	position: relative; _height: 1px;
+}
+.gq_player_list li.xm {
+	margin-bottom: 1px;
+}
+.gq_player_list li .time_data {
+	background: rgb(255, 255, 255); left: 0px; width: 50px; text-align: center; overflow: hidden; border-right-color: rgb(255, 153, 102); border-bottom-color: rgb(255, 153, 102); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid; position: absolute; min-height: 73px;
+}
+.gq_player_list li .time_data .sub_data {
+	margin: 0px auto; width: 46px; height: 100%; display: table;
+}
+.gq_player_list li .time_data .conter_3 {
+	line-height: 18px; vertical-align: middle; display: table-cell;
+}
+.gq_player_list li .time_data span {
+	font-weight: bold; display: block;
+}
+.gq_player_list li ul li {
+	background: rgb(255, 255, 255); border-width: medium medium 1px; border-style: none none solid; border-color: currentColor currentColor rgb(239, 239, 239); height: 36px; margin-left: 51px; position: relative;
+}
+.gq_player_list li ul li.sf30 {
+	background: rgb(255, 243, 238); border-bottom-color: rgb(255, 222, 206); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.gq_player_list li ul li.sf30 .hdp_ac {
+	background: rgb(255, 243, 238);
+}
+.gq_player_list li ul li.dline {
+	border-bottom-color: rgb(255, 153, 102); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.gq_player_list li ul li .lock_1 {
+	background: url("../images/whole_lock.png") no-repeat 2px 2px rgb(0, 0, 0); top: 0px; width: 392px; height: 36px; right: 400px; line-height: 32px; font-size: 14px; filter: alpha(opacity=20); position: absolute; z-index: 10; opacity: 0.2; -moz-opacity: 0.2; -khtml-opacity: 0.2;
+}
+.gq_player_list li ul li .lock_2 {
+	background: url("../images/whole_lock.png") no-repeat 2px 2px rgb(0, 0, 0); top: 0px; width: 398px; height: 36px; right: 0px; line-height: 32px; font-size: 14px; filter: alpha(opacity=20); position: absolute; z-index: 10; opacity: 0.2; -moz-opacity: 0.2; -khtml-opacity: 0.2;
+}
+.gq_player_list li ul li.hf_g {
+	background: rgb(230, 255, 242);
+}
+.gq_player_list li ul li:hover {
+	background: rgb(255, 255, 204); border-bottom-color: red; border-bottom-width: 1px; border-bottom-style: solid;
+}
+.gq_player_list li ul li:hover .hdp_ac {
+	background: rgb(255, 255, 204);
+}
+.play_span {
+	height: 36px; line-height: 36px; padding-left: 5px; font-weight: bold;
+}
+.red_style {
+	background: url("../images/p_redcard_a.gif") no-repeat left; padding: 1px 4px 1px 2px; color: rgb(255, 255, 255); font-size: 12px;
+}
+.red_style_flash {
+	background: url("../images/p_redcard.gif") no-repeat left; padding: 1px 4px 1px 2px; color: rgb(255, 255, 255); font-size: 12px;
+}
+.p_goal {
+	background: url("../images/p_goal.gif") no-repeat 4px; padding-left: 18px;
+}
+.ds_player_list {
+	background: rgb(90, 123, 212); padding: 2px 2px 1px; margin-bottom: 1px; display: block;
+}
+.ds_player_list li {
+	position: relative; _height: 1px;
+}
+.ds_player_list li.xm {
+	margin-bottom: 1px;
+}
+.ds_player_list li .time_data {
+	background: rgb(255, 255, 255); left: 0px; width: 50px; text-align: center; overflow: hidden; border-right-color: rgb(90, 123, 212); border-bottom-color: rgb(90, 123, 212); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid; position: absolute; min-height: 73px;
+}
+.ds_player_list li .time_data .sub_data {
+	margin: 0px auto; width: 46px; height: 100%; display: table;
+}
+.ds_player_list li .time_data .conter_3 {
+	line-height: 18px; vertical-align: middle; display: table-cell;
+}
+.tolive {
+	background: url("../images/live_a3.gif") no-repeat center; height: 22px;
+}
+.ds_player_list li .time_data span {
+	font-weight: bold; display: block;
+}
+.ds_player_list li ul li {
+	background: rgb(255, 255, 255); border-width: medium medium 1px; border-style: none none solid; border-color: currentColor currentColor rgb(239, 239, 239); height: 36px; margin-left: 51px; position: relative;
+}
+.ds_player_list li ul li.sf30 {
+	background: rgb(222, 239, 255); border-bottom-color: rgb(201, 216, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ds_player_list li ul li.sf30 .hdp_ac {
+	background: rgb(222, 239, 255);
+}
+.ds_player_list li ul li.dline {
+	border-bottom-color: rgb(90, 123, 212); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ds_player_list li ul li .lock_1 {
+	background: url("../images/whole_lock.png") no-repeat 2px 2px rgb(0, 0, 0); top: 0px; width: 392px; height: 36px; right: 400px; line-height: 32px; font-size: 14px; filter: alpha(opacity=20); position: absolute; z-index: 10; opacity: 0.2; -moz-opacity: 0.2; -khtml-opacity: 0.2;
+}
+.ds_player_list li ul li .lock_2 {
+	background: url("../images/whole_lock.png") no-repeat 2px 2px rgb(0, 0, 0); top: 0px; width: 398px; height: 36px; right: 0px; line-height: 36px; font-size: 14px; filter: alpha(opacity=20); position: absolute; z-index: 10; opacity: 0.2; -moz-opacity: 0.2; -khtml-opacity: 0.2;
+}
+.ds_player_list li ul li.hf_g {
+	background: rgb(230, 255, 242);
+}
+.ds_player_list li ul li:hover {
+	background: rgb(255, 255, 204); border-bottom-color: red; border-bottom-width: 1px; border-bottom-style: solid;
+}
+.ds_player_list li ul li:hover .hdp_ac {
+	background: rgb(255, 255, 204);
+}
+.ds_player_list li ul li .play_span {
+	height: 36px; line-height: 36px; padding-left: 5px; font-weight: bold;
+}
+.ds_player_list li ul li .play_span * {
+	font-size: 14px;
+}
+.collect_no {
+	background: url("../images/collect_all.gif") no-repeat top; top: 9px; width: 18px; height: 18px; right: 796px; display: block; position: absolute; z-index: 100;
+}
+.collect_no:hover {
+	background: url("../images/collect_all.gif") no-repeat center -20px; text-decoration: none; cursor: pointer;
+}
+.collect_yes {
+	background: url("../images/collect_all.gif") no-repeat center -60px; top: 9px; width: 18px; height: 18px; right: 796px; display: block; position: absolute; z-index: 100;
+}
+.collect_yes:hover {
+	background: url("../images/collect_all.gif") no-repeat center -80px; text-decoration: none; cursor: pointer;
+}
+.collect_lock_yes {
+	background: url("../images/collect_all.gif") no-repeat center -60px; top: 9px; width: 18px; height: 18px; right: 796px; display: block; position: absolute; z-index: 100;
+}
+.collect_lock_yes:hover {
+	text-decoration: none;
+}
+.hdp_ac {
+	background: rgb(255, 255, 255); top: 0px; width: 410px; height: 36px; right: 402px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; position: absolute; z-index: 1;
+}
+.hdp_ac .other_data {
+	width: 86px; height: 35px; text-align: right; color: rgb(51, 51, 51); line-height: 35px; margin-right: 3px; margin-left: 20px; float: left; display: inline;
+}
+.hdp_ac .buy {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: left;
+}
+.hdp_ac .buy a b {
+	color: rgb(0, 0, 0); display: block;
+}
+.hdp_ac .buy a:hover b {
+	color: rgb(51, 153, 255);
+}
+.hdp_ac .buy span {
+	line-height: 13px;
+}
+.hdp_ac .buy .ons {
+	background: url("../images/buyons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .buy .ons:hover {
+	background: url("../images/buyons_ons.gif") no-repeat;
+}
+.hdp_ac .buy .ons_select {
+	background: url("../images/buyons_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .buy .ons_select b {
+	color: rgb(51, 153, 255);
+}
+.hdp_ac .buy .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .buy .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.hdp_ac .buy .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .buy .next_select b {
+	color: rgb(51, 153, 255);
+}
+.hdp_ac .buy .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .sell {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: right;
+}
+.hdp_ac .sell a b {
+	width: 46px; color: rgb(0, 0, 0); display: block;
+}
+.hdp_ac .sell a:hover b {
+	color: red;
+}
+.hdp_ac .sell span {
+	line-height: 13px;
+}
+.hdp_ac .sell .ons {
+	background: url("../images/sellons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .sell .ons:hover {
+	background: url("../images/sellons_ons.gif") no-repeat;
+}
+.hdp_ac .sell .ons_select {
+	background: url("../images/sellons_ons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(51, 51, 51); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .sell .ons_select b {
+	color: red;
+}
+.hdp_ac .sell .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .sell .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.hdp_ac .sell .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.hdp_ac .sell .next_select b {
+	color: red;
+}
+.hdp_ac .sell .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac {
+	top: 0px; width: 396px; height: 37px; right: 0px; overflow: hidden; padding-right: 2px; font-family: Arial, Helvetica, sans-serif; border-left-color: rgb(255, 153, 102); border-left-width: 2px; border-left-style: solid; position: absolute;
+}
+.ds_player_list .bsp_ac {
+	top: 0px; width: 396px; height: 37px; right: 0px; overflow: hidden; padding-right: 2px; border-left-color: rgb(90, 123, 212); border-left-width: 2px; border-left-style: solid; position: absolute;
+}
+.bsp_ac .other_data {
+	width: 93px; height: 35px; text-align: right; color: rgb(0, 0, 0); line-height: 35px; margin-right: 2px; float: left; display: inline; white-space: nowrap;
+}
+.bsp_ac .buy {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: left;
+}
+.bsp_ac .buy a b {
+	width: 46px; color: rgb(0, 0, 0); display: block;
+}
+.bsp_ac .buy a:hover b {
+	color: rgb(51, 153, 255);
+}
+.bsp_ac .buy span {
+	line-height: 13px;
+}
+.bsp_ac .buy .ons {
+	background: url("../images/buyons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .buy .ons:hover {
+	background: url("../images/buyons_ons.gif") no-repeat;
+}
+.bsp_ac .buy .ons_select {
+	background: url("../images/buyons_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .buy .ons_select b {
+	color: rgb(51, 153, 255);
+}
+.bsp_ac .buy .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .buy .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.bsp_ac .buy .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .buy .next_select b {
+	color: rgb(51, 153, 255);
+}
+.bsp_ac .buy .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .sell {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: right;
+}
+.bsp_ac .sell a b {
+	width: 46px; color: rgb(0, 0, 0); display: block;
+}
+.bsp_ac .sell a:hover b {
+	color: red;
+}
+.bsp_ac .sell span {
+	line-height: 13px;
+}
+.bsp_ac .sell .ons {
+	background: url("../images/sellons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .sell .ons:hover {
+	background: url("../images/sellons_ons.gif") no-repeat;
+}
+.bsp_ac .sell .ons_select {
+	background: url("../images/sellons_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .sell .ons_select b {
+	color: red;
+}
+.bsp_ac .sell .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .sell .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.bsp_ac .sell .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.bsp_ac .sell .next_select b {
+	color: red;
+}
+.bsp_ac .sell .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.wf_bewrite {
+	top: 0px; width: 804px; text-align: center; right: 0px; border-collapse: collapse; position: absolute;
+}
+.ckpl_1 {
+	padding: 0px 5px; width: 88px; height: 40px; text-align: center; color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); border-right-width: 1px; border-left-width: 1px; border-right-style: solid; border-left-style: solid;
+}
+.ckpl_2 {
+	padding: 0px 5px; width: 88px; color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid;
+}
+.t_top_1 {
+	width: 302px; height: 19px; color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-right-width: 2px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+.t_top_2 {
+	width: 302px; height: 19px; color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.t_bot_1 {
+	background: url("../images/bs_titbg.gif") repeat-y -8px; font-weight: bold; border-right-color: rgb(255, 255, 255); border-right-width: 2px; border-right-style: solid;
+}
+.t_bot_2 {
+	background: url("../images/bs_titbg.gif") repeat-y -8px; font-weight: bold;
+}
+.t_bg {
+	background: rgb(255, 243, 238);
+}
+.bot_left {
+	width: 150px; text-align: right; color: rgb(0, 153, 255); overflow: hidden; float: left; display: block; white-space: nowrap;
+}
+.bot_right {
+	width: 150px; text-align: left; color: rgb(255, 51, 0); overflow: hidden; float: right; display: block; white-space: nowrap;
+}
+.gq_table_list {
+	width: 100%; margin-bottom: 2px; border-top-color: rgb(255, 102, 0); border-left-color: rgb(255, 102, 0); border-top-width: 1px; border-left-width: 1px; border-top-style: solid; border-left-style: solid; border-collapse: collapse;
+}
+.gq_table_list tr td {
+	border-right-color: rgb(255, 102, 0); border-bottom-color: rgb(255, 102, 0); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+.ds_table_list {
+	width: 100%; margin-bottom: 2px; border-top-color: rgb(51, 102, 153); border-left-color: rgb(51, 102, 153); border-top-width: 1px; border-left-width: 1px; border-top-style: solid; border-left-style: solid; border-collapse: collapse;
+}
+.ds_table_list tr td {
+	border-right-color: rgb(51, 102, 153); border-bottom-color: rgb(51, 102, 153); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+.hf_time span {
+	text-align: center; line-height: 20px; font-weight: bold; display: block;
+}
+.table_player_name_1 {
+	height: 72px; overflow: hidden; margin-top: 3px; margin-right: 3px; border-bottom-color: rgb(255, 51, 0); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.table_player_name_2 {
+	height: 72px; overflow: hidden; margin-top: 3px; margin-right: 3px; border-bottom-color: rgb(51, 102, 153); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.t_p_name {
+	width: 99%; height: 36px; text-align: left; line-height: 35px; overflow: hidden; padding-left: 3px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.table_ac_list_1 {
+	width: 400px; height: 72px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; margin-top: 3px; border-bottom-color: rgb(255, 51, 0); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.table_ac_list_2 {
+	width: 400px; height: 72px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; margin-top: 3px; border-bottom-color: rgb(51, 102, 153); border-bottom-width: 1px; border-bottom-style: solid; position: relative;
+}
+.lock_this {
+	background: url("../images/whole_lock.png") no-repeat 2px 2px rgb(0, 0, 0); top: 0px; width: 398px; height: 72px; right: 0px; filter: alpha(opacity=20); position: absolute; z-index: 10; opacity: 0.2; -moz-opacity: 0.2; -khtml-opacity: 0.2;
+}
+.f_ac_body {
+	height: 36px; margin-right: 3px; margin-left: 1px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.f_ac_body .other_data {
+	width: 94px; height: 35px; text-align: right; color: rgb(51, 51, 51); line-height: 35px; margin-right: 1px; float: left; display: inline;
+}
+.f_ac_body .buy {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: left;
+}
+.f_ac_body .buy a b {
+	color: rgb(0, 0, 0); display: block;
+}
+.f_ac_body .buy a:hover b {
+	color: rgb(51, 153, 255);
+}
+.f_ac_body .buy span {
+	line-height: 13px;
+}
+.f_ac_body .buy .ons {
+	background: url("../images/buyons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .buy .ons:hover {
+	background: url("../images/buyons_ons.gif") no-repeat;
+}
+.f_ac_body .buy .ons_select {
+	background: url("../images/buyons_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .buy .ons_select b {
+	color: rgb(51, 153, 255);
+}
+.f_ac_body .buy .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .buy .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.f_ac_body .buy .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(51, 51, 51); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .buy .next_select b {
+	color: rgb(51, 153, 255);
+}
+.f_ac_body .buy .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 32px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .sell {
+	width: 150px; height: 32px; overflow: hidden; padding-top: 2px; float: right;
+}
+.f_ac_body .sell a b {
+	width: 46px; color: rgb(0, 0, 0); display: block;
+}
+.f_ac_body .sell a:hover b {
+	color: red;
+}
+.f_ac_body .sell span {
+	line-height: 13px;
+}
+.f_ac_body .sell .ons {
+	background: url("../images/sellons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .sell .ons:hover {
+	background: url("../images/sellons_ons.gif") no-repeat;
+}
+.f_ac_body .sell .ons_select {
+	background: url("../images/sellons_ons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(51, 51, 51); line-height: 14px; overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .sell .ons_select b {
+	color: red;
+}
+.f_ac_body .sell .next {
+	background: url("../images/buynext.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .sell .next:hover {
+	background: url("../images/buynext_ons.gif") no-repeat;
+}
+.f_ac_body .sell .next_select {
+	background: url("../images/buynext_ons.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+.f_ac_body .sell .next_select b {
+	color: red;
+}
+.f_ac_body .sell .bg_yy {
+	background: url("../images/buyons_yy.gif") no-repeat; width: 48px; height: 30px; text-align: center; color: rgb(102, 102, 102); overflow: hidden; padding-top: 3px; text-decoration: none; margin-left: 2px; display: inline-block; cursor: pointer;
+}
+/*
+.t_collect_no {
+	background: url("../images/collect_all.gif") no-repeat top rgb(255, 255, 255); top: 6px; width: 18px; height: 18px; right: 3px; display: block; position: absolute; z-index: 100; cursor: pointer;
+}
+.t_collect_no:hover {
+	background: url("../images/collect_all.gif") no-repeat center -20px; text-decoration: none; cursor: pointer;
+}
+.t_collect_yes {
+	background: url("../images/collect_all.gif") no-repeat center -60px rgb(255, 255, 255); top: 6px; width: 18px; height: 18px; right: 3px; display: block; position: absolute; z-index: 100; cursor: pointer;
+}
+.t_collect_yes:hover {
+	background: url("../images/collect_all.gif") no-repeat center -80px; text-decoration: none; cursor: pointer;
+}
+.t_collect_lock_yes {
+	background: url("../images/collect_all.gif") no-repeat center -60px rgb(255, 255, 255); top: 6px; width: 18px; height: 18px; right: 3px; display: block; position: absolute; z-index: 100; cursor: pointer;
+}
+.t_collect_lock_yes:hover {
+	text-decoration: none;
+}
+*/
+.toderr {
+	border: 2px solid rgb(90, 123, 212); text-align: center; margin-bottom: 1px; display: block;
+}
+.toderr span {
+	background: url("../images/errinfo.gif") no-repeat 15px 8px rgb(255, 255, 255); text-align: left; color: red; line-height: 24px; padding-top: 6px; padding-left: 40px; display: inline-block;
+}
+.todload {
+	border: 2px solid rgb(90, 123, 212); text-align: center; margin-bottom: 1px; display: block;
+}
+.todload span {
+	background: url("../images/loading5.gif") no-repeat center 20px rgb(255, 255, 255); padding: 44px 0px 10px; text-align: center; color: rgb(204, 204, 204); line-height: 52px; display: block;
+}
+.paly_select_c {
+	padding: 15px 6px 5px; color: red;
+}
+.paly_select_c label:hover {
+	color: rgb(255, 102, 0); cursor: pointer;
+}
+.paly_select_c input:hover {
+	color: rgb(255, 51, 0); cursor: pointer;
+}
+.paly_select_d {
+	background: rgb(209, 224, 253); border-width: 1px; border-style: solid; border-color: rgb(201, 207, 220) rgb(227, 227, 227) rgb(227, 227, 227); padding: 5px 6px; overflow: auto; min-height: 200px;
+}
+.paly_select_d ul li {
+	padding: 5px 0px; width: 310px; line-height: 14px; overflow: hidden; margin-right: 10px; float: left; display: inline; white-space: nowrap;
+}
+.paly_select_d ul li:hover {
+	background: rgb(254, 252, 241); color: red; cursor: pointer;
+}
+.paly_select_d ul label {
+	display: inline-block;
+}
+.paly_select_d ul.locklist li {
+	color: rgb(102, 102, 102);
+}
+.paly_select_d ul.locklist li:hover {
+	color: rgb(102, 102, 102);
+}
+.bt_search {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_add {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_folder {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_hand {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_stop {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_yse {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_emotion {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_return {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_save {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_money {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_back {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_up {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_del_1 {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_down {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_next {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_del_2 {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_modify {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_power {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_acitve {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_player {
+	background: url("../images/button_h24.gif"); padding: 0px 8px 0px 28px; border: 1px solid rgb(204, 204, 204); width: auto; height: 24px; line-height: 22px; overflow: visible; margin-right: 5px; cursor: pointer; _width: 0; _height: 22px; _line-height: 20px; _margin-right: 15px;
+}
+.bt_search {
+	background-position: left -1px;
+}
+.bt_add {
+	background-position: left -25px;
+}
+.bt_folder {
+	background-position: left -49px;
+}
+.bt_hand {
+	background-position: left -73px;
+}
+.bt_stop {
+	background-position: left -97px;
+}
+.bt_yse {
+	background-position: left -121px;
+}
+.bt_emotion {
+	background-position: left -145px;
+}
+.bt_return {
+	background-position: left -169px;
+}
+.bt_save {
+	background-position: left -193px;
+}
+.bt_money {
+	background-position: left -217px;
+}
+.bt_back {
+	background-position: left -241px;
+}
+.bt_up {
+	background-position: left -265px;
+}
+.bt_del_1 {
+	background-position: left -289px;
+}
+.bt_down {
+	background-position: left -313px;
+}
+.bt_next {
+	background-position: right -337px; padding: 0px 28px 0px 8px;
+}
+.bt_del_2 {
+	background-position: left -361px;
+}
+.bt_modify {
+	background-position: left -385px;
+}
+.bt_power {
+	background-position: left -409px;
+}
+.bt_acitve {
+	background-position: left -432px; margin: 0px; padding: 0px 6px; border: 1px solid rgb(168, 215, 234); height: 20px; color: rgb(55, 90, 144); line-height: 20px; _height: 16px; _line-height: 16px;
+}
+.bt_player {
+	background-position: left -457px; margin: 0px; border: 1px solid rgb(134, 141, 89);
+}
+.bt_yes {
+	background: url("../images/button_h24.gif") no-repeat right -1px; padding: 0px 10px; border: 1px solid rgb(227, 227, 227); height: 22px; line-height: 22px; cursor: pointer; _padding: 0 5px; _line-height: 20px;
+}
+.bt_not {
+	background: url("../images/button_h24.gif") no-repeat right -1px; padding: 0px 10px; border: 1px solid rgb(227, 227, 227); height: 22px; line-height: 22px; cursor: pointer; _padding: 0 5px; _line-height: 20px;
+}
+.loading-icon {
+	background: url("images/throbber.gif") no-repeat center; margin: 0px; padding: 0px; width: 40px; height: 16px; text-decoration: none; display: inline-block;
+}
+.active_play {
+	border: 1px solid rgb(204, 204, 204); position: relative;
+}
+.date_ico {
+	background: url("../images/date_ico.gif") no-repeat right rgb(255, 255, 255);
+}

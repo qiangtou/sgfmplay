@@ -1,0 +1,21 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="css/layout_cn.css">
+<link type="text/css" rel="stylesheet" href="css/link.css">
+</head>
+<body>
+<div></div>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.ajaxtest.js"></script>
+<script type="text/javascript" src="sgfmmvc.js"></script>
+<script type="text/javascript" src="play_new.js"></script>
+<script type="text/javascript">
+$('div').sgfmplay({
+	'url' : {
+		'info' : "/trade/core/inPlay.findInPlayInfo.do?mid=3544796",
+		'match' : '/trade/core/inPlay.findMarketMatchInfo.do?mid=3332584',
+		'status' : '/trade/core/inPlay.findMarketGameStatusInfo.do?mid=3332584'
+	}
+});
+</script>
+</body>

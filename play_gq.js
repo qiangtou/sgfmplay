@@ -12,7 +12,7 @@
 				second : "下半场",
 				half : "半场",
 				playing : "进行中",
-				pause:"暂停中"
+				pause : "暂停中"
 			},
 			playlist : {
 				title : this.tit,
@@ -23,7 +23,7 @@
 				pl : "参考赔率"
 			}
 		}
-		},
+	},
 	templates = {},
 	dr = {
 		fecth : function (settings) {
@@ -52,7 +52,7 @@
 	},
 	ds = {
 		all : function (json) {
-			var d;			
+			var d;
 			if (json.c == 0) {
 				d = json.d;
 				ds.setFrame(d[0]);
@@ -62,50 +62,56 @@
 		},
 		setFrame : function (frame) {
 			//框架frame[0][0]
-			var mId,mName,isRoll,p1,p2;
-			f=frame[0][0];
+			var mId,
+			mName,
+			isRoll,
+			p1,
+			p2;
+			f = frame[0][0];
 			console.log(f);
 			//topModel的重置
-			topModel.set({				
-				p1name:f[6][0][1],
-				p2name:f[6][1][1],
+			topModel.set({
+				p1name : f[6][0][1],
+				p2name : f[6][1][1],
 			});
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			var s = status[0];
-			console.log(s);
-			var i,j,k,gr,o = {}, 
+			//console.log(s);
+			var i,
+			j,
+			gr,
+			o = {},
 			attr = ["goal", "red"],
-			c=["goal","red_card"],
-			events=[],
+			events = [],
 			goalred = s[5];
-			for ( i = 0; i < 2; i++) {
+			for (i = 0; i < 2; i++) {
 				gr = goalred[i];
-				for ( j = 1; j < 3; j++) {
-					o["p" + (i + 1) + attr[j-1]] = gr[j];
+				for (j = 1; j < 3; j++) {
+					o["p" + (i + 1) + attr[j - 1]] = gr[j];
 				}
-				gTimes=gr[3];
+				gTimes = gr[j];
 				//进球时间
-				for(j=gTimes.length;j--;){
+				for (j = gTimes.length; j--; ) {
 					events.push({
-						id:"g"+i+j,
-						action:"goal",
-						type:i,
-						time:gTimes[j]
+						id : "g" + i + j,
+						action : "goal",
+						type : i,
+						time : gTimes[j]
 					})
 				}
-				rTimes=gr[4];
+				rTimes = gr[4];
 				//红牌时间
-				for(j=rTimes.length;j--;){
+				for (j = rTimes.length; j--; ) {
 					events.push({
-						id:"r"+i+j,
-						action:"red_card",
-						type:i,
-						time:rTimes[j]
+						id : "r" + i + j,
+						action : "red_card",
+						type : i,
+						time : rTimes[j]
 					})
 				}
-				
+
 			}
 			o.playTime = (s[2] / 60000) | 0;
 			topModel.set(o);
@@ -127,73 +133,93 @@
 		}),
 	goalModels = new GameModels,
 	redcardModels = new GameModels,
-	matchEvents=new sgfmmvc.Models({
-		model:sgfmmvc.Model.extend()
-	}),
-	matchEventsView=sgfmmvc.View.extend({
-		//$:$("<span></span>"),
-		init:function(){
-			var m=this.model,
-				location=["t","d"];//主队客队红黄牌上下位置标识 
-			var cls=m.get("action")+"_"+location[m.get("type")];
-			this.$.addClass(cls).css("left",m.get("left"));
-		},
-		render:function(){
-			var time=this.model.get("time");
-			this.$.html(time+"'");
-			return this;
-		}
-	}),
-	
-	PlayTimeBarView=sgfmmvc.View.extend({
-			model:matchEvents,
-			init:function(){
-				this.render();
-				this.listenTo(this.model,"reset",this.reset);
-			},
-			render:function(){
-				this.$.html(this.template);
-				var c=this.$.children();
-				this.first=c.eq(0);
-				this.second=c.eq(1);
-				this.width=this.first.width();
-			},
-			reset:function(){
-					this.render();
-					
-					var left,m,time,bar, arr = this.model.toArr();
-					for (i = arr.length; i--; ) {
-						m=arr[i];
-						time = m.get("time");
-						if (time <= 45) {
-							bar = this.first;
-						} else if (time > 45) {
-							time-=45;
-							bar = this.second;
-						}
-						left=-10+(time/45*bar.width())|0;
-						m.set("left",left)
-						//console.log(m.id)
-						var me = new matchEventsView({model : m});
-						bar.append(me.render().$);
-					}
-			}
-	}),
-	topModel=new sgfmmvc.Model,
-	TopView = sgfmmvc.View.extend({
-			model:topModel,
-			cls:"gq_top",
+	matchEvents = new sgfmmvc.Models({
+			model : sgfmmvc.Model.extend()
+		}),
+	matchEventsView = sgfmmvc.View.extend({
+			//$:$("<span></span>"),
 			init : function () {
-				this.listenTo(this.model,"hasChange",this.render);
+				var m = this.model,
+				location = ["t", "d"]; //主队客队红黄牌上下位置标识
+				var cls = m.get("action") + "_" + location[m.get("type")];
+				this.$.addClass(cls).css("left", m.get("left"));
 			},
 			render : function () {
-				this.$.html(sgfmmvc.replace(this.template,$.extend({},this.model.getAttrs(),opt.i18n.top)));
-				new PlayTimeBarView({$:this.$.find(".play_time_bar"),template:$("#timebar_tmpl").html()});
+				var time = this.model.get("time");
+				this.$.html(time + "'");
+				return this;
+			}
+		}),
+
+	PlayTimeBarView = sgfmmvc.View.extend({
+			model : matchEvents,
+			init : function () {
+				this.render();
+				this.listenTo(this.model, "reset", this.reset);
+			},
+			render : function () {
+				this.$.html(this.template);
+				var c = this.$.children();
+				this.first = c.eq(0);
+				this.second = c.eq(1);
+				this.width = this.first.width();
+				this.showTimeLine(topModel.get("playTime"));
+			},
+			showTimeLine : function (playTime) {
+			var timeLine=this.first.children(".time_line"),
+				barWidth=this.width,
+				width=(playTime/45*barWidth)|0;
+				if(playTime>45){
+					timeLine.css("width",barWidth);
+					width=width-barWidth;
+					timeLine=this.second.children(".time_line");
+				}
+				timeLine.css("width",width).html(playTime+"'");
+			},
+			reset : function () {
+				this.render();
+
+				var left,
+				m,
+				time,
+				bar,
+				arr = this.model.toArr();
+				for (i = arr.length; i--; ) {
+					m = arr[i];
+					time = m.get("time");
+					if (time <= 45) {
+						bar = this.first;
+					} else if (time > 45) {
+						time -= 45;
+						bar = this.second;
+					}
+					left = -10 + (time / 45 * bar.width()) | 0;
+					m.set("left", left)
+					var me = new matchEventsView({
+							model : m
+						});
+					bar.append(me.render().$);
+				}
+			}
+		}),
+	topModel = new sgfmmvc.Model,
+	TopView = sgfmmvc.View.extend({
+			model : topModel,
+			cls : "gq_top",
+			init : function () {
+				this.listenTo(this.model, "hasChange", this.render);
+			},
+			render : function () {
+				this.$.html(sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), opt.i18n.top)));
+				new PlayTimeBarView({
+					$ : this.$.find(".play_time_bar"),
+					template : $("#timebar_tmpl").html()
+				});
 				return this;
 			}
 		}),
 	PlayListView = sgfmmvc.View.extend({
-			cls:"play_list_frame",
+			cls : "play_list_frame",
 			init : function () {
 				this.render();
 			},

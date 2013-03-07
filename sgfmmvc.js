@@ -76,7 +76,7 @@
 //对象集合类
 	_.Models = function (settings) {
 		var models = {},
-		length = 0;
+			length = 0;
 		//取得集合大小
 		this.length = function () {
 			return length;
@@ -94,16 +94,16 @@
 		};
 		//添加指定的model进入该集合
 		this.add = function (m) {
-			var id = m.get(m.id);
+			var id = m.get(m.idArr);
 			if (!models[id]) {
-				length++;
 				models[id] = m;
+				length++;
 			}
 			return this;
 		};
 		//删除指定的model
 		this.del = function (m) {
-			var id = m.get(m.id);
+			var id = m.get(m.idArr);
 			if (models[id]) {
 				delete models[id];
 				length--;
@@ -121,6 +121,7 @@
 			for (m in models) {
 				arr.push(models[m]);
 			}
+			return arr;
 		};
 		//通过model Id取得model
 		this.getById = function (id) {
@@ -135,6 +136,13 @@
 					return models[m];
 				}
 			}
+		};
+		this.reset=function(mArrs){
+			this.empty();
+			for(var i=mArrs.length;i--;){
+				this.create(mArrs[i]);
+			}
+			return this;
 		};
 		//向服务器拉取数据，callback暴露给外部处理响应json
 		this.fetch = function (callback) {
@@ -204,10 +212,19 @@
 			}
 		};
 		//覆盖默认配置
-		$.extend(self, settings);
-		//调用初始化方法和添加事件处理
-		this.init.call(this, settings);
-		this.addEvents.call(this, settings);
+		this._init=function(){
+			$.extend(self, settings);
+			//调用初始化方法和添加事件处理
+			this.init.call(this, settings);
+			this.addEvents.call(this, settings);
+			//覆盖默认的jquery对象
+			var tag=this.tag;
+			tag && (this.$=$("<"+tag+"></"+tag+">"));
+			var cls=this.cls;
+			cls && this.$.addClass(cls);
+		};
+		this._init();
+		
 	};
 	//为Model,Models,View添加扩展方法，类似于继承
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {

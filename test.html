@@ -15,7 +15,7 @@ $(function () {
 	$('div').sgfmplay({
 		'allUrl':"all", 
 		'infoUrl':"info",
-		'allRefreshCycle':8000,
+		'allRefreshCycle':30000,
 		'infoRefreshCycle':2000
 	});
 });
@@ -24,7 +24,7 @@ $(function () {
 			<div class="palyer_1">{p1name}</div>
 			<div class="player_1_n">{p1goal}</div>
             <div class="play_active">
-				<span class="p_time_ac">{playTime}' 暂停中</span><span class="p_helf_ac">2-2 {half}</span>
+				<span class="p_time_ac">{now}' 暂停中</span><span class="p_helf_ac">2-2 {half}</span>
 			</div>
             <div class="palyer_2">{p2name}</div>
 			<div class="player_2_n">{p2goal}</div>
@@ -34,7 +34,10 @@ $(function () {
             <div class="play_time_bar">
             	<div class="helf_timebar">
                     <div style="width:230px;" class="time_line">35' </div>
-                    
+                    <span class="red_card_t">12'</span>
+                    <span class="goal_t">34'</span>
+                    <span class="red_card_d">8'</span>
+                    <span class="goal_d">34'</span>
                 </div>
                 <div class="helf_timebar">
                 	<div style="width:0;" class="time_line"><!--这个不能没有，至少要写宽度为0，不然IE6会出错--></div>
@@ -48,14 +51,6 @@ $(function () {
 		<span class="other_th">{pl}</span>
 		<span class="buy_th">{buy}&nbsp;</span>
 		<span class="sell_th">&nbsp;{sell}</span>
-	</div>
-</script>
-<script id="timebar_tmpl" type="text/template">
-   <div class="helf_timebar">
-       <div class="time_line" style="width:50px;">35' </div>
-   </div>    
-    <div class="helf_timebar">
-       <div class="time_line" style="width:0px;"><!--这个不能没有，至少要写宽度为0，不然IE6会出错--></div>
 	</div>
 </script>
 </body>

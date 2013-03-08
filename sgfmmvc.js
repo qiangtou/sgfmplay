@@ -215,13 +215,14 @@
 		this._init=function(){
 			$.extend(self, settings);
 			//调用初始化方法和添加事件处理
-			this.init.call(this, settings);
-			this.addEvents.call(this, settings);
-			//覆盖默认的jquery对象
+				//覆盖默认的jquery对象
 			var tag=this.tag;
 			tag && (this.$=$("<"+tag+"></"+tag+">"));
 			var cls=this.cls;
 			cls && this.$.addClass(cls);
+			
+			this.init.call(this, settings);
+			this.addEvents.call(this, settings);
 		};
 		this._init();
 		

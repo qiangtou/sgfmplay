@@ -72,7 +72,7 @@
 			//topModel的重置
 			topModel.set({
 				p1name : f[6][0][1],
-				p2name : f[6][1][1],
+				p2name : f[6][1][1]
 			});
 		},
 		setStatus : function (status) {
@@ -123,8 +123,7 @@
 		},
 		info : function (json) {
 			//	console.log("info")
-		},
-
+		}
 	},
 	dc = {},
 	GameModel = sgfmmvc.Models.extend({}),
@@ -137,7 +136,7 @@
 			model : sgfmmvc.Model.extend()
 		}),
 	matchEventsView = sgfmmvc.View.extend({
-			//$:$("<span></span>"),
+			tag:'span',
 			init : function () {
 				var m = this.model,
 				location = ["t", "d"]; //主队客队红黄牌上下位置标识

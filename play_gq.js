@@ -69,25 +69,23 @@
 			p2;
 			f = frame[0][0];
 			console.log(f);
-			//topModel的重置
+			//topModel的设置
 			topModel.set({
 				p1name : f[6][0][1],
 				p2name : f[6][1][1]
 			});
+			//框架的设置
+			
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
-			var s = status[0];
-			//console.log(s);
-			var i,
-			j,
-			gr,
-			o = {},
+			var s = status[0],i,j,gr,gTimes,rTimes,o = {},
 			attr = ["goal", "red"],
 			events = [],
 			goalred = s[5];
 			for (i = 0; i < 2; i++) {
 				gr = goalred[i];
+				//双方信息
 				for (j = 1; j < 3; j++) {
 					o["p" + (i + 1) + attr[j - 1]] = gr[j];
 				}
@@ -130,13 +128,15 @@
 	GameModels = sgfmmvc.Models.extend({
 			model : GameModel
 		}),
-	goalModels = new GameModels,
+	//暴露在外的进球玩法和红牌玩法集合,对应的view进行监听
+	goalModels = new GameModels,	
 	redcardModels = new GameModels,
+	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
 		}),
 	matchEventsView = sgfmmvc.View.extend({
-			tag:'span',
+			tag : 'span',
 			init : function () {
 				var m = this.model,
 				location = ["t", "d"]; //主队客队红黄牌上下位置标识
@@ -165,15 +165,15 @@
 				this.showTimeLine(topModel.get("playTime"));
 			},
 			showTimeLine : function (playTime) {
-			var timeLine=this.first.children(".time_line"),
-				barWidth=this.width,
-				width=(playTime/45*barWidth)|0;
-				if(playTime>45){
-					timeLine.css("width",barWidth);
-					width=width-barWidth;
-					timeLine=this.second.children(".time_line");
+				var timeLine = this.first.children(".time_line"),
+				barWidth = this.width,
+				width = (playTime / 45 * barWidth) | 0;
+				if (playTime > 45) {
+					timeLine.css("width", barWidth);
+					width = width - barWidth;
+					timeLine = this.second.children(".time_line");
 				}
-				timeLine.css("width",width).html(playTime+"'");
+				timeLine.css("width", width).html(playTime + "'");
 			},
 			reset : function () {
 				this.render();

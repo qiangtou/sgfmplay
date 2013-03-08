@@ -21,8 +21,7 @@ if (!console) {
 		timeEnd : $.noop
 	}
 } else {
-	if (!console.time)
-		console.time = $.noop;
-		console.timeEnd = $.noop;
+	if (!console.time)console.time = $.noop;
+	if (!console.timeEnd)console.timeEnd = $.noop;
 }
 })();

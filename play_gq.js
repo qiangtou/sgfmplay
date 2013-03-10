@@ -7,6 +7,13 @@
 	opt = {},
 	defaults = {
 		i18n : {
+			gameType : {
+				standard : "标准盘",
+				concedepoints : "让球玩法",
+				goal : "大小球玩法",
+				sigledouble : "单双玩法",
+				redcard : "红牌玩法"
+			},
 			top : {
 				first : "上半场",
 				second : "下半场",
@@ -60,26 +67,33 @@
 				ds.setPk(d[2]);
 			}
 		},
+		//框架的设置
 		setFrame : function (frame) {
 			//框架frame[0][0]
 			var mId,
 			mName,
 			isRoll,
 			p1,
-			p2;
-			f = frame[0][0];
-			console.log(f);
+			p2,
+			f = frame[0][0],
+			gameArr = f[7];
+			console.log(gameArr)
 			//topModel的设置
 			topModel.set({
 				p1name : f[6][0][1],
 				p2name : f[6][1][1]
 			});
-			//框架的设置
-			
+			ds.setGames(gameArr);
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
-			var s = status[0],i,j,gr,gTimes,rTimes,o = {},
+			var s = status[0],
+			i,
+			j,
+			gr,
+			gTimes,
+			rTimes,
+			o = {},
 			attr = ["goal", "red"],
 			events = [],
 			goalred = s[5];
@@ -118,6 +132,46 @@
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			//console.log(pk);
+
+		},
+		setGames : function (gameArr) {
+			var game,
+			typeIds = {}, //玩法id集合
+			typeId, //玩法id
+			gameTypeModel,
+			gamemodels,
+			i18ns = [],
+			i18n = opt.i18n.gameType;
+			for (var k in i18n) {
+				i18ns.push(i18n[k]);
+			}
+
+			var typeName = [],
+			typeModels = {
+				1 : null, //标准盘
+				2 : null, //让球
+				3 : goalModels, //大小球
+				4 : null, //单双
+				5 : redcardModels //红黄牌
+			};
+			for (var i = gameArr.length; i--; ) {
+				game = gameArr[i];
+				typeId = game[3];
+				gamemodels = typeModels[typeId];
+				gameTypeModel = gameTypeModels.getById(typeId);
+				if (gameTypeModel == null) {
+					gameTypeModels.create({
+						typeId : typeId,
+						gamemodels : gamemodels,
+						title : i18ns[typeId - 1]
+					});
+				}
+
+			};
+			for (tid in typeIds) {
+				gamemodels = typeModels[tid];
+				gamemodels && gamemodels.reset();
+			}
 		},
 		info : function (json) {
 			//	console.log("info")
@@ -129,7 +183,7 @@
 			model : GameModel
 		}),
 	//暴露在外的进球玩法和红牌玩法集合,对应的view进行监听
-	goalModels = new GameModels,	
+	goalModels = new GameModels,
 	redcardModels = new GameModels,
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
@@ -177,28 +231,34 @@
 			},
 			reset : function () {
 				this.render();
-
 				var left,
+				width = this.width,
 				m,
 				time,
 				bar,
+				fragment,
+				first = document.createDocumentFragment(),
+				second = document.createDocumentFragment(),
 				arr = this.model.toArr();
+
 				for (i = arr.length; i--; ) {
 					m = arr[i];
 					time = m.get("time");
 					if (time <= 45) {
-						bar = this.first;
+						fragment = first;
 					} else if (time > 45) {
 						time -= 45;
-						bar = this.second;
+						fragment = second;
 					}
-					left = -10 + (time / 45 * bar.width()) | 0;
+					left = -10 + (time / 45 * width) | 0;
 					m.set("left", left)
 					var me = new matchEventsView({
 							model : m
 						});
-					bar.append(me.render().$);
+					fragment.appendChild(me.render().$[0]);
 				}
+				this.first.append(first);
+				this.second.append(second);
 			}
 		}),
 	topModel = new sgfmmvc.Model,
@@ -230,27 +290,33 @@
 				return this;
 			}
 		}),
+	gameTypeModels = new sgfmmvc.Models({
+			model : sgfmmvc.Model.extend({
+				idArr : "typeId"
+			})
+		}),
 	Play = sgfmmvc.View.extend({
+			model : gameTypeModels,
 			init : function () {
 				this.top = new TopView({
 						template : $("#top_tmpl").html()
 					});
-				var playlist_tmpl = $("#playlist_tmpl").html();
-				this.goalList = new PlayListView({
-						model : goalModels,
-						tit : "总进球数",
-						template : playlist_tmpl
-					});
-				this.redCardList = new PlayListView({
-						tit : "红牌数",
-						model : redcardModels,
-						template : playlist_tmpl
-					});
+				this.listenTo(this.model, "create", this.addGameType);
 				this.render();
 				dr.fecth(opt);
 			},
 			render : function () {
-				this.$.append(this.top.$, this.goalList.$, this.redCardList.$);
+				this.$.append(this.top.$);
+			},
+			addGameType : function (m) {
+				var mds = this.model;
+				md = mds.getById(m.typeId);
+				var playlist = new PlayListView({
+						tit : md.get("title"),
+						model : md.get("gamemodels"),
+						template : $("#playlist_tmpl").html()
+					});
+				this.$.append(playlist.render().$);
 			}
 		}),
 	instence = {

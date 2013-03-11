@@ -7,21 +7,7 @@
 </head>
 <body>
 <div></div>
-<script type="text/javascript" src="jquery.min.js"></script>
-<script type="text/javascript" src="jquery.ajaxtest.js"></script>
-<script type="text/javascript" src="play_gq_data.js"></script>
-<script type="text/javascript" src="sgfmmvc.js"></script>
-<script type="text/javascript" src="play_gq.js"></script>
-<script type="text/javascript">
-$(function () {
-	$('div').sgfmplay({
-		'allUrl':"all", 
-		'infoUrl':"info",
-		'allRefreshCycle':10000,
-		'infoRefreshCycle':2000
-	});
-});
-</script>
+
 <script id="top_tmpl" type="text/template">
 			<div class="palyer_1">{p1name}</div>
 			<div class="player_1_n">{p1goal}</div>
@@ -58,6 +44,45 @@ $(function () {
     <div class="helf_timebar">
        <div class="time_line" style="width:0px;"><!--这个不能没有，至少要写宽度为0，不然IE6会出错--></div>
 	</div>
+</script>
+<script id="game_tmpl" type="text/template">
+                <li id="{trade1}">
+                    <span class="player">{p1name}</span>
+                    <span class="other_pk">{p1pk}</span>
+                    <span class="other_data">{p1data}</span>
+                    <span class="buy">
+                    <a href="#" class="span"><span><b>{b1}</b>{b1n}</span></a><a href="#" class="span"><span><b>{b2}</b>{b2n}</span></a><a href="#" class="ons"><span><b>{b3}</b>{b3n}</span></a>
+                    </span>
+                    <span class="sell">
+                    <a href="#" class="ons"><span><b>{s1}</b>{s1n}</span></a><a href="#" class="span"><span><b>{s2}</b>{s2n}</span></a><a href="#" class="span"><span><b>{s3}</b>{s3n}</span></a>
+                    </span>
+                </li>
+                <li id="{trade2}">
+                    <span class="player">{p2name}</span>
+                    <span class="other_pk">{p2pk}</span>
+                    <span class="other_data">{p2data}</span>
+                    <span class="buy">
+                    <a href="#" class="span" title="买盘能量：102%"><span><b>1.99</b>0</span></a><a href="#" class="span" title="买盘能量：102%"><span><b>6</b>120</span></a><a href="#" class="ons" title="买盘能量：102%"><span><b>11.4</b>115000</span></a>
+                    </span>
+                    <span class="sell">
+                    <a href="#" class="ons" title="卖盘能量：52%"><span><b>6.3</b>9110</span></a><a href="#" class="span" title="卖盘能量：52%"><span><b>5</b>820</span></a><a href="#" class="span" title="卖盘能量：52%"><span><b>14.4</b>95000</span></a>
+                    </span>
+                </li>
+</script>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.ajaxtest.js"></script>
+<script type="text/javascript" src="play_gq_data.js"></script>
+<script type="text/javascript" src="sgfmmvc.js"></script>
+<script type="text/javascript" src="play_gq.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('div').sgfmplay({
+		'allUrl':"all", 
+		'infoUrl':"info",
+		'allRefreshCycle':30000,
+		'infoRefreshCycle':2000
+	});
+});
 </script>
 </body>
 </html>

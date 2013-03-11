@@ -75,14 +75,13 @@
 			isRoll,
 			p1,
 			p2,
+			ptmp,
+			isHost, //主客标识
 			f = frame[0][0],
+			teamInfo = f[6],
 			gameArr = f[7];
-			console.log(gameArr)
-			//topModel的设置
-			topModel.set({
-				p1name : f[6][0][1],
-				p2name : f[6][1][1]
-			});
+			ds.setTop(teamInfo);
+			console.log(gameArr);
 			ds.setGames(gameArr);
 		},
 		setStatus : function (status) {
@@ -126,18 +125,49 @@
 
 			}
 			o.playTime = (s[2] / 60000) | 0;
-			topModel.set(o);
+			topModel.reset($.extend({}, topModel.getAttrs(), o));
 			matchEvents.reset(events);
 		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
-			//console.log(pk);
+			console.log("盘口"+pk);
 
+		},
+		//设置头部比分model
+		setTop : function (teamInfo) {
+			var p1, //主队
+			p2, //客队
+			p1Id,
+			p2Id,
+			ptmp, //交换临时变量
+			isHost; //p1主客标识
+			p1 = ptmp = teamInfo[0];
+			p2 = teamInfo[1];
+			isHost = p1[2];
+			if (!isHost) { //如果p1是客队，交换处理
+				isHost = false;
+				p1 = p2;
+				p2 = ptmp;
+			}
+			//topModel的设置
+			p1Id = p1[0];
+			p2Id = p2[0];
+			var o = {
+				"p1name" : p1[1],
+				"p2name" : p2[1]
+			}
+			o[p1Id] = 1;
+			o[p2Id] = 0;
+			topModel.set(o);
 		},
 		setGames : function (gameArr) {
 			var game,
 			typeIds = {}, //玩法id集合
 			typeId, //玩法id
+			gameIds = {},
+			gameId, //游戏id
+			tradeId, //交易项id
+			playerId, //球队id
 			gameTypeModel,
 			gamemodels,
 			i18ns = [],
@@ -148,17 +178,24 @@
 
 			var typeName = [],
 			typeModels = {
-				1 : null, //标准盘
-				2 : null, //让球
+				1 : standardModels, //标准盘
+				2 : concedepointsModels, //让球
 				3 : goalModels, //大小球
-				4 : null, //单双
+				4 : sigledoubleModels, //单双
 				5 : redcardModels //红黄牌
 			};
+			var _topModel = topModel,
+			p1name = _topModel.get('p1name'),
+			p2name = _topModel.get('p2name');
 			for (var i = gameArr.length; i--; ) {
 				game = gameArr[i];
+				playerId = game[0];
+				tradeId = game[1];
+				gameId = game[2];
 				typeId = game[3];
 				gamemodels = typeModels[typeId];
 				gameTypeModel = gameTypeModels.getById(typeId);
+				//玩法处理
 				if (gameTypeModel == null) {
 					gameTypeModels.create({
 						typeId : typeId,
@@ -167,10 +204,34 @@
 					});
 				}
 
+				var gameObj = {
+					"gameId" : gameId
+				};
+				gameObj['p1name'] = p1name;
+				gameObj['p2name'] = p2name;
+				//交易项的处理
+				tradeModels.create({tradeId:tradeId});
+				var isHost = _topModel.get(playerId);
+				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
+				gameObj['p' + host + 'pk'] = game[4];
+				gameObj['trade' + host] = tradeId;
+
+				var gm = gamemodels.getById(gameId);
+				if (gm == null) {
+					gamemodels.create(gameObj);
+				} else {
+					var newgameObj=$.extend({}, gm.getAttrs(), gameObj); 
+					console.log("newgameObj--",newgameObj)
+					gm.reset(newgameObj);
+				}
+				console.log(123)
 			};
 			for (tid in typeIds) {
 				gamemodels = typeModels[tid];
-				gamemodels && gamemodels.reset();
+				if (gamemodels) {
+					gamemodels.reset();
+
+				}
 			}
 		},
 		info : function (json) {
@@ -178,13 +239,18 @@
 		}
 	},
 	dc = {},
-	GameModel = sgfmmvc.Models.extend({}),
+	GameModel = sgfmmvc.Model.extend({
+			idArr : "gameId"
+		}),
 	GameModels = sgfmmvc.Models.extend({
 			model : GameModel
 		}),
 	//暴露在外的进球玩法和红牌玩法集合,对应的view进行监听
 	goalModels = new GameModels,
 	redcardModels = new GameModels,
+	standardModels = new GameModels,
+	concedepointsModels = new GameModels,
+	sigledoubleModels = new GameModels,
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
@@ -206,6 +272,7 @@
 
 	PlayTimeBarView = sgfmmvc.View.extend({
 			model : matchEvents,
+			template : $("#timebar_tmpl").html(),
 			init : function () {
 				this.render();
 				this.listenTo(this.model, "reset", this.reset);
@@ -265,15 +332,47 @@
 	TopView = sgfmmvc.View.extend({
 			model : topModel,
 			cls : "gq_top",
+			template : $("#top_tmpl").html(),
 			init : function () {
-				this.listenTo(this.model, "hasChange", this.render);
+				this.listenTo(this.model, "reset", this.render);
 			},
 			render : function () {
 				this.$.html(sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), opt.i18n.top)));
 				new PlayTimeBarView({
-					$ : this.$.find(".play_time_bar"),
-					template : $("#timebar_tmpl").html()
+					$ : this.$.find(".play_time_bar")					
 				});
+				return this;
+			}
+		}),
+	tradeModels=new sgfmmvc.Models({
+		model:sgfmmvc.Model.extend({idArr:"tradeId"})
+	}),
+	TradeView = sgfmmvc.View.extend({
+			init : function () {
+				this.listenTo(this.model,"reset",this.render);
+			},
+			render : function () {
+			
+			}
+		}),
+	GameView = sgfmmvc.View.extend({
+			cls : "play_list_ul",
+			tag : "ul",
+			template : $("#game_tmpl").html(),
+			init : function () {
+				this.listenTo(this.model, "reset", this.render);
+			},
+			render : function () {
+				this.$.html(sgfmmvc.replace(this.template, this.model.getAttrs()));
+				var $el=this.$;
+				var trade1Id=this.model.get("trade1"),
+					trade2Id=this.model.get("trade2"),
+					t1=$el.find('#'+trade1Id),
+					t2=$el.find('#'+trade2Id),
+					m1=tradeModels.getById(trade1Id),
+					m2=tradeModels.getById(trade2Id);
+					new TradeView({$:t1,model:m1});
+					new TradeView({$:t2,model:m2});
 				return this;
 			}
 		}),
@@ -281,6 +380,14 @@
 			cls : "play_list_frame",
 			init : function () {
 				this.render();
+				this.listenTo(this.model, "create", this.addGame);
+			},
+			addGame : function (m) {
+				var md = this.model.getById(m.gameId);
+				var gv = new GameView({
+						model : md
+					});
+				this.$.append(gv.$);
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
@@ -298,9 +405,7 @@
 	Play = sgfmmvc.View.extend({
 			model : gameTypeModels,
 			init : function () {
-				this.top = new TopView({
-						template : $("#top_tmpl").html()
-					});
+				this.top = new TopView();
 				this.listenTo(this.model, "create", this.addGameType);
 				this.render();
 				dr.fecth(opt);

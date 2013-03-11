@@ -21,6 +21,11 @@
 		this.getAttrs = function () {
 			return attrs;
 		};
+		//重置Model的属性
+		this.reset=function(json){
+			attrs={};
+			return this.set(json);
+		},
 		//设置Model属性，支持单个key-value,也支持对象集合
 		this.set = function (k, v) {
 			if(!k)return;
@@ -99,7 +104,7 @@
 				models[id] = m;
 				length++;
 			}
-			return this;
+			return m;
 		};
 		//删除指定的model
 		this.del = function (m) {
@@ -187,13 +192,15 @@
 			event = attrArr[0];
 			attr = attrArr[1];
 			attr && (listenFuns[attr] = callback);
+			console.log("m----",model,event);
 			oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
 			model[event] = function () {
-				var listenFun,
+				var ret,listenFun,
 				key = arguments[0];
-				oldFun.apply(model, arguments);
+				ret=oldFun.apply(model, arguments);
 				listenFun = listenFuns[key] || callback || $.noop;
 				listenFun.apply(self, arguments);
+				return ret;
 			};
 		};
 		//为视图添加事件处理

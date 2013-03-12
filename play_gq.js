@@ -81,7 +81,6 @@
 			teamInfo = f[6],
 			gameArr = f[7];
 			ds.setTop(teamInfo);
-			console.log(gameArr);
 			ds.setGames(gameArr);
 		},
 		setStatus : function (status) {
@@ -130,7 +129,21 @@
 		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
-			console.log("盘口"+pk);
+			var _tradeModels=tradeModels,tm,pkArr,tradeId,o,pkLen=pk.length;
+			var attrs=['tradeId','pdata','b1','b1n','b2','b2n','b3','b3n','s1','s1n','s2','s2n','s3','s3n'],
+				attrsLen=attrs.length;
+			while(pkLen--){
+				pkArr=pk[pkLen];
+				tradeId=pkArr[0];
+				tm=_tradeModels.getById(tradeId);
+				if(tm){
+					o={};
+					for(var j=0;j<attrsLen;j++){
+						o[attrs[j]]=pkArr[j];
+					}
+					tm.reset(o);
+				}
+			}
 
 		},
 		//设置头部比分model
@@ -221,10 +234,8 @@
 					gamemodels.create(gameObj);
 				} else {
 					var newgameObj=$.extend({}, gm.getAttrs(), gameObj); 
-					console.log("newgameObj--",newgameObj)
 					gm.reset(newgameObj);
 				}
-				console.log(123)
 			};
 			for (tid in typeIds) {
 				gamemodels = typeModels[tid];
@@ -239,9 +250,11 @@
 		}
 	},
 	dc = {},
+	//游戏模型
 	GameModel = sgfmmvc.Model.extend({
 			idArr : "gameId"
 		}),
+	//游戏模型集合类
 	GameModels = sgfmmvc.Models.extend({
 			model : GameModel
 		}),
@@ -255,6 +268,7 @@
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
 		}),
+	//进球，红牌视图，放在时间条里面的
 	matchEventsView = sgfmmvc.View.extend({
 			tag : 'span',
 			init : function () {
@@ -269,7 +283,7 @@
 				return this;
 			}
 		}),
-
+	//头部时间条视图
 	PlayTimeBarView = sgfmmvc.View.extend({
 			model : matchEvents,
 			template : $("#timebar_tmpl").html(),
@@ -328,7 +342,9 @@
 				this.second.append(second);
 			}
 		}),
+	//头部模型
 	topModel = new sgfmmvc.Model,
+	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({
 			model : topModel,
 			cls : "gq_top",
@@ -344,17 +360,33 @@
 				return this;
 			}
 		}),
+	//交易项集合
 	tradeModels=new sgfmmvc.Models({
 		model:sgfmmvc.Model.extend({idArr:"tradeId"})
 	}),
+	//交易项视图
 	TradeView = sgfmmvc.View.extend({
+			template:$('#trade_tmpl').html(),
 			init : function () {
 				this.listenTo(this.model,"reset",this.render);
 			},
-			render : function () {
+			events:{
+				"a click":function(e){
+					
+					alert(e.target.innerHTML)
+				
+				}
 			
+			},
+			render : function () {
+				var $el=this.$;
+				var html=sgfmmvc.replace(this.template,this.model.getAttrs());
+				var origin=$el.html();
+				$el.html(origin+html);
+				return this;
 			}
 		}),
+	//游戏视图
 	GameView = sgfmmvc.View.extend({
 			cls : "play_list_ul",
 			tag : "ul",
@@ -376,6 +408,7 @@
 				return this;
 			}
 		}),
+	//玩法视图
 	PlayListView = sgfmmvc.View.extend({
 			cls : "play_list_frame",
 			init : function () {
@@ -397,11 +430,13 @@
 				return this;
 			}
 		}),
+	//玩法集合
 	gameTypeModels = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend({
 				idArr : "typeId"
 			})
 		}),
+	//单式视图
 	Play = sgfmmvc.View.extend({
 			model : gameTypeModels,
 			init : function () {

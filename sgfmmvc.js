@@ -51,7 +51,7 @@
 		};
 		//属性变化时调用此方法
 		this.change = function (key, oldV, newV) {
-			console && console.log && console.log(this.idArr+":" + this.get(this.idArr) + ',[' + key + '] changed from [' + oldV + '] to [' + newV + ']');
+			//console && console.log && console.log(this.idArr+":" + this.get(this.idArr) + ',[' + key + '] changed from [' + oldV + '] to [' + newV + ']');
 		};
 		//向服务器拉数据callback暴露给外部处理响应
 		this.fetch = function (callback) {
@@ -192,7 +192,6 @@
 			event = attrArr[0];
 			attr = attrArr[1];
 			attr && (listenFuns[attr] = callback);
-			console.log("m----",model,event);
 			oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
 			model[event] = function () {
 				var ret,listenFun,
@@ -248,8 +247,10 @@
 	 *  return:'tom<div>10</div><span>99</span>' 
 	 */
 	_.replace = function (str, json) {
+		if(!json)return str;
 		return str.replace(/{(.*?)}/igm, function (s, s1) {
-			return json[s1] || s;
+			var val=json[s1];
+			return val!='undefinde'?val:s;
 		});
 	};
 })(jQuery, window);

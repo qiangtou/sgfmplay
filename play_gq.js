@@ -141,7 +141,7 @@
 					for(var j=0;j<attrsLen;j++){
 						o[attrs[j]]=pkArr[j];
 					}
-					tm.reset(o);
+					tm.set(o);
 				}
 			}
 
@@ -218,28 +218,21 @@
 				}
 
 				var gm = gamemodels.getById(gameId);
-				console.log('gameId',gameId)
 				if (gm == null) {
 					gm=gamemodels.create({
 					"gameId" : gameId,
 					"p1name":p1name,
-					"p2name":p1name
+					"p2name":p1name,
+					"pk":game[4]
 					});
 				} 
 				//交易项的处理
 				//tradeModels.create({tradeId:tradeId});
 				var isHost = _topModel.get(playerId);
-				// console.log('i',i)
-				// console.log('playerId',playerId)
-				// console.log('top',_topModel.getAttrs())
-				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
-				// console.log('host',host)
+				var host = [2,1][isHost]; //[0]是客场，[1]是主场
 				var gameObj = {};
-				gameObj['p' + host + 'pk'] = game[4];
 				gameObj['trade' + host] = tradeId;
-				//	var newgameObj=$.extend({}, gm.getAttrs(), gameObj); 
 				gm.update(gameObj);
-				// console.log(gm.getAttrs());
 			};
 			for (tid in typeIds) {
 				gamemodels = typeModels[tid];
@@ -327,7 +320,7 @@
 				second = document.createDocumentFragment(),
 				arr = this.model.toArr();
 
-				for (i = arr.length; i--; ) {
+				for (var i = arr.length; i--; ) {
 					m = arr[i];
 					time = m.get("time");
 					if (time <= 45) {
@@ -374,18 +367,14 @@
 	}),
 	//交易项视图
 	TradeView = sgfmmvc.View.extend({
-			tag:'li',
 			template:$('#trade_tmpl').html(),
 			init : function () {
-				this.listenTo(this.model,"reset",this.render);
+				this.listenTo(this.model,"hasChange",this.render);
 			},
 			events:{
 				"a click":function(e){
-					
 					alert(e.target.innerHTML)
-				
 				}
-			
 			},
 			render : function () {
 				var $el=this.$;
@@ -406,17 +395,21 @@
 			},
 			render : function () {
 				this.$.html(sgfmmvc.replace(this.template, this.model.getAttrs()));
+				var children=this.$.children();
+				this.trade1=children.first();
+				this.trade2=children.last();
 				return this;
-			},			
-			addTrade:function(k,v1,v2){
-				console.log('kkkkkkkkkkkkkkk',k,v1,v2);
-				var tradeId=this.model.get(k);
+			},	
+			addTrade:function(name,v1,v2){
+				var tradeId=this.model.get(name);
 				var m=tradeModels.create({tradeId:tradeId});
-				new TradeView({
-				model:m
-				});
+				
+				var tv=new TradeView({
+				$:this[name],
+				model:m});
+				window.a=window.a||{};
+				a[tradeId]=tv;
 			}
-			
 		}),
 	//玩法视图
 	PlayListView = sgfmmvc.View.extend({
@@ -431,7 +424,7 @@
 				var gv = new GameView({
 						model : md
 					});
-				this.$.append(gv.$);
+				this.$.append(gv.render().$);
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {

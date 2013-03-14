@@ -134,7 +134,7 @@
 		//转换此集合成数组
 		this.toArr = function () {
 			var arr = [];
-			for (m in models) {
+			for (var m in models) {
 				arr.push(models[m]);
 			}
 			return arr;
@@ -184,11 +184,9 @@
 
 	_.View = function (settings) {
 		var self = this,
-		allchange=false;
 		oldFuns = {},
-		singleChangeCallback=null,
-		changeCallback=null,
 		listenFuns = {};
+		this.f=function(){return listenFuns};
 		//初始化方法
 		this.init = $.noop;
 		//默认绑定一个空的div给当前视图
@@ -200,7 +198,6 @@
 		//监听model的相关事件
 		this.listenTo = function (model, event, callback) {
 			if(!model)return;
-			
 			var attrArr,
 			attr,
 			oldFun;
@@ -210,10 +207,7 @@
 				attr = attrArr[1];
 				if(attr){
 					listenFuns[attr] = callback;
-				}else{
-					singleChangeCallback=callback;
 				}
-console.log(event,listenFuns,model.getAttrs());
 			}
 				oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
 				model[event] =function(){
@@ -232,7 +226,7 @@ console.log(event,listenFuns,model.getAttrs());
 		};
 		//为视图添加事件处理
 		this.addEvents = function () {
-			var es,
+			var es,eventType,selector,eventsStr,
 			events = this.events;
 			for (eventsStr in events) {
 				es = eventsStr.split(" ");

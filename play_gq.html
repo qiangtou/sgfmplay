@@ -18,15 +18,7 @@
 			<div class="player_2_n">{p2goal}</div>
             <div class="sub_player_1">{p1name}</div>
 			<div class="sub_player_2">{p2name}</div>
-            <div class="helf_bewrite_1">{first}</div><div class="helf_bewrite_2">{second}</div>
-            <div class="play_time_bar">
-            	<div class="helf_timebar">
-                    <div style="width:0px;" class="time_line"></div>
-                </div>
-                <div class="helf_timebar">
-                	<div style="width:0;" class="time_line"><!--这个不能没有，至少要写宽度为0，不然IE6会出错--></div>
-                </div>
-            </div>            
+            <div class="helf_bewrite_1">{first}</div><div class="helf_bewrite_2">{second}</div>         
 </script>
 <script id="playlist_tmpl" type="text/template">
 	<div class="play_list_tit"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
@@ -74,7 +66,7 @@ $(function () {
 	$('div').sgfmplay({
 		'allUrl':"all", 
 		'infoUrl':"info",
-		'allRefreshCycle':30000,
+		'allRefreshCycle':3000,
 		'infoRefreshCycle':2000
 	});
 });

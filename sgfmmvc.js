@@ -25,9 +25,13 @@
 		this.reset=function(json){
 			attrs={};
 			return this.set(json);
-		},
-		//设置Model属性，支持单个key-value,也支持对象集合
-		this.set = function (k, v) {
+		};
+		//属性变化时调用此方法
+		this.change = function (key, oldV, newV) {
+			//console && console.log && console.log(this.idArr+":" + this.get(this.idArr) + ',[' + key + '] changed from [' + oldV + '] to [' + newV + ']');
+		};
+		
+		var _set = function (k, v) {
 			if(!k)return;
 			var objs,oldVal,newVal,changed = false;
 			if (typeof k == "string") {
@@ -49,9 +53,13 @@
 			}
 			return this;
 		};
-		//属性变化时调用此方法
-		this.change = function (key, oldV, newV) {
-			//console && console.log && console.log(this.idArr+":" + this.get(this.idArr) + ',[' + key + '] changed from [' + oldV + '] to [' + newV + ']');
+		//设置Model属性，支持单个key-value,也支持对象集合
+		this.set=function(k,v){
+			return _set.call(this,k,v);
+		};
+		//更新Model属性，支持单个key-value,也支持对象集合
+		this.update=function(k,v){
+			return _set.call(this,k,v);
 		};
 		//向服务器拉数据callback暴露给外部处理响应
 		this.fetch = function (callback) {
@@ -95,16 +103,19 @@
 			var m = new this.model({
 					defaults : json
 				});
-			return this.add(m);
+			return _add.call(this,m);
 		};
 		//添加指定的model进入该集合
-		this.add = function (m) {
+		var _add = function (m) {
 			var id = m.get(m.idArr);
 			if (!models[id]) {
 				models[id] = m;
 				length++;
 			}
 			return m;
+		};
+		this.add=function(m){
+			return _add.call(this,m);
 		};
 		//删除指定的model
 		this.del = function (m) {
@@ -173,7 +184,10 @@
 
 	_.View = function (settings) {
 		var self = this,
+		allchange=false;
 		oldFuns = {},
+		singleChangeCallback=null,
+		changeCallback=null,
 		listenFuns = {};
 		//初始化方法
 		this.init = $.noop;
@@ -185,22 +199,36 @@
 		this.events = {};
 		//监听model的相关事件
 		this.listenTo = function (model, event, callback) {
+			if(!model)return;
+			
 			var attrArr,
 			attr,
 			oldFun;
 			attrArr = event.split(":");
 			event = attrArr[0];
-			attr = attrArr[1];
-			attr && (listenFuns[attr] = callback);
-			oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
-			model[event] = function () {
-				var ret,listenFun,
-				key = arguments[0];
-				ret=oldFun.apply(model, arguments);
-				listenFun = listenFuns[key] || callback || $.noop;
-				listenFun.apply(self, arguments);
-				return ret;
-			};
+			if(event=='change'){
+				attr = attrArr[1];
+				if(attr){
+					listenFuns[attr] = callback;
+				}else{
+					singleChangeCallback=callback;
+				}
+console.log(event,listenFuns,model.getAttrs());
+			}
+				oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
+				model[event] =function(){
+					var ret,
+					listenFun,
+					key = arguments[0];
+					ret = oldFun.apply(model, arguments);
+					if(event=="change"){
+						listenFun =  listenFuns[key] ;
+					}else{
+						listenFun=callback;
+					}
+					listenFun && listenFun.apply(self, arguments);
+					return ret;
+				};
 		};
 		//为视图添加事件处理
 		this.addEvents = function () {
@@ -226,7 +254,6 @@
 			tag && (this.$=$("<"+tag+"></"+tag+">"));
 			var cls=this.cls;
 			cls && this.$.addClass(cls);
-			
 			this.init.call(this, settings);
 			this.addEvents.call(this, settings);
 		};
@@ -237,6 +264,7 @@
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
 		var self = this;
 		return function (settings) {
+			//console.debug('new----',$.extend(opt, settings))
 			return new self($.extend(opt, settings));
 		};
 	};
@@ -248,6 +276,9 @@
 	 */
 	_.replace = function (str, json) {
 		if(!json)return str;
+		if(json instanceof _.Model){
+			json=json.getAttrs();
+		}
 		return str.replace(/{(.*?)}/igm, function (s, s1) {
 			var val=json[s1];
 			return val!='undefinde'?val:s;

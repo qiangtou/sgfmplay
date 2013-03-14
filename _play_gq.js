@@ -124,7 +124,7 @@
 
 			}
 			o.playTime = (s[2] / 60000) | 0;
-			topModel.update(o);
+			topModel.reset($.extend({}, topModel.getAttrs(), o));
 			matchEvents.reset(events);
 		},
 		setPk : function (pk) {
@@ -183,20 +183,26 @@
 			playerId, //球队id
 			gameTypeModel,
 			gamemodels,
+			gameTypes={},
 			i18ns = [],
 			i18n = opt.i18n.gameType;
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
 			}
 
-			var typeName = [],
-			typeModels = {
-				1 : standardModels, //标准盘
-				2 : concedepointsModels, //让球
-				3 : goalModels, //大小球
-				4 : sigledoubleModels, //单双
-				5 : redcardModels //红黄牌
-			};
+			//var typeName = [],
+			
+			// typeModels = {
+				// 1 : standardModels, //标准盘
+				// 2 : concedepointsModels, //让球
+				// 3 : goalModels, //大小球
+				// 4 : sigledoubleModels, //单双
+				// 5 : redcardModels //红黄牌
+			// };
+
+
+				
+
 			var _topModel = topModel,
 			p1name = _topModel.get('p1name'),
 			p2name = _topModel.get('p2name');
@@ -206,46 +212,45 @@
 				tradeId = game[1];
 				gameId = game[2];
 				typeId = game[3];
-				gamemodels = typeModels[typeId];
+				
+				//gamemodels = typeModels[typeId];
+				
+				gameTypes[typeId]=typeId;
+				
 				gameTypeModel = gameTypeModels.getById(typeId);
 				//玩法处理
 				if (gameTypeModel == null) {
 					gameTypeModels.create({
 						typeId : typeId,
-						gamemodels : gamemodels,
+					//	gamemodels : gamemodels,
 						title : i18ns[typeId - 1]
 					});
 				}
 
-				var gm = gamemodels.getById(gameId);
-				console.log('gameId',gameId)
-				if (gm == null) {
-					gm=gamemodels.create({
-					"gameId" : gameId,
-					"p1name":p1name,
-					"p2name":p1name
-					});
-				} 
+				var gameObj = {
+					"gameId" : gameId
+				};
+				gameObj['p1name'] = p1name;
+				gameObj['p2name'] = p2name;
 				//交易项的处理
-				//tradeModels.create({tradeId:tradeId});
+				tradeModels.create({tradeId:tradeId});
 				var isHost = _topModel.get(playerId);
-				// console.log('i',i)
-				// console.log('playerId',playerId)
-				// console.log('top',_topModel.getAttrs())
 				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
-				// console.log('host',host)
-				var gameObj = {};
 				gameObj['p' + host + 'pk'] = game[4];
 				gameObj['trade' + host] = tradeId;
-				//	var newgameObj=$.extend({}, gm.getAttrs(), gameObj); 
-				gm.update(gameObj);
-				// console.log(gm.getAttrs());
+
+				var gm = gamemodels.getById(gameId);
+				if (gm == null) {
+					gamemodels.create(gameObj);
+				} else {
+					var newgameObj=$.extend({}, gm.getAttrs(), gameObj); 
+					gm.reset(newgameObj);
+				}
 			};
 			for (tid in typeIds) {
 				gamemodels = typeModels[tid];
 				if (gamemodels) {
 					gamemodels.reset();
-
 				}
 			}
 		},
@@ -263,11 +268,11 @@
 			model : GameModel
 		}),
 	//暴露在外的进球玩法和红牌玩法集合,对应的view进行监听
-	goalModels = new GameModels,
-	redcardModels = new GameModels,
-	standardModels = new GameModels,
-	concedepointsModels = new GameModels,
-	sigledoubleModels = new GameModels,
+	// goalModels = new GameModels,
+	// redcardModels = new GameModels,
+	// standardModels = new GameModels,
+	// concedepointsModels = new GameModels,
+	// sigledoubleModels = new GameModels,
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
@@ -290,7 +295,6 @@
 	//头部时间条视图
 	PlayTimeBarView = sgfmmvc.View.extend({
 			model : matchEvents,
-			cls:'play_time_bar',
 			template : $("#timebar_tmpl").html(),
 			init : function () {
 				this.render();
@@ -355,18 +359,15 @@
 			cls : "gq_top",
 			template : $("#top_tmpl").html(),
 			init : function () {
-				this.i18n=opt.i18n.top;
-				this.timebar=$('<div></div>');				
-				this.$.append(this.timebar);
-				new PlayTimeBarView({$ :this.timebar});
-				this.listenTo(this.model, "update", this.render);
+				this.listenTo(this.model, "reset", this.render);
 			},
 			render : function () {
-				var html=sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
-				this.$.html(html).append(this.timebar);
+				this.$.html(sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), opt.i18n.top)));
+				new PlayTimeBarView({
+					$ : this.$.find(".play_time_bar")					
+				});
 				return this;
 			}
-
 		}),
 	//交易项集合
 	tradeModels=new sgfmmvc.Models({
@@ -374,7 +375,6 @@
 	}),
 	//交易项视图
 	TradeView = sgfmmvc.View.extend({
-			tag:'li',
 			template:$('#trade_tmpl').html(),
 			init : function () {
 				this.listenTo(this.model,"reset",this.render);
@@ -401,27 +401,25 @@
 			tag : "ul",
 			template : $("#game_tmpl").html(),
 			init : function () {
-				this.listenTo(this.model, "change:trade1", this.addTrade);
-				this.listenTo(this.model, "change:trade2", this.addTrade);
+				this.listenTo(this.model, "reset", this.render);
 			},
 			render : function () {
 				this.$.html(sgfmmvc.replace(this.template, this.model.getAttrs()));
+				var $el=this.$;
+				var trade1Id=this.model.get("trade1"),
+					trade2Id=this.model.get("trade2"),
+					t1=$el.find('#'+trade1Id),
+					t2=$el.find('#'+trade2Id),
+					m1=tradeModels.getById(trade1Id),
+					m2=tradeModels.getById(trade2Id);
+					new TradeView({$:t1,model:m1});
+					new TradeView({$:t2,model:m2});
 				return this;
-			},			
-			addTrade:function(k,v1,v2){
-				console.log('kkkkkkkkkkkkkkk',k,v1,v2);
-				var tradeId=this.model.get(k);
-				var m=tradeModels.create({tradeId:tradeId});
-				new TradeView({
-				model:m
-				});
 			}
-			
 		}),
 	//玩法视图
 	PlayListView = sgfmmvc.View.extend({
 			cls : "play_list_frame",
-			template : $("#playlist_tmpl").html(),
 			init : function () {
 				this.render();
 				this.listenTo(this.model, "create", this.addGame);
@@ -460,11 +458,12 @@
 				this.$.append(this.top.$);
 			},
 			addGameType : function (m) {
-				var mds = this.model,
+				var mds = this.model;
 				md = mds.getById(m.typeId);
 				var playlist = new PlayListView({
 						tit : md.get("title"),
-						model : md.get("gamemodels")
+						model : new GameModels,
+						template : $("#playlist_tmpl").html()
 					});
 				this.$.append(playlist.render().$);
 			}
@@ -485,9 +484,9 @@
 	};
 	$.fn.sgfmplay = function (settings) {
 		settings = instence.init.call(this, settings);
-		console.time("show");
+		//console.time("show");
 		instence.show.call(this, settings);
-		console.timeEnd("show");
+		//console.timeEnd("show");
 		return this;
 	};
 })(jQuery, window);

@@ -9,17 +9,28 @@
 <div></div>
 
 <script id="top_tmpl" type="text/template">
-			<div class="palyer_1">{p1name}</div>
-			<div class="player_1_n">{p1goal}</div>
-            <div class="play_active">
-				<span class="p_time_ac">{playTime}' 暂停中</span><span class="p_helf_ac">2-2 {half}</span>
-			</div>
-            <div class="palyer_2">{p2name}</div>
-			<div class="player_2_n">{p2goal}</div>
-            <div class="sub_player_1">{p1name}</div>
-			<div class="sub_player_2">{p2name}</div>
-            <div class="helf_bewrite_1">{first}</div><div class="helf_bewrite_2">{second}</div>         
+<div class="palyer_1">{p1name}</div>
+<div class="player_1_n">{p1goal}</div>
+<div class="play_active">
+	<span class="p_time_ac">{playTime}' 暂停中</span><span class="p_helf_ac">2-2 {half}</span>
+</div>
+<div class="palyer_2">{p2name}</div>
+<div class="player_2_n">{p2goal}</div>
+<div class="sub_player_1">{p1name}</div>
+<div class="sub_player_2">{p2name}</div>
+<div class="helf_bewrite_1">{first}</div><div class="helf_bewrite_2">{second}</div>         
 </script>
+
+<script id="tab_tmpl" type="text/template">				
+<ul>
+	<li><a href="###">{standard}</a></li>
+	<li><a href="###">{concedepoints}</a></li>
+	<li><a href="###">{goal}</a></li>
+	<li><a href="###">{sigledouble}</a></li>
+	<li><a href="###">{redcard}</a></li>
+</ul>
+</script>
+
 <script id="playlist_tmpl" type="text/template">
 	<div class="play_list_tit"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
 	<div class="play_ac_tit">
@@ -56,7 +67,7 @@
                     <a href="#" class="ons"><span><b>{s1}</b>{s1n}</span></a><a href="#" class="span"><span><b>{s2}</b>{s2n}</span></a><a href="#" class="span"><span><b>{s3}</b>{s3n}</span></a>
     </span>
 </script>
-<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="jquery.ajaxtest.js"></script>
 <script type="text/javascript" src="play_gq_data.js"></script>
 <script type="text/javascript" src="sgfmmvc.js"></script>
@@ -64,10 +75,10 @@
 <script type="text/javascript">
 $(function () {
 	$('div').sgfmplay({
-		'allUrl':"all", 
-		'infoUrl':"info",
-		'allRefreshCycle':4000,
-		'infoRefreshCycle':2000
+		'allUrl':"all", //全量数据
+		'allRefreshCycle':30000,//全量请求周期
+		'infoUrl':"info",//增量数据
+		'infoRefreshCycle':2000//增量请求周期
 	});
 });
 </script>

@@ -34,7 +34,7 @@ $.ajax = function (settings) {
 		returndata = returndata();
 	}
 	setTimeout(function () {
-		console.log('url:',opt.url,+new Date);
+		//console.log('url:',opt.url,+new Date);
 		opt.success.call(this, returndata,"success",jqXHR);
 		opt.complete.call(this, jqXHR,"complete");
 	}, 200);

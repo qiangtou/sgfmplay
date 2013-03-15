@@ -226,7 +226,7 @@
 		};
 		//为视图添加事件处理
 		this.addEvents = function () {
-			var es,eventType,selector,eventsStr,
+			var es,eventType,selector,eventsStr,fun,
 			events = this.events;
 			for (eventsStr in events) {
 				es = eventsStr.split(" ");
@@ -236,7 +236,7 @@
 				if (typeof fun == "string") {
 					fun = this[fun];
 				}
-				this.$.delegate(selector, eventType, $.proxy(fun, this));
+				this.$.delegate(selector, eventType, {'view':this},fun);
 			}
 		};
 		//覆盖默认配置

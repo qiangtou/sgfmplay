@@ -101,7 +101,7 @@
 				for (j = 1; j < 3; j++) {
 					o["p" + (i + 1) + attr[j - 1]] = gr[j];
 				}
-				gTimes = gr[j];
+				gTimes = gr[3]||[];
 				//进球时间
 				for (j = gTimes.length; j--; ) {
 					events.push({
@@ -111,8 +111,8 @@
 						time : gTimes[j]
 					})
 				}
-				rTimes = gr[4];
 				//红牌时间
+				rTimes = gr[4]||[];
 				for (j = rTimes.length; j--; ) {
 					events.push({
 						id : "r" + i + j,
@@ -129,17 +129,22 @@
 		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
-			var _tradeModels=tradeModels,tm,pkArr,tradeId,o,pkLen=pk.length;
-			var attrs=['tradeId','pdata','b1','b1n','b2','b2n','b3','b3n','s1','s1n','s2','s2n','s3','s3n'],
-				attrsLen=attrs.length;
-			while(pkLen--){
-				pkArr=pk[pkLen];
-				tradeId=pkArr[0];
-				tm=_tradeModels.getById(tradeId);
-				if(tm){
-					o={};
-					for(var j=0;j<attrsLen;j++){
-						o[attrs[j]]=pkArr[j];
+			var _tradeModels = tradeModels,
+			tm,
+			pkArr,
+			tradeId,
+			o,
+			pkLen = pk.length;
+			var attrs = ['tradeId', 'pdata', 'b1', 'b1n', 'b2', 'b2n', 'b3', 'b3n', 's1', 's1n', 's2', 's2n', 's3', 's3n'],
+			attrsLen = attrs.length;
+			while (pkLen--) {
+				pkArr = pk[pkLen];
+				tradeId = pkArr[0];
+				tm = _tradeModels.getById(tradeId);
+				if (tm) {
+					o = {};
+					for (var j = 0; j < attrsLen; j++) {
+						o[attrs[j]] = pkArr[j];
 					}
 					tm.set(o);
 				}
@@ -219,17 +224,17 @@
 
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
-					gm=gamemodels.create({
-					"gameId" : gameId,
-					"p1name":p1name,
-					"p2name":p1name,
-					"pk":game[4]
-					});
-				} 
+					gm = gamemodels.create({
+							"gameId" : gameId,
+							"p1name" : p1name,
+							"p2name" : p2name,
+							"pk" : game[4]
+						});
+				}
 				//交易项的处理
 				//tradeModels.create({tradeId:tradeId});
 				var isHost = _topModel.get(playerId);
-				var host = [2,1][isHost]; //[0]是客场，[1]是主场
+				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
 				var gameObj = {};
 				gameObj['trade' + host] = tradeId;
 				gm.update(gameObj);
@@ -283,7 +288,7 @@
 	//头部时间条视图
 	PlayTimeBarView = sgfmmvc.View.extend({
 			model : matchEvents,
-			cls:'play_time_bar',
+			cls : 'play_time_bar',
 			template : $("#timebar_tmpl").html(),
 			init : function () {
 				this.render();
@@ -348,39 +353,69 @@
 			cls : "gq_top",
 			template : $("#top_tmpl").html(),
 			init : function () {
-				this.i18n=opt.i18n.top;
-				this.timebar=$('<div></div>');				
+				this.i18n = opt.i18n.top;
+				this.timebar = $('<div></div>');
 				this.$.append(this.timebar);
-				new PlayTimeBarView({$ :this.timebar});
+				new PlayTimeBarView({
+					$ : this.timebar
+				});
 				this.listenTo(this.model, "update", this.render);
 			},
 			render : function () {
-				var html=sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
+				var html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
 				this.$.html(html).append(this.timebar);
 				return this;
 			}
 
 		}),
-	//交易项集合
-	tradeModels=new sgfmmvc.Models({
-		model:sgfmmvc.Model.extend({idArr:"tradeId"})
+	//玩法选项卡视图
+	TabView=sgfmmvc.View.extend({
+		model:new sgfmmvc.Model,
+		cls:'other_play',
+		template:$('#tab_tmpl').html(),
+		init:function(){
+			this.model.set(opt.i18n.gameType);
+			this.render();
+			this.currentTab=this.$.find('li').first();
+			this.currentCls='ons';
+			this.currentTab.addClass(this.currentCls);
+		},
+		events:{
+			'li click':'toggletab'
+		},
+		toggletab:function(e){
+			var view=e.data.view;
+			view.currentTab.removeClass(view.currentCls);
+			view.currentTab=$(this);
+			view.currentTab.addClass(view.currentCls);
+		},
+		render:function(){			var html=sgfmmvc.replace(this.template,this.model.getAttrs());
+			this.$.html(html);
+			return this;
+		}	
 	}),
+	//交易项集合
+	tradeModels = new sgfmmvc.Models({
+			model : sgfmmvc.Model.extend({
+				idArr : "tradeId"
+			})
+		}),
 	//交易项视图
 	TradeView = sgfmmvc.View.extend({
-			template:$('#trade_tmpl').html(),
+			template : $('#trade_tmpl').html(),
 			init : function () {
-				this.listenTo(this.model,"hasChange",this.render);
+				this.listenTo(this.model, "hasChange", this.render);
 			},
-			events:{
-				"a click":function(e){
-					alert(e.target.innerHTML)
+			events : {
+				"a click" : function (e) {
+					alert($(this).html());
 				}
 			},
 			render : function () {
-				var $el=this.$;
-				var html=sgfmmvc.replace(this.template,this.model.getAttrs());
-				var origin=$el.html();
-				$el.html(origin+html);
+				var $el = this.$;
+				var html = sgfmmvc.replace(this.template, this.model.getAttrs());
+				var origin = $el.html();
+				$el.html(origin + html);
 				return this;
 			}
 		}),
@@ -395,20 +430,21 @@
 			},
 			render : function () {
 				this.$.html(sgfmmvc.replace(this.template, this.model.getAttrs()));
-				var children=this.$.children();
-				this.trade1=children.first();
-				this.trade2=children.last();
+				var children = this.$.children();
+				this.trade1 = children.first();
+				this.trade2 = children.last();
 				return this;
-			},	
-			addTrade:function(name,v1,v2){
-				var tradeId=this.model.get(name);
-				var m=tradeModels.create({tradeId:tradeId});
-				
-				var tv=new TradeView({
-				$:this[name],
-				model:m});
-				window.a=window.a||{};
-				a[tradeId]=tv;
+			},
+			addTrade : function (name, v1, v2) {
+				var tradeId = this.model.get(name);
+				var m = tradeModels.create({
+						tradeId : tradeId
+					});
+
+				var tv = new TradeView({
+						$ : this[name],
+						model : m
+					});
 			}
 		}),
 	//玩法视图
@@ -445,12 +481,13 @@
 			model : gameTypeModels,
 			init : function () {
 				this.top = new TopView();
+				this.tab= new TabView();
 				this.listenTo(this.model, "create", this.addGameType);
 				this.render();
 				dr.fecth(opt);
 			},
 			render : function () {
-				this.$.append(this.top.$);
+				this.$.append(this.top.$,this.tab.$);
 			},
 			addGameType : function (m) {
 				var mds = this.model,
@@ -478,9 +515,9 @@
 	};
 	$.fn.sgfmplay = function (settings) {
 		settings = instence.init.call(this, settings);
-		console.time("show");
+		//console.time("show");
 		instence.show.call(this, settings);
-		console.timeEnd("show");
+		//console.timeEnd("show");
 		return this;
 	};
 })(jQuery, window);

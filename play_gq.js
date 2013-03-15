@@ -193,7 +193,6 @@
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
 			}
-
 			var typeName = [],
 			typeModels = {
 				1 : standardModels, //标准盘
@@ -221,14 +220,14 @@
 						title : i18ns[typeId - 1]
 					});
 				}
-
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
 					gm = gamemodels.create({
 							"gameId" : gameId,
 							"p1name" : p1name,
 							"p2name" : p2name,
-							"pk" : game[4]
+							"pk1" : (game[5]?game[4]:'-'),
+							"pk2" : (game[5]?'-':game[4]),
 						});
 				}
 				//交易项的处理

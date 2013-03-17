@@ -215,14 +215,13 @@
 				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
 				if (gameTypeModel == null) {
-					gamemodels = new GameModels;
-					gameTypeModels.create({
+					gameTypeModel=gameTypeModels.create({
 						'typeId' : typeId,
-						'gamemodels': gamemodels,
+						'gamemodels':  new GameModels,
 						'title' : i18ns[typeId - 1]
 					});
 				};
-				
+				gamemodels=gameTypeModel.get('gamemodels');
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {

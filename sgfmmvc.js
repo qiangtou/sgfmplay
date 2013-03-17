@@ -195,7 +195,12 @@
 		this.render = $.noop;
 		//默认的事件集合
 		this.events = {};
-		//监听model的相关事件
+		
+		/**监听model的相关事件,
+		*@param model 需要监听的model
+		*@param event 监听model的事件名。"change:attr",可以监听model的'attr'属性改变事件
+		*@param callback 监听的回调函数
+		*/
 		this.listenTo = function (model, event, callback) {
 			if(!model)return;
 			var attrArr,

@@ -12,7 +12,9 @@
 				concedepoints : "让球玩法",
 				goal : "大小球玩法",
 				sigledouble : "单双玩法",
-				redcard : "红牌玩法"
+				redcard : "红牌玩法",
+				half:"半场",
+				whole:"全场"
 			},
 			top : {
 				first : "上半场",
@@ -72,7 +74,6 @@
 			//框架frame[0][0]
 			var mId,
 			mName,
-			isRoll,
 			p1,
 			p2,
 			ptmp,
@@ -123,9 +124,11 @@
 						time : rTimes[j]
 					})
 				}
-
-			}
-			o.playTime = (s[2] / 60000) | 0;
+			};
+			//开赛时间
+			o.livetime = s[2]?new Date(s[2]):0;
+			//滚球时间
+			o.playTime = (s[7] / 60000) | 0;
 			topModel.update(o);
 			matchEvents.reset(events);
 		},
@@ -189,6 +192,7 @@
 			gameId, //游戏id
 			tradeId, //交易项id
 			playerId, //球队id
+			isWhole, //全半场标识
 			gameTypeModel,
 			gamemodels,
 			i18ns = [],
@@ -204,6 +208,18 @@
 			p1name = _topModel.get('p1name'),
 			p2name = _topModel.get('p2name');
 			
+			//一个游戏中两个交易项上下位置
+			var pos={
+			2:{'1':1,'0':2},//让球，让球方在上
+			3:{'o':1,'u':2},//大小球, 大在上
+			};
+			//全半场1全/2半
+			var halfWhole={
+				1:{name:'whole','title':i18ns.whole},
+				2:{name:'half','title':i18ns.half}
+			};
+			
+			
 			for (var i = gameArr.length; i--; ) {
 				//解析数组
 				game = gameArr[i];
@@ -211,17 +227,19 @@
 				tradeId = game[1];
 				gameId = game[2];
 				typeId = game[3];
+				isWhole = game[6];
 				
 				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
 				if (gameTypeModel == null) {
 					gameTypeModel=gameTypeModels.create({
 						'typeId' : typeId,
-						'gamemodels':  new GameModels,
-						'title' : i18ns[typeId - 1]
+						//全半场1全/2半
+						1:{'model':new GameModels,'title':i18ns.whole+'-'+i18ns[typeId - 1]},
+						2:{'model':new GameModels,'title':i18ns.half+'-'+i18ns[typeId - 1]}
 					});
 				};
-				gamemodels=gameTypeModel.get('gamemodels');
+				gamemodels=gameTypeModel.get(isWhole).model;
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
@@ -230,7 +248,7 @@
 							"p1name" : p1name,
 							"p2name" : p2name,
 							"pk1" : (game[5]?game[4]:'-'),//[5]是否让球，[4]盘口
-							"pk2" : (game[5]?'-':game[4]),//[5]是否让球，[4]盘口
+							"pk2" : (game[5]?'-':game[4])//[5]是否让球，[4]盘口
 						});
 				};
 				
@@ -240,13 +258,21 @@
 				var gameObj = {};
 				gameObj['trade' + host] = tradeId;
 				gm.update(gameObj);
+				console.log("update",gameObj)
 			};
 		},
 		info : function (json) {
 			//	console.log("info")
 		}
 	},
-	dc = {},
+	tools = {
+		date2String:function(date,formatStr){
+				//2012-12-6 15:30
+				//yyyy-MM-dd HH:mm:ss
+				
+				return '';
+		}
+	},
 	//游戏模型
 	GameModel = sgfmmvc.Model.extend({
 			idArr : "gameId"

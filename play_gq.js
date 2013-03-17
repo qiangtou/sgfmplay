@@ -78,9 +78,11 @@
 			ptmp,
 			isHost, //主客标识
 			f = frame[0][0],
+			isRollingBall=f[4],
 			teamInfo = f[6],
 			gameArr = f[7];
-			ds.setTop(teamInfo);
+			//isRollingBall=0;
+			ds.setTop(isRollingBall,teamInfo);
 			ds.setGames(gameArr);
 		},
 		setStatus : function (status) {
@@ -151,8 +153,8 @@
 			}
 
 		},
-		//设置头部比分model
-		setTop : function (teamInfo) {
+		//设置滚球头部比分model
+		setTop : function (isRollingBall,teamInfo) {
 			var p1, //主队
 			p2, //客队
 			p1Id,
@@ -171,18 +173,19 @@
 			p1Id = p1[0];
 			p2Id = p2[0];
 			var o = {
+				"isRollingBall":isRollingBall,
 				"p1name" : p1[1],
-				"p2name" : p2[1]
+				"p2name" : p2[1],
+				"livetime":new Date
 			}
 			o[p1Id] = 1;
 			o[p2Id] = 0;
 			topModel.set(o);
 		},
+		
 		setGames : function (gameArr) {
 			var game,
-			typeIds = {}, //玩法id集合
 			typeId, //玩法id
-			gameIds = {},
 			gameId, //游戏id
 			tradeId, //交易项id
 			playerId, //球队id
@@ -190,61 +193,55 @@
 			gamemodels,
 			i18ns = [],
 			i18n = opt.i18n.gameType;
+			
+			//玩法国际化
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
-			}
-			var typeName = [],
-			typeModels = {
-				1 : standardModels, //标准盘
-				2 : concedepointsModels, //让球
-				3 : goalModels, //大小球
-				4 : sigledoubleModels, //单双
-				5 : redcardModels //红黄牌
 			};
+			
+			//取主客队名称
 			var _topModel = topModel,
 			p1name = _topModel.get('p1name'),
 			p2name = _topModel.get('p2name');
+			
 			for (var i = gameArr.length; i--; ) {
+				//解析数组
 				game = gameArr[i];
 				playerId = game[0];
 				tradeId = game[1];
 				gameId = game[2];
 				typeId = game[3];
-				gamemodels = typeModels[typeId];
+				
+				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
-				//玩法处理
 				if (gameTypeModel == null) {
+					gamemodels = new GameModels;
 					gameTypeModels.create({
-						typeId : typeId,
-						gamemodels : gamemodels,
-						title : i18ns[typeId - 1]
+						'typeId' : typeId,
+						'gamemodels': gamemodels,
+						'title' : i18ns[typeId - 1]
 					});
-				}
+				};
+				
+				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
 					gm = gamemodels.create({
 							"gameId" : gameId,
 							"p1name" : p1name,
 							"p2name" : p2name,
-							"pk1" : (game[5]?game[4]:'-'),
-							"pk2" : (game[5]?'-':game[4]),
+							"pk1" : (game[5]?game[4]:'-'),//[5]是否让球，[4]盘口
+							"pk2" : (game[5]?'-':game[4]),//[5]是否让球，[4]盘口
 						});
-				}
-				//交易项的处理
-				//tradeModels.create({tradeId:tradeId});
+				};
+				
+				//游戏model设置交易项
 				var isHost = _topModel.get(playerId);
 				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
 				var gameObj = {};
 				gameObj['trade' + host] = tradeId;
 				gm.update(gameObj);
 			};
-			for (tid in typeIds) {
-				gamemodels = typeModels[tid];
-				if (gamemodels) {
-					gamemodels.reset();
-
-				}
-			}
 		},
 		info : function (json) {
 			//	console.log("info")
@@ -259,12 +256,6 @@
 	GameModels = sgfmmvc.Models.extend({
 			model : GameModel
 		}),
-	//暴露在外的进球玩法和红牌玩法集合,对应的view进行监听
-	goalModels = new GameModels,
-	redcardModels = new GameModels,
-	standardModels = new GameModels,
-	concedepointsModels = new GameModels,
-	sigledoubleModels = new GameModels,
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
@@ -349,16 +340,26 @@
 	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({
 			model : topModel,
-			cls : "gq_top",
-			template : $("#top_tmpl").html(),
 			init : function () {
 				this.i18n = opt.i18n.top;
-				this.timebar = $('<div></div>');
-				this.$.append(this.timebar);
-				new PlayTimeBarView({
-					$ : this.timebar
-				});
+				this.listenTo(this.model, "change:isRollingBall", this._init);
 				this.listenTo(this.model, "update", this.render);
+			},
+			_init:function(key,oldV, isRollingBall){
+				//isRollingBall:0是单式;1是滚球;
+				var addClass=['ds_top','gq_top'],
+				removeClass=['gq_top','ds_top'],
+				template=["#dstop_tmpl","#gqtop_tmpl"];
+				this.$.removeClass(removeClass[isRollingBall]).addClass(addClass[isRollingBall]);
+				this.template= $(template[isRollingBall]).html();
+				//如果是滚球则加上滚球时间条
+				if(isRollingBall){
+					this.timebar = $('<div></div>');
+					new PlayTimeBarView({
+						$ : this.timebar
+					});
+					this.$.append(this.timebar);
+				}
 			},
 			render : function () {
 				var html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
@@ -493,7 +494,7 @@
 				md = mds.getById(m.typeId);
 				var playlist = new PlayListView({
 						tit : md.get("title"),
-						model : md.get("gamemodels")
+						model :md.get('gamemodels')
 					});
 				this.$.append(playlist.render().$);
 			}

@@ -263,7 +263,6 @@
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
 		var self = this;
 		return function (settings) {
-			//console.debug('new----',$.extend(opt, settings))
 			return new self($.extend(opt, settings));
 		};
 	};

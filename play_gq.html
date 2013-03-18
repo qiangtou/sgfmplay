@@ -12,7 +12,7 @@
 <div class="palyer_1">{p1name}</div>
 <div class="player_1_n">{p1goal}</div>
 <div class="play_active">
-	<span class="p_time_ac">{playTime}' 暂停中</span><span class="p_helf_ac">2-2 {half}</span>
+	<span class="p_time_ac">{playTime}' {mStatus}</span><span class="p_helf_ac">{p1halfgoal}-{p2halfgoal} {half}</span>
 </div>
 <div class="palyer_2">{p2name}</div>
 <div class="player_2_n">{p2goal}</div>
@@ -27,17 +27,18 @@
 
 <script id="tab_tmpl" type="text/template">				
 <ul>
-	<li><a href="###">{standard}</a></li>
-	<li><a href="###">{concedepoints}</a></li>
-	<li><a href="###">{goal}</a></li>
-	<li><a href="###">{sigledouble}</a></li>
-	<li><a href="###">{redcard}</a></li>
+	<li typeId="1"><a href="###">{standard}</a></li>
+	<li typeId="2"><a href="###">{concedepoints}</a></li>
+	<li typeId="3"><a href="###">{goal}</a></li>
+	<li typeId="4"><a href="###">{sigledouble}</a></li>
+	<li typeId="5"><a href="###">{redcard}</a></li>
 </ul>
 </script>
 
 <script id="playlist_tmpl" type="text/template">
-	<div class="play_list_tit"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
+	<div class="play_list_tit_all"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
 	<div class="play_ac_tit">
+		<span class="pk_xm">{pkxm}</span>
 		<span class="pk_th">{pk}</span>
 		<span class="other_th">{pl}</span>
 		<span class="buy_th">{buy}&nbsp;</span>
@@ -53,22 +54,22 @@
 	</div>
 </script>
 <script id="game_tmpl" type="text/template">
-                <li >
-                    <span class="player">{p1name}</span>
-                    <span class="other_pk">{pk1}</span>
-                </li>
-                <li >
-                    <span class="player">{p2name}</span>
-                    <span class="other_pk">{pk2}</span>
-                </li>
+	<li >
+		<span class="player">{p1name}</span>
+		<span class="other_pk">{pk1}</span>
+	</li>
+	<li >
+		<span class="player">{p2name}</span>
+		<span class="other_pk">{pk2}</span>
+	</li>
 </script>
 <script id="trade_tmpl" type="text/template">
     <span class="other_data">{pdata}</span>
-                    <span class="buy">
-                    <a href="#" class="span"><span><b>{b1}</b>{b1n}</span></a><a href="#" class="span"><span><b>{b2}</b>{b2n}</span></a><a href="#" class="ons"><span><b>{b3}</b>{b3n}</span></a>
-                    </span>
-                    <span class="sell">
-                    <a href="#" class="ons"><span><b>{s1}</b>{s1n}</span></a><a href="#" class="span"><span><b>{s2}</b>{s2n}</span></a><a href="#" class="span"><span><b>{s3}</b>{s3n}</span></a>
+		<span class="buy">
+		<a href="#" class="span"><span><b>{b1}</b>{b1n}</span></a><a href="#" class="span"><span><b>{b2}</b>{b2n}</span></a><a href="#" class="ons"><span><b>{b3}</b>{b3n}</span></a>
+		</span>
+		<span class="sell">
+		<a href="#" class="ons"><span><b>{s1}</b>{s1n}</span></a><a href="#" class="span"><span><b>{s2}</b>{s2n}</span></a><a href="#" class="span"><span><b>{s3}</b>{s3n}</span></a>
     </span>
 </script>
 <script type="text/javascript" src="jquery.js"></script>

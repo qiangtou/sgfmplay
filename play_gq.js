@@ -28,18 +28,19 @@
 				buy : "下注（买）",
 				sell : "（卖）吃货",
 				refresh : "刷新",
+				pkxm:"玩法",
 				pk : "盘口",
 				pl : "参考赔率"
 			}
 		}
 	},
-	templates = {},
+	//请求封装
 	dr = {
 		fecth : function (settings) {
 			//取全量信息
 			dr.dispatch(settings.allUrl, settings.allRefreshCycle, "all");
 			//取变化信息
-			//dr.dispatch(settings.infoUrl, settings.infoRefreshCycle, "info");
+			dr.dispatch(settings.infoUrl, settings.infoRefreshCycle, "info");
 		},
 		dispatch : function (url, refreshCycle, method) {
 			//执行周期任务
@@ -59,6 +60,7 @@
 			});
 		}
 	},
+	//模型填充
 	ds = {
 		all : function (json) {
 			var d;
@@ -72,17 +74,10 @@
 		//框架的设置
 		setFrame : function (frame) {
 			//框架frame[0][0]
-			var mId,
-			mName,
-			p1,
-			p2,
-			ptmp,
-			isHost, //主客标识
-			f = frame[0][0],
+			var f = frame[0][0],
 			isRollingBall=f[4],
 			teamInfo = f[6],
 			gameArr = f[7];
-			//isRollingBall=0;
 			ds.setTop(isRollingBall,teamInfo);
 			ds.setGames(gameArr);
 		},
@@ -97,6 +92,12 @@
 			o = {},
 			attr = ["goal", "red"],
 			events = [],
+			mStatus=s[1],//(状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束),
+			mStatusObj={
+				41:'',
+				42:opt.i18n.top.pause,
+				43:''
+			},
 			goalred = s[5];
 			for (i = 0; i < 2; i++) {
 				gr = goalred[i];
@@ -125,8 +126,12 @@
 					})
 				}
 			};
+			if(/4[123]/.test(mStatus)){
+				o.mStatus=mStatusObj[mStatus];
+			}
 			//开赛时间
-			o.livetime = s[2]?new Date(s[2]):0;
+			var u=Utils.date2String;
+			o.livetime = s[2] ? (u(new Date, 'yyyy-MM-dd ') + u(new Date(s[2]+8*3600*1000), 'HH:mm')) : '';
 			//滚球时间
 			o.playTime = (s[7] / 60000) | 0;
 			topModel.update(o);
@@ -134,8 +139,7 @@
 		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
-			var _tradeModels = tradeModels,
-			tm,
+			var tm,
 			pkArr,
 			tradeId,
 			o,
@@ -145,7 +149,7 @@
 			while (pkLen--) {
 				pkArr = pk[pkLen];
 				tradeId = pkArr[0];
-				tm = _tradeModels.getById(tradeId);
+				tm = tradeModels.getById(tradeId);
 				if (tm) {
 					o = {};
 					for (var j = 0; j < attrsLen; j++) {
@@ -164,6 +168,7 @@
 			p2Id,
 			ptmp, //交换临时变量
 			isHost; //p1主客标识
+			
 			p1 = ptmp = teamInfo[0];
 			p2 = teamInfo[1];
 			isHost = p1[2];
@@ -211,7 +216,6 @@
 			p1name = _topModel.get('p1name'),
 			p2name = _topModel.get('p2name');
 			
-			
 			for (var i = gameArr.length; i--; ) {
 				//解析数组
 				game = gameArr[i];
@@ -229,8 +233,8 @@
 					gameTypeModel=gameTypeModels.create({
 						'typeId' : typeId,
 						//全半场1全/2半
-						1:{'model':new GameModels,'title':i18ns[5]+'-'+i18ns[typeId - 1]},
-						2:{'model':new GameModels,'title':i18ns[6]+'-'+i18ns[typeId - 1]}
+						1:{'model':new GameModels,'title':i18ns[5]+' - '+i18ns[typeId - 1]},
+						2:{'model':new GameModels,'title':i18ns[6]+' - '+i18ns[typeId - 1]}
 					});
 				};
 				gamemodels=gameTypeModel.get(isWhole).model;
@@ -263,12 +267,23 @@
 			//	console.log("info")
 		}
 	},
-	tools = {
-		date2String:function(date,formatStr){
-				//2012-12-6 15:30
-				//yyyy-MM-dd HH:mm:ss
-				
-				return '';
+	//工具函数
+	Utils = {
+		date2String : function (d, formatStr) {
+			//2012-12-6 15:30:22
+			formatStr=formatStr||'yyyy-MM-dd HH:mm:ss';
+			var dateObj = {
+				'dd' : d.getDate(),
+				'MM' : d.getMonth(),
+				'yyyy' : d.getFullYear(),
+				'HH' : d.getHours(),
+				'mm' : d.getMinutes(),
+				'ss' : d.getSeconds()
+			};
+			for (var attr in dateObj) {
+				formatStr = formatStr.replace(attr, dateObj[attr]);
+			}
+			return formatStr;
 		}
 	},
 	//游戏模型
@@ -406,11 +421,15 @@
 		events:{
 			'li click':'toggletab'
 		},
+		//切换标签
 		toggletab:function(e){
 			var view=e.data.view;
 			view.currentTab.removeClass(view.currentCls);
 			view.currentTab=$(this);
 			view.currentTab.addClass(view.currentCls);
+			
+			//var typeId=view.currentTab.attr("typeId");
+			//var gtm=gameTypeModels.getById(typeId);
 		},
 		render:function(){			var html=sgfmmvc.replace(this.template,this.model.getAttrs());
 			this.$.html(html);
@@ -506,11 +525,15 @@
 	//玩法集合
 	gameTypeModels = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend({
-				idArr : "typeId"
+				idArr : "typeId",
+				defaults:{
+					'show':false
+				}
 			})
 		}),
-	//单式视图
+	//整个应用视图
 	Play = sgfmmvc.View.extend({
+			cls:'ac_frame',
 			model : gameTypeModels,
 			init : function () {
 				this.top = new TopView();

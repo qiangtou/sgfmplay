@@ -9,12 +9,12 @@
 		i18n : {
 			gameType : {
 				standard : "标准盘",
-				concedepoints : "让球玩法",
-				goal : "大小球玩法",
-				sigledouble : "单双玩法",
-				redcard : "红牌玩法",
-				half:"半场",
-				whole:"全场"
+				concedepoints : "让球",
+				goal : "大小球",
+				sigledouble : "单双",
+				redcard : "红牌",
+				whole:"全场",
+				half:"半场"
 			},
 			top : {
 				first : "上半场",
@@ -193,6 +193,9 @@
 			tradeId, //交易项id
 			playerId, //球队id
 			isWhole, //全半场标识
+			indicator,//指标
+			concedeId,//让球标识
+			concedeObj,//标识表
 			gameTypeModel,
 			gamemodels,
 			i18ns = [],
@@ -208,17 +211,6 @@
 			p1name = _topModel.get('p1name'),
 			p2name = _topModel.get('p2name');
 			
-			//一个游戏中两个交易项上下位置
-			var pos={
-			2:{'1':1,'0':2},//让球，让球方在上
-			3:{'o':1,'u':2},//大小球, 大在上
-			};
-			//全半场1全/2半
-			var halfWhole={
-				1:{name:'whole','title':i18ns.whole},
-				2:{name:'half','title':i18ns.half}
-			};
-			
 			
 			for (var i = gameArr.length; i--; ) {
 				//解析数组
@@ -227,6 +219,8 @@
 				tradeId = game[1];
 				gameId = game[2];
 				typeId = game[3];
+				indicator = game[4];
+				concedeId = game[5];
 				isWhole = game[6];
 				
 				//玩法处理,没有则创建
@@ -235,8 +229,8 @@
 					gameTypeModel=gameTypeModels.create({
 						'typeId' : typeId,
 						//全半场1全/2半
-						1:{'model':new GameModels,'title':i18ns.whole+'-'+i18ns[typeId - 1]},
-						2:{'model':new GameModels,'title':i18ns.half+'-'+i18ns[typeId - 1]}
+						1:{'model':new GameModels,'title':i18ns[5]+'-'+i18ns[typeId - 1]},
+						2:{'model':new GameModels,'title':i18ns[6]+'-'+i18ns[typeId - 1]}
 					});
 				};
 				gamemodels=gameTypeModel.get(isWhole).model;
@@ -246,19 +240,23 @@
 					gm = gamemodels.create({
 							"gameId" : gameId,
 							"p1name" : p1name,
-							"p2name" : p2name,
-							"pk1" : (game[5]?game[4]:'-'),//[5]是否让球，[4]盘口
-							"pk2" : (game[5]?'-':game[4])//[5]是否让球，[4]盘口
+							"p2name" : p2name
 						});
 				};
 				
 				//游戏model设置交易项
-				var isHost = _topModel.get(playerId);
+				var isHost = _topModel.get(playerId) || playerId == "big" ? 1 : 0;
 				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
 				var gameObj = {};
+				concedeObj = {
+					'1' : indicator, //让球
+					'0' : '-', //非让球
+					'o' : indicator + '&nbsp o', //大球
+					'u' : '&nbsp u' //小球
+				};
+				gameObj['pk' + host] = concedeObj[concedeId];
 				gameObj['trade' + host] = tradeId;
 				gm.update(gameObj);
-				console.log("update",gameObj)
 			};
 		},
 		info : function (json) {
@@ -450,6 +448,7 @@
 			tag : "ul",
 			template : $("#game_tmpl").html(),
 			init : function () {
+
 				this.listenTo(this.model, "change:trade1", this.addTrade);
 				this.listenTo(this.model, "change:trade2", this.addTrade);
 			},
@@ -458,9 +457,18 @@
 				var children = this.$.children();
 				this.trade1 = children.first();
 				this.trade2 = children.last();
+				var pk=this.$.find('.other_pk');
+				this.pk1=pk.eq(0);
+				this.pk2=pk.eq(1);
 				return this;
 			},
 			addTrade : function (name, v1, v2) {
+				
+				var isHost=name.charAt(name.length-1);
+				var pk='pk'+isHost;
+				var pkVal=this.model.get(pk);
+				this[pk].html(pkVal);
+					
 				var tradeId = this.model.get(name);
 				var m = tradeModels.create({
 						tradeId : tradeId
@@ -485,13 +493,13 @@
 				var gv = new GameView({
 						model : md
 					});
-				this.$.append(gv.render().$);
+				this.$.show().append(gv.render().$);
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
 						title : this.tit
 					});
-				this.$.html(sgfmmvc.replace(this.template, i18n));
+				this.$.html(sgfmmvc.replace(this.template, i18n)).hide();
 				return this;
 			}
 		}),
@@ -517,11 +525,15 @@
 			addGameType : function (m) {
 				var mds = this.model,
 				md = mds.getById(m.typeId);
-				var playlist = new PlayListView({
-						tit : md.get("title"),
-						model :md.get('gamemodels')
+				var playlist1 = new PlayListView({
+						tit : md.get('1').title,
+						model :md.get('1').model
 					});
-				this.$.append(playlist.render().$);
+					var playlist2 = new PlayListView({
+						tit : md.get('2').title,
+						model :md.get('2').model
+					});
+				this.$.append(playlist1.render().$,playlist2.render().$);
 			}
 		}),
 	instence = {

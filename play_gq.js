@@ -6,6 +6,7 @@
 	var content = window,
 	opt = {},
 	defaults = {
+		gameType:1,//默认显示的玩法标签
 		i18n : {
 			gameType : {
 				standard : "标准盘",
@@ -260,15 +261,20 @@
 					});
 				};
 				gamemodels=gameTypeModel.get(isWhole).model;
+				console.log(gameTypeModel.get('isShow'));
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
+				
+					gameTypeModel.set('isShow',opt.gameType==typeId);
+
 					gm = gamemodels.create({
 							"gameId" : gameId,
 							"p1name" : _playerModels.host.get('name'),
 							"p2name" : _playerModels.custom.get('name')
 						});
 				};
+				console.log(gameTypeModel.get('isShow'));
 				
 				concedeObj = {
 					'1' : indicator, //让球
@@ -331,7 +337,8 @@
 		}),
 	//游戏模型集合类
 	GameModels = sgfmmvc.Models.extend({
-			model : GameModel
+			model : GameModel,
+			isShow:false
 		}),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
@@ -547,21 +554,20 @@
 			cls : "play_list_frame",
 			template : $("#playlist_tmpl").html(),
 			init : function () {
-				this.render();
-				this.listenTo(this.model, "create", this.addGame);
+				this.listenTo(this.model, "create", this.addGame);				
 			},
 			addGame : function (m) {
 				var md = this.model.getById(m.gameId);
 				var gv = new GameView({
 						model : md
 					});
-				this.$.show().append(gv.render().$);
+				this.$.append(gv.render().$);
 			},
-			render : function () {
+			render : function () {		
 				var i18n = $.extend(opt.i18n.playlist, {
 						title : this.tit
 					});
-				this.$.html(sgfmmvc.replace(this.template, i18n)).hide();
+				this.$.html(sgfmmvc.replace(this.template, i18n));
 				return this;
 			}
 		}),
@@ -582,6 +588,7 @@
 				this.top = new TopView();
 				this.tab= new TabView();
 				this.listenTo(this.model, "create", this.addGameType);
+				this.listenTo(this.model, "change:isShow", this.showhide);
 				this.render();
 				dr.fecth(opt);
 			},
@@ -590,16 +597,28 @@
 			},
 			addGameType : function (m) {
 				var mds = this.model,
+				isShow=opt.gameType==m.typeId,
 				md = mds.getById(m.typeId);
-				var playlist1 = new PlayListView({
+				this.playlist1 = new PlayListView({
 						tit : md.get('1').title,
 						model :md.get('1').model
 					});
-					var playlist2 = new PlayListView({
+				this.playlist2 = new PlayListView({
 						tit : md.get('2').title,
 						model :md.get('2').model
 					});
-				this.$.append(playlist1.render().$,playlist2.render().$);
+				this.$.append(this.playlist1.render().$,this.playlist2.render().$);
+			},
+			showhide : function (name, old, isShow) {
+				var p1 = this.playlist1,
+				p2 = this.playlist2;
+				if (isShow) {
+					p1.model.length > 0 && p1.show();
+					p2.model.length > 0 && p2.show();
+				} else {
+					p1.hide();
+					p2.hide();
+				}
 			}
 		}),
 	instence = {

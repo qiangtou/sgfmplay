@@ -191,6 +191,12 @@
 		this.render = $.noop;
 		//默认的事件集合
 		this.events = {};
+		this.show=function(){
+			return this.$.show();
+		};
+		this.hide=function(){
+			return this.$.hide();
+		};
 		
 		/**监听model的相关事件,
 		*@param model 需要监听的model

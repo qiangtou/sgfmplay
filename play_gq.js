@@ -77,19 +77,26 @@
 			var f = frame[0][0],
 			isRollingBall=f[4],
 			teamInfo = f[6],
-			gameArr = f[7];
-			ds.setTop(isRollingBall,teamInfo);
+			gameArr = f[7],
+			totalTime=f[9];//赛事总时长
+			console.log(f)
+			ds.setTop(isRollingBall,teamInfo,totalTime);
 			ds.setGames(gameArr);
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			var s = status[0],
-			i,
-			j,
+			i,j,
 			gr,
 			gTimes,
 			rTimes,
+			time,//时间点
+			isFirst,//上下半场标识(1上2下)
 			o = {},
+			pid,
+			player,
+			isHost,
+			halfGoal=0,
 			attr = ["goal", "red"],
 			events = [],
 			mStatus=s[1],//(状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束),
@@ -101,28 +108,33 @@
 			goalred = s[5];
 			for (i = 0; i < 2; i++) {
 				gr = goalred[i];
+				pid=gr[0];
+				player=playerModels.getById(pid);
 				//双方信息
-				for (j = 1; j < 3; j++) {
-					o["p" + (i + 1) + attr[j - 1]] = gr[j];
-				}
 				gTimes = gr[3]||[];
 				//进球时间
 				for (j = gTimes.length; j--; ) {
+					time=gTimes[j][0];
+					isFirst=gTimes[j][1] ;
+					isFirst && ++halfGoal//半场进球累加
 					events.push({
-						id : "g" + i + j,
-						action : "goal",
-						type : i,
-						time : gTimes[j]
+						'id' : "g" + isHost + j,
+						'action' : "goal",
+						'type' : i,
+						'time' : time
 					})
 				}
+				player.set('goal',gr[1]);//设置进球数
+				player.set('redcard',gr[2]);//设置红牌数
+				player.set('halfGoal',halfGoal);//设置半场进球数
 				//红牌时间
 				rTimes = gr[4]||[];
 				for (j = rTimes.length; j--; ) {
 					events.push({
-						id : "r" + i + j,
-						action : "red_card",
-						type : i,
-						time : rTimes[j]
+						'id' : "r" + isHost + j,
+						'action' : "red_card",
+						'type' : i,
+						'time' : rTimes[j][0]
 					})
 				}
 			};
@@ -134,6 +146,11 @@
 			o.livetime = s[2] ? (u(new Date, 'yyyy-MM-dd ') + u(new Date(s[2]+8*3600*1000), 'HH:mm')) : '';
 			//滚球时间
 			o.playTime = (s[7] / 60000) | 0;
+			o['p1goal']=playerModels.host.get('goal');
+			o['p2goal']=playerModels.custom.get('goal');
+			o['p1halfgoal']=playerModels.host.get('halfGoal');
+			o['p2halfgoal']=playerModels.custom.get('halfGoal');
+			console.log(o)
 			topModel.update(o);
 			matchEvents.reset(events);
 		},
@@ -161,34 +178,43 @@
 
 		},
 		//设置滚球头部比分model
-		setTop : function (isRollingBall,teamInfo) {
+		setTop : function (isRollingBall,teamInfo,totalTime) {
 			var p1, //主队
 			p2, //客队
-			p1Id,
-			p2Id,
-			ptmp, //交换临时变量
-			isHost; //p1主客标识
+			p1m,p2m,
+			_playerModels=playerModels,//缓存外部变量
+			isHost, //p1主客标识
 			
-			p1 = ptmp = teamInfo[0];
+			p1 = teamInfo[0];
 			p2 = teamInfo[1];
-			isHost = p1[2];
-			if (!isHost) { //如果p1是客队，交换处理
-				isHost = false;
-				p1 = p2;
-				p2 = ptmp;
+			isHost = p1[2];//取第一个队的主客标识
+
+
+			if(_playerModels.length==0){
+				p1m=_playerModels.create({
+					'playerId':p1[0],
+					'name':p1[1],
+					'isHost':p1[2]
+				});
+				p2m=_playerModels.create({
+					'playerId':p2[0],
+					'name':p2[1],
+					'isHost':p2[2]
+				});
+				_playerModels.host=isHost?p1m:p2m;
+				_playerModels.custom=isHost?p2m:p1m;
 			}
+			//取出主客队
+			host=_playerModels.host;
+			custom=_playerModels.custom;
+			
 			//topModel的设置
-			p1Id = p1[0];
-			p2Id = p2[0];
-			var o = {
+			topModel.set({
 				"isRollingBall":isRollingBall,
-				"p1name" : p1[1],
-				"p2name" : p2[1],
-				"livetime":new Date
-			}
-			o[p1Id] = 1;
-			o[p2Id] = 0;
-			topModel.set(o);
+				"p1name" : host.get('name'),
+				"p2name" : custom.get('name'),
+				'totalTime':totalTime/60000|0//总时间
+			});
 		},
 		
 		setGames : function (gameArr) {
@@ -201,6 +227,8 @@
 			indicator,//指标
 			concedeId,//让球标识
 			concedeObj,//标识表
+			_playerModels=playerModels,//缓存外部变量
+			player,
 			gameTypeModel,
 			gamemodels,
 			i18ns = [],
@@ -210,12 +238,6 @@
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
 			};
-			
-			//取主客队名称
-			var _topModel = topModel,
-			p1name = _topModel.get('p1name'),
-			p2name = _topModel.get('p2name');
-			
 			for (var i = gameArr.length; i--; ) {
 				//解析数组
 				game = gameArr[i];
@@ -243,23 +265,27 @@
 				if (gm == null) {
 					gm = gamemodels.create({
 							"gameId" : gameId,
-							"p1name" : p1name,
-							"p2name" : p2name
+							"p1name" : _playerModels.host.get('name'),
+							"p2name" : _playerModels.custom.get('name')
 						});
 				};
 				
-				//游戏model设置交易项
-				var isHost = _topModel.get(playerId) || playerId == "big" ? 1 : 0;
-				var host = [2, 1][isHost]; //[0]是客场，[1]是主场
-				var gameObj = {};
 				concedeObj = {
 					'1' : indicator, //让球
 					'0' : '-', //非让球
 					'o' : indicator + '&nbsp o', //大球
 					'u' : '&nbsp u' //小球
 				};
-				gameObj['pk' + host] = concedeObj[concedeId];
-				gameObj['trade' + host] = tradeId;
+				//游戏model设置交易项
+				var hostcustomId;
+				if(/(big|small)/.test(playerId)){
+					hostcustomId = playerId=="big" ? 1 : 2;
+				}else{
+					hostcustomId = _playerModels.getById(playerId).hostcustomId();
+				}
+				var gameObj = {};
+				gameObj['pk' + hostcustomId] = concedeObj[concedeId];
+				gameObj['trade' + hostcustomId] = tradeId;
 				gm.update(gameObj);
 			};
 		},
@@ -286,6 +312,19 @@
 			return formatStr;
 		}
 	},
+	//球队集合
+	playerModels= new sgfmmvc.Models({
+		model: sgfmmvc.Model.extend({
+			defaults:{
+				'goal':0,
+				'halfGoal':0
+			},
+			idArr:'playerId',
+			hostcustomId:function(){
+				return this.get('isHost')?1:2;//主场返回1,否则返回2
+			}
+		})
+	}),
 	//游戏模型
 	GameModel = sgfmmvc.Model.extend({
 			idArr : "gameId"
@@ -296,7 +335,7 @@
 		}),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
-			model : sgfmmvc.Model.extend()
+			model : sgfmmvc.Model.extend()			
 		}),
 	//进球，红牌视图，放在时间条里面的
 	matchEventsView = sgfmmvc.View.extend({
@@ -328,17 +367,22 @@
 				this.first = c.eq(0);
 				this.second = c.eq(1);
 				this.width = this.first.width();
-				this.showTimeLine(topModel.get("playTime"));
+				this.showTimeLine(topModel.get("playTime"),topModel.get("totalTime"));
 			},
-			showTimeLine : function (playTime) {
+			/** 设置时间条颜色
+			*@pram playTime 滚球进行时间，相对全场
+			*@pram totalTime 全场时间
+			*/
+			showTimeLine : function (playTime,totalTime) {
 				var timeLine = this.first.children(".time_line"),
 				barWidth = this.width,
-				width = (playTime / 45 * barWidth) | 0;
-				if (playTime > 45) {
-					timeLine.css("width", barWidth);
-					width = width - barWidth;
-					timeLine = this.second.children(".time_line");
+				halfTime=totalTime/2|0;//与0或取整
+				if (playTime > halfTime) {
+					timeLine.css("width", barWidth);//填满上半场
+					playTime-=halfTime;//如果是下半场，自减掉半场时间
+					timeLine = this.second.children(".time_line");//切换到下半场
 				}
+				width = (playTime / halfTime * barWidth) | 0;//计算时间条比例
 				timeLine.css("width", width).html(playTime + "'");
 			},
 			reset : function () {
@@ -482,7 +526,6 @@
 				return this;
 			},
 			addTrade : function (name, v1, v2) {
-				
 				var isHost=name.charAt(name.length-1);
 				var pk='pk'+isHost;
 				var pkVal=this.model.get(pk);

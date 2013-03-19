@@ -88,12 +88,9 @@
 	};
 //对象集合类
 	_.Models = function (settings) {
-		var models = {},
-			length = 0;
+		var models = {};
 		//取得集合大小
-		this.length = function () {
-			return length;
-		};
+		this.length =0;
 		//集合类型
 		this.model = null;
 		//初始化方法
@@ -110,7 +107,7 @@
 			var id = m.get(m.idArr);
 			if (!models[id]) {
 				models[id] = m;
-				length++;
+				this.length++;
 			}
 			return m;
 		};
@@ -122,14 +119,14 @@
 			var id = m.get(m.idArr);
 			if (models[id]) {
 				delete models[id];
-				length--;
+				this.length--;
 			}
 			return this;
 		};
 		//清空该集合
 		this.empty = function () {
 			models = {};
-			length = 0;
+			this.length = 0;
 		};
 		//转换此集合成数组
 		this.toArr = function () {
@@ -186,7 +183,6 @@
 		var self = this,
 		oldFuns = {},
 		listenFuns = {};
-		this.f=function(){return listenFuns};
 		//初始化方法
 		this.init = $.noop;
 		//默认绑定一个空的div给当前视图

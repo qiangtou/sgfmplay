@@ -11,31 +11,9 @@ $.setReturnData({
 	'info' : initData['info']
 });
 
-// if (!console) {
-	// console = {
-		// log : $.noop,
-		// info : $.noop,
-		// warn : $.noop,
-		// error : $.noop,
-		// time : $.noop,
-		// timeEnd : $.noop
-	// }
-// } else {
-	// console.cache = {};
-	// if (!console.time)
-		// console.time = function (name) {
-			// var c = console.cache;
-			// c[name] = +new Date;
-		// }
-	// if (!console.timeEnd)
-		// console.timeEnd = function (name) {
-			// var c = console.cache,
-			// start = c[name];
-			// if (start) {
-				// var end = +new Date;
-				// var time = end - start;
-				// console.warn("计时" + name + ":" + time + "ms");
-			// }
-		// };
-// }
+$.setReturnData({
+	'all' : initData['all'],
+	'info' : initData['info']
+});
+
 })();

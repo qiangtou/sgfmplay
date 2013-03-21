@@ -229,6 +229,7 @@
 			concedeId,//让球标识
 			concedeObj,//标识表
 			_playerModels=playerModels,//缓存外部变量
+			typeName,//玩法名
 			player,
 			gameTypeModel,
 			gamemodels,
@@ -253,29 +254,27 @@
 				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
 				if (gameTypeModel == null) {
+					typeName=i18ns[typeId - 1];
 					gameTypeModel=gameTypeModels.create({
 						'typeId' : typeId,
+						'typeName':typeName,
+						'isShow':opt.gameType==typeId,
 						//全半场1全/2半
-						1:{'model':new GameModels,'title':i18ns[5]+' - '+i18ns[typeId - 1]},
-						2:{'model':new GameModels,'title':i18ns[6]+' - '+i18ns[typeId - 1]}
+						1:{'model':new GameModels,'title':i18ns[5]+' - '+typeName},
+						2:{'model':new GameModels,'title':i18ns[6]+' - '+typeName}
 					});
 				};
 				gamemodels=gameTypeModel.get(isWhole).model;
-				console.log(gameTypeModel.get('isShow'));
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (gm == null) {
-				
-					gameTypeModel.set('isShow',opt.gameType==typeId);
-
 					gm = gamemodels.create({
 							"gameId" : gameId,
 							"p1name" : _playerModels.host.get('name'),
 							"p2name" : _playerModels.custom.get('name')
 						});
+					gamemodels.showhide(opt.gameType==typeId);
 				};
-				console.log(gameTypeModel.get('isShow'));
-				
 				concedeObj = {
 					'1' : indicator, //让球
 					'0' : '-', //非让球
@@ -338,7 +337,10 @@
 	//游戏模型集合类
 	GameModels = sgfmmvc.Models.extend({
 			model : GameModel,
-			isShow:false
+			isShow:false,
+			showhide:function(isShow){
+				this.isShow=isShow;
+			}
 		}),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
@@ -457,36 +459,7 @@
 			}
 
 		}),
-	//玩法选项卡视图
-	TabView=sgfmmvc.View.extend({
-		model:new sgfmmvc.Model,
-		cls:'other_play',
-		template:$('#tab_tmpl').html(),
-		init:function(){
-			this.model.set(opt.i18n.gameType);
-			this.render();
-			this.currentTab=this.$.find('li').first();
-			this.currentCls='ons';
-			this.currentTab.addClass(this.currentCls);
-		},
-		events:{
-			'li click':'toggletab'
-		},
-		//切换标签
-		toggletab:function(e){
-			var view=e.data.view;
-			view.currentTab.removeClass(view.currentCls);
-			view.currentTab=$(this);
-			view.currentTab.addClass(view.currentCls);
-			
-			//var typeId=view.currentTab.attr("typeId");
-			//var gtm=gameTypeModels.getById(typeId);
-		},
-		render:function(){			var html=sgfmmvc.replace(this.template,this.model.getAttrs());
-			this.$.html(html);
-			return this;
-		}	
-	}),
+
 	//交易项集合
 	tradeModels = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend({
@@ -554,7 +527,8 @@
 			cls : "play_list_frame",
 			template : $("#playlist_tmpl").html(),
 			init : function () {
-				this.listenTo(this.model, "create", this.addGame);				
+				this.listenTo(this.model, "create", this.addGame);	
+				this.listenTo(this.model, "showhide", this.showhide);				
 			},
 			addGame : function (m) {
 				var md = this.model.getById(m.gameId);
@@ -563,41 +537,137 @@
 					});
 				this.$.append(gv.render().$);
 			},
-			render : function () {		
+			render : function () {	
 				var i18n = $.extend(opt.i18n.playlist, {
 						title : this.tit
 					});
-				this.$.html(sgfmmvc.replace(this.template, i18n));
+				this.$.hide().html(sgfmmvc.replace(this.template, i18n));
 				return this;
+			},
+			showhide:function(isShow){
+			console.log(isShow);
+			if(isShow)
+			{
+				this.model.length> 0 && this.show();
+			}else{
+				 this.hide();
+			}
 			}
 		}),
+		
+		
 	//玩法集合
 	gameTypeModels = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend({
 				idArr : "typeId",
+				showType:null,
+				getShowType:function(){
+					return this.showType;
+				},
+				setShowType:function(md){
+					if(this.getById(md.get(md.idArr))){
+						this.showType=md;
+					}
+				},
 				defaults:{
 					'show':false
 				}
 			})
 		}),
+	TabView=sgfmmvc.View.extend({
+		template:$('#tab_tmpl').html(),
+		tag:'li',
+		init:function(){
+			this.cls='ons';
+			this.listenTo(this.model, "change:isShow", this.showhide);
+		},
+		render:function(){
+			this.isShow()?this.highlight():this.removeHighlight();
+			var html=sgfmmvc.replace(this.template,this.model.getAttrs());
+			this.$.html(html);
+			return this;
+		},
+		clickTab:function(e){
+			var v=e.data.view;
+			v.model.set('isShow',true);
+		},
+		isShow:function(){
+			return this.model.get('isShow')||false;
+		},
+		highlight:function(){
+			this.$.addClass(this.cls);
+			return this;
+		},
+		removeHighlight:function(e){
+			this.$.removeClass(this.cls);
+			return this;
+		
+		},
+		showhide:function(name,o,isShow){
+			this.model.get('1').model.showhide(isShow);
+			this.model.get('2').model.showhide(isShow);
+		}
+	}),
+		//玩法选项卡视图
+		TabsView = sgfmmvc.View.extend({
+				model : gameTypeModels,
+				cls : 'other_play',
+				init : function () {
+					this.currenTab=null;
+					this.listenTo(this.model, "create", this.addTypeTab);
+				},
+				events:{
+					'li click':'toggleTab'
+				},
+				toggleTab:function(e){
+					var currenTab=$(this),v=e.data.view;
+					if(v.currenTab){
+						var id=v.currenTab.children().attr('typeId');
+						v[id].removeHighlight();
+						gameTypeModels.getById(id).set('isShow',false);
+					}
+					var typeId=currenTab.children().attr('typeId');
+					v[typeId].highlight();
+					v.currenTab=currenTab;
+					gameTypeModels.getById(typeId).set('isShow',true);
+				},
+				addTypeTab : function (m) {
+					var typeId=m.typeId;
+					var md = this.model.getById(typeId);
+					var tv = new TabView({
+							model : md
+						});
+					this[typeId]=tv;
+					this.ul.append(tv.render().$);
+					
+					if(m.isShow){
+						this.currenTab=tv.$;
+					}
+				},
+				render : function () {
+					this.ul = $('<ul></ul>');
+					this.$.append(this.ul);
+					return this;
+				}
+			}),
 	//整个应用视图
 	Play = sgfmmvc.View.extend({
+			model:gameTypeModels,
 			cls:'ac_frame',
 			model : gameTypeModels,
 			init : function () {
 				this.top = new TopView();
-				this.tab= new TabView();
+				this.tab= new TabsView();
 				this.listenTo(this.model, "create", this.addGameType);
-				this.listenTo(this.model, "change:isShow", this.showhide);
+				
 				this.render();
 				dr.fecth(opt);
 			},
 			render : function () {
-				this.$.append(this.top.$,this.tab.$);
+				this.$.append(this.top.$,this.tab.render().$);
 			},
 			addGameType : function (m) {
 				var mds = this.model,
-				isShow=opt.gameType==m.typeId,
 				md = mds.getById(m.typeId);
 				this.playlist1 = new PlayListView({
 						tit : md.get('1').title,
@@ -608,17 +678,6 @@
 						model :md.get('2').model
 					});
 				this.$.append(this.playlist1.render().$,this.playlist2.render().$);
-			},
-			showhide : function (name, old, isShow) {
-				var p1 = this.playlist1,
-				p2 = this.playlist2;
-				if (isShow) {
-					p1.model.length > 0 && p1.show();
-					p2.model.length > 0 && p2.show();
-				} else {
-					p1.hide();
-					p2.hide();
-				}
 			}
 		}),
 	instence = {

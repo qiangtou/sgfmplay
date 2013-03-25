@@ -17,7 +17,7 @@ http://172.17.109.106/tw/core/inPlay.getFrameInfo.do
 * 参数:v	参数类型:long	|版本号(可选,不填或已失效的版本号将返回全量信息)
 * 参数:m	参数类型:int	|赛事ID
 
-##获取游戏信息
+##获取游戏(状态)信息
 <http://172.17.109.106/tw/core/inPlay.getGameInfo.do>
 
 * 参数:m	参数类型:int	|赛事ID
@@ -56,7 +56,7 @@ http://172.17.109.106/tw/core/inPlay.getFrameInfo.do
 ##获取框架信息
 <http://127.0.0.1/tw/core/today.getFrameInfo.do>
 
-##获取游戏信息
+##获取游戏(状态)信息
 <http://127.0.0.1/tw/core/today.getGameInfo.do>
 
 ##获取盘口信息

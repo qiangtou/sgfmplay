@@ -275,7 +275,7 @@
 	 *  return:'tom<div>10</div><span>99</span>' 
 	 */
 	_.replace = function (str, json) {
-		if(!json)return str;
+		if(!json || !str)return '';
 		if(json instanceof _.Model){
 			json=json.getAttrs();
 		}

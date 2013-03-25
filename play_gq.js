@@ -44,28 +44,37 @@
 	dr = {
 		//取全量信息
 		fecth : function (settings) {
-			dc.stopTimeout();
-			dr.dispatch(settings.allData, 0, "all");
+			dr.dispatch(settings.allData, 0, "all",ds.all);
 		},
 		//取增量信息
 		fecthIncreacement : function () {
 			dc.stopTimeout();
-			// window.setTimeout(function(){
-			// var settings=opt;
-			// dr.dispatch(settings.frameInfo[0], settings.frameInfo[1], "setFrame");
-			// dr.dispatch(settings.gameInfo[0], settings.gameInfo[1], "setStatus");
-			// dr.dispatch(settings.marketInfo[0], settings.marketInfo[1], "setPk");
-			// },2000);
+			timoutIndex['fecthIncreacement']=window.setTimeout(function(){
+				var settings=opt,
+				info={
+					'frameInfo':'setFrame',
+					'gameInfo':'setStatus',
+					'marketInfo':'setPk',
+				};
+				for(var name in info){
+					dr.dispatch(settings[name][0], settings[name][1], name,function(json){
+						if(json.c==0){
+							ds[name](json.d);
+						}
+					});
+				}
+			},2000);
 
 		},
-		dispatch : function (url, refreshCycle, method) {
+		dispatch : function (url, refreshCycle, name,callback) {
 			var data={'m':opt.gameType[0]};//带上玩法id
+			
 			//执行周期任务
-			dr.ajax(url, ds[method],data);
+			dr.ajax(url, callback,data);
 			if (refreshCycle > 0) {
 				setTimeout(function () {
-					dr.ajax(url, ds[method]);
-					timoutIndex[method] = setTimeout(arguments.callee, refreshCycle);
+					dr.ajax(url, callback,data);
+					timoutIndex[name] = setTimeout(arguments.callee, refreshCycle);
 				}, refreshCycle);
 			}
 		},
@@ -87,15 +96,16 @@
 			mIndex =0; //赛事索引
 			if (json.c == 0) {
 				d = json.d;
-				ds.setFrame(d[0][0][mIndex]);
+				ds.setFrame(d[0][mIndex]);
 				ds.setStatus(d[1][mIndex]);
-				d[2] && ds.setPk(d[2]);
+				ds.setPk(d[2]);
 				dr.fecthIncreacement();
 			}
-		},
+		},		
 		//框架的设置
 		setFrame : function (frame) {
 			//框架frame[0][0]
+			if(!frame)return;
 			var f = frame,
 			isRollingBall = f[4],
 			teamInfo = f[6],
@@ -106,6 +116,7 @@
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
+			if(!status)return;
 			var s = status,
 			i,
 			j,
@@ -183,6 +194,8 @@
 		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
+			
+			if(!pk)return ;
 			var tm,
 			pkArr,
 			tradeId,
@@ -219,7 +232,6 @@
 				p2 = teamInfo[1];
 				isHost = p1[2]; //取第一个队的主客标识
 
-
 				if (_playerModels.length == 0) {
 					p1m = _playerModels.create({
 							'playerId' : p1[0],
@@ -244,7 +256,7 @@
 				"isRollingBall" : isRollingBall,
 				"p1name" : host.get('name'),
 				"p2name" : custom.get('name'),
-				'totalTime' : totalTime //总时间
+				'totalTime' : totalTime||90 //总时间
 			});
 		},
 
@@ -258,19 +270,19 @@
 			indicator, //指标
 			concedeId, //让球标识
 			concedeObj, //标识表
-			_playerModels = playerModels, //缓存外部变量
 			typeName, //玩法名
 			player,
 			gameTypeModel,
 			gamemodels,
 			i18ns = [],
-			i18n = opt.i18n.gameType;
+			i18n = opt.i18n.gameType,
+			_defaultType=ds.getDefaultType(),
+			_playerModels = playerModels; //缓存外部变量
 
 			//玩法国际化
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
 			};
-			console.log(gameArr)
 			for (var i = 0, len = gameArr.length; i < len; i++) {
 				//解析数组
 				game = gameArr[i];
@@ -281,11 +293,14 @@
 				indicator = game[4];
 				concedeId = game[5];
 				isWhole = game[6];
-
+				
+				if(typeId!=_defaultType){
+					//只显示一种玩法
+					continue;
+				}
 				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
 				if (gameTypeModel == null) {
-					continue;
 					// typeName = i18ns[typeId - 1];
 					// gameTypeModel = gameTypeModels.create({
 							// 'typeId' : typeId,
@@ -326,12 +341,18 @@
 		},
 		info : function (json) {
 			//	console.log("info")
-		}
+		},
+		//获得默认玩法
+	getDefaultType:function(){
+		return opt.gameType[0];
+	}
+	
 	},
 	dc = {
 		stopTimeout : function () {
 			for (var name in timoutIndex) {
-				clearTimeout(timoutIndex[name]);
+			console.log(timoutIndex[name])
+				timoutIndex[name] && clearTimeout(timoutIndex[name]);
 			}
 		}
 
@@ -723,7 +744,7 @@
 						break;
 					}
 			}
-				dr.fecth(opt);
+				dr.fecthIncreacement();
 			},
 			
 			addTypeTab : function (m) {

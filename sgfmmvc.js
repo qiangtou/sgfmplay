@@ -281,7 +281,7 @@
 		}
 		return str.replace(/{(.*?)}/igm, function (s, s1) {
 			var val=json[s1];
-			return val||'';
+			return val!=undefined?val:'';
 		});
 	};
 })(jQuery, window);

@@ -30,6 +30,7 @@ $.ajax = function (settings) {
 		'complete' : settings.complete || $.noop
 	},
 	returndata = $.testData[opt.url] || '';
+	console.log(settings.data)
 	if (typeof returndata == 'function') {
 		returndata = returndata();
 	};

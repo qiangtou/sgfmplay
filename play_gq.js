@@ -3,8 +3,19 @@
  * 2.轮循状态
  */
 (function ($, window) {
+//日志处理
+	var log=true;
+	if(log && console && console.log){
+		log=function(){
+			console.log.apply(null,arguments);
+		}
+	}else{
+		log=$.noop;
+	};
+	
 	var content = window,
-	timoutIndex = [],
+	timoutIndex = {},
+	version={},
 	opt = {},
 	defaults = {
 		gameType : 2, //默认显示的玩法标签
@@ -44,39 +55,55 @@
 	dr = {
 		//取全量信息
 		fecth : function (settings) {
-			dr.dispatch(settings.allData, 0, "all",ds.all);
+			dc.stopTimeout();
+			dr.getPlaylist();
+			dr.dispatch(settings.allData, 0, "all",{},ds.all);
 		},
 		//取增量信息
-		fecthIncreacement : function () {
+		fecthIncreacement : function (v) {
 			dc.stopTimeout();
 			timoutIndex['fecthIncreacement']=window.setTimeout(function(){
 				var settings=opt,
+				//
 				info={
 					'frameInfo':'setFrame',
 					'gameInfo':'setStatus',
 					'marketInfo':'setPk',
+					'playlist':'_addType',
 				};
-				for(var name in info){
-					dr.dispatch(settings[name][0], settings[name][1], name,function(json){
+				for(var _name in info){
+				(function(){
+					var name=_name;
+					dr.dispatch(settings[name][0], settings[name][1], name,{'v':v},function(json){
 						if(json.c==0){
-							ds[name](json.d);
+							ds[info[name]](json.d);
+							version[name]=json.v;
 						}
 					});
+				})();
+					
 				}
 			},2000);
 
 		},
-		dispatch : function (url, refreshCycle, name,callback) {
-			var data={'m':opt.gameType[0]};//带上玩法id
-			
-			//执行周期任务
+		dispatch : function (url, refreshCycle, name,data,callback) {
+			 data['v']=version[name]||data['v'];//带上玩法id
+			data['p']=ds.getDefaultType();
+			//执行周期任务					
 			dr.ajax(url, callback,data);
 			if (refreshCycle > 0) {
-				setTimeout(function () {
+				timoutIndex['refresh'] =setTimeout(function () {
+					data['v']=version[name];
 					dr.ajax(url, callback,data);
 					timoutIndex[name] = setTimeout(arguments.callee, refreshCycle);
 				}, refreshCycle);
 			}
+		},
+		getPlaylist:function(){
+			var _opt=opt,url=_opt.playlist[0];
+			dr.ajax(url,ds.addType,{})
+			
+		
 		},
 		//ajax封装
 		ajax : function (url, success,data) {
@@ -99,7 +126,7 @@
 				ds.setFrame(d[0][mIndex]);
 				ds.setStatus(d[1][mIndex]);
 				ds.setPk(d[2]);
-				dr.fecthIncreacement();
+				//dr.fecthIncreacement(json.v);
 			}
 		},		
 		//框架的设置
@@ -327,21 +354,54 @@
 					'u' : '' //小球
 				};
 				//游戏model设置交易项
-				if (!tradeModels.getById(tradeId)) {
-					var tm = new TradeModel;
-					tm.set({
+				var tm=tradeModels.getById(tradeId);
+				var tmObj={
 						'tradeId' : tradeId,
 						'typeId' : typeId,
 						'name' : game[0],
 						'pk' : concedeObj[concedeId]
-					});
+					};
+				if (!tm) {
+					tm = new TradeModel;
+					tm.set(tmObj);
 					gm.addTrade(tm);
+				}else{
+					gm.update(tmObj);
 				}
 			};
 		},
-		info : function (json) {
-			//	console.log("info")
+		
+		addType:function(json){
+			if(json.c==0){
+				ds._addType(json.d);
+			}
 		},
+		_addType : function (d) {
+			var i18n = opt.i18n.gameType;
+			var typeHandler = {
+				1 : 'standard', //标准
+				2 : 'concedepoints', //让球
+				3 : 'bigsmall', //大小球
+				4 : 'sigledouble' //单双
+			};
+			if (d) {
+				opt.gameType=d;
+				var typeId,gameTypeModel;
+				for (i = 0, len = d.length; i < len; i++) {
+					typeId = d[i];
+					gameTypeModel = gameTypeModels.getById(typeId);
+					if (!gameTypeModel) {
+						gameTypeModel=gameTypeModels.create({
+							'typeId' : typeId,
+							'typeName' : i18n[typeHandler[typeId]],
+							'isShow' : i == 0
+						});
+					}
+				}
+			}
+		},
+		
+		
 		//获得默认玩法
 	getDefaultType:function(){
 		return opt.gameType[0];
@@ -351,8 +411,8 @@
 	dc = {
 		stopTimeout : function () {
 			for (var name in timoutIndex) {
-			console.log(timoutIndex[name])
 				timoutIndex[name] && clearTimeout(timoutIndex[name]);
+				version[name] && (version[name]=null);
 			}
 		}
 
@@ -616,7 +676,6 @@
 		}),
 	//玩法集合
 	gameTypeModels = new sgfmmvc.Models({
-			showList : function (m) {},
 			model : sgfmmvc.Model.extend({
 				idArr : "typeId",
 				showType : null,
@@ -700,22 +759,6 @@
 				};
 				this.currenTab = null;
 				this.listenTo(this.model, "create", this.addTypeTab);
-				this._init();
-			},
-			_init : function () {
-				var md,
-				arr = opt.gameType;
-				for (var i = 0, len = arr.length; i < len; i++) {
-					md = this.model.create({
-							typeId : arr[i],
-							typeName : this.i18n[this.typeHandler[arr[i]]],
-							isShow : i == 0
-						});
-					if (i == 0) {
-						this.model.showList(md);
-					}
-				}
-
 			},
 			events : {
 				'li click' : 'toggleTab'
@@ -744,7 +787,7 @@
 						break;
 					}
 			}
-				dr.fecthIncreacement();
+				dr.fecth(opt);
 			},
 			
 			addTypeTab : function (m) {
@@ -774,16 +817,16 @@
 					3 : 'bigsmall', //大小球
 					4 : 'sigledouble' //单双
 				};
-				this.listenTo(this.model, "showList", this.render);
+				this.listenTo(this.model, "create", this.render);
 			},
 			render : function (md) {
 				if (md) {
-					this.$.empty();
+					//this.$.empty();
 					this.addGameType(md);
 				}
 			},
 			addGameType : function (m) {
-				var typeId = m.get('typeId');
+				var typeId =m.typeId|| m.get('typeId');
 				var fun = this.typeHandler[typeId];
 				fun && this[fun](typeId, fun);
 				return this;

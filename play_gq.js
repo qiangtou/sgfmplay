@@ -3,22 +3,10 @@
  * 2.轮循状态
  */
 (function ($, window) {
-//日志处理
-	var log=true;
-	if(log && console && console.log){
-		log=function(){
-			console.log.apply(null,arguments);
-		}
-	}else{
-		log=$.noop;
-	};
-	
+	//window.//console={log:$.noop};
 	var content = window,
-	timoutIndex = {},
-	version={},
 	opt = {},
 	defaults = {
-		gameType : 2, //默认显示的玩法标签
 		i18n : {
 			gameType : {
 				standard : "标准盘",
@@ -53,81 +41,118 @@
 	},
 	//请求封装
 	dr = {
-		//取全量信息
-		fecth : function (settings) {
+		firstGetPlaylist:function(){
 			dc.stopTimeout();
-			dr.getPlaylist();
-			dr.dispatch(settings.allData, 0, "all",{},ds.all);
-		},
-		//取增量信息
-		fecthIncreacement : function (v) {
-			dc.stopTimeout();
-			timoutIndex['fecthIncreacement']=window.setTimeout(function(){
-				var settings=opt,
-				//
-				info={
-					'frameInfo':'setFrame',
-					'gameInfo':'setStatus',
-					'marketInfo':'setPk',
-					'playlist':'_addType',
-				};
-				for(var _name in info){
-				(function(){
-					var name=_name;
-					dr.dispatch(settings[name][0], settings[name][1], name,{'v':v},function(json){
-						if(json.c==0){
-							ds[info[name]](json.d);
-							version[name]=json.v;
-						}
-					});
-				})();
-					
+			dr.ajax({url:opt.playlist[0],success:function(json){
+				if(json.c==0){
+					ds._addType(json.d);
+					dr.getAll();
 				}
-			},2000);
-
+			}});
 		},
-		dispatch : function (url, refreshCycle, name,data,callback) {
-			 data['v']=version[name]||data['v'];//带上玩法id
-			data['p']=ds.getDefaultType();
-			//执行周期任务					
-			dr.ajax(url, callback,data);
-			if (refreshCycle > 0) {
-				timoutIndex['refresh'] =setTimeout(function () {
-					data['v']=version[name];
-					dr.ajax(url, callback,data);
-					timoutIndex[name] = setTimeout(arguments.callee, refreshCycle);
-				}, refreshCycle);
+		
+		
+		//取全量信息
+		getAll : function () {
+			var data={p:ds.getDefaultType()};
+			dr.ajax({url:opt.allData,data:data,success:function(json){
+			if(json.c==0){
+				ds.all(json.d);
+				dr.getIncrease(json.v);
 			}
+			}});
+		},
+		getIncrease:function(v){
+				dr.getFrameInfo(v);
+				dr.getGameInfo(v);
+				dr.getMarketInfo(v);
+				dr.getPlaylist();
 		},
 		getPlaylist:function(){
-			var _opt=opt,url=_opt.playlist[0];
-			dr.ajax(url,ds.addType,{})
-			
-		
-		},
-		//ajax封装
-		ajax : function (url, success,data) {
-			return $.ajax({
-				type : "post",
-				url : url,
-				data:data||null,
-				success : success || $.noop,
-				dataType : "json"
+			var fun=arguments.callee,
+			url=opt.playlist[0],
+			refreshCycle=opt.playlist[1]||30000;
+			dr.ajax({
+			url:url,			
+			success:function(json){
+				if(json.c==0){
+					ds._addType(json.d);
+					dr.timeoutIndex['playlist']=setTimeout(fun,refreshCycle);
+				}
+			}
 			});
+		},
+		//取框架信息
+		getFrameInfo : function (v) {
+			var fun=arguments.callee,
+			url=opt.frameInfo[0],
+			_v=v||fun.v,
+			refreshCycle=opt.frameInfo[1]||3000;
+			dr.ajax({
+			url:url,
+			data:{p:ds.getDefaultType(),v:_v},			
+			success:function(json){
+				if(json.c==0){
+					ds.setFrame(json.d);
+					fun.v=json.v;
+					dr.timeoutIndex['frameInfo']=setTimeout(fun,refreshCycle);
+				}
+			}
+			});
+		},
+		//取状态信息
+		getGameInfo : function (v) {
+			var fun=arguments.callee,
+			_v=v||fun.v,
+			url=opt.gameInfo[0],
+			refreshCycle=opt.gameInfo[1]||3000;
+			dr.ajax({
+			url:url,
+			data:{p:ds.getDefaultType(),v:_v},
+			success:function(json){
+				if(json.c==0){
+					ds.setStatus(json.d);
+					fun.v=json.v;
+					dr.timeoutIndex['gameInfo']=setTimeout(fun,refreshCycle);
+				}
+			}
+			});
+		},
+		//取盘口信息
+		getMarketInfo : function (v) {
+			var fun=arguments.callee,
+			url=opt.marketInfo[0],
+			_v=v||fun.v,
+			refreshCycle=opt.marketInfo[1]||3000;
+			dr.ajax({
+			url:url,
+			data:{p:ds.getDefaultType(),v:_v},
+			success:function(json){
+				if(json.c==0){
+					ds.setStatus(json.d);
+					fun.v=json.v;
+					dr.timeoutIndex['marketInfo']=setTimeout(fun,refreshCycle);
+				}
+			}
+			});
+		},
+		timeoutIndex:{},
+		//ajax封装
+		ajax : function (settings) {
+			console.log(settings.url,settings.data);
+			return $.ajax($.extend({
+				type : "post",
+				dataType : "json"
+			},settings));
 		}
 	},
 	//模型填充
 	ds = {
-		all : function (json) {
-			var d,
-			mIndex =0; //赛事索引
-			if (json.c == 0) {
-				d = json.d;
+		all : function (d) {
+				var mIndex =0; //赛事索引
 				ds.setFrame(d[0][mIndex]);
 				ds.setStatus(d[1][mIndex]);
 				ds.setPk(d[2]);
-				//dr.fecthIncreacement(json.v);
-			}
 		},		
 		//框架的设置
 		setFrame : function (frame) {
@@ -370,13 +395,20 @@
 				}
 			};
 		},
-		
+		firstAddType:function(json){
+			if(json.c==0){
+				ds._addType(json.d);
+				ds.gecth(opt);
+			}
+		},
 		addType:function(json){
+			//console.log('--addType,return: ',json);
 			if(json.c==0){
 				ds._addType(json.d);
 			}
 		},
 		_addType : function (d) {
+			//console.log('--_addType,return: ',d);	
 			var i18n = opt.i18n.gameType;
 			var typeHandler = {
 				1 : 'standard', //标准
@@ -390,7 +422,9 @@
 				for (i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gameTypeModels.getById(typeId);
+					//console.log('--check gameTypeModel',gameTypeModel)
 					if (!gameTypeModel) {
+						//console.log('--create gameTypeModel',typeId);
 						gameTypeModel=gameTypeModels.create({
 							'typeId' : typeId,
 							'typeName' : i18n[typeHandler[typeId]],
@@ -398,6 +432,8 @@
 						});
 					}
 				}
+			}else{
+				//console.log('--_addType,data is null: ');
 			}
 		},
 		
@@ -410,9 +446,11 @@
 	},
 	dc = {
 		stopTimeout : function () {
-			for (var name in timoutIndex) {
-				timoutIndex[name] && clearTimeout(timoutIndex[name]);
-				version[name] && (version[name]=null);
+			var timeoutIndex=dr.timeoutIndex,method;
+			for (var name in timeoutIndex) {
+				timeoutIndex[name] && clearTimeout(timeoutIndex[name]);
+				method='get'+name.replace(/\w/,name.charAt(0).toUpperCase());
+				dr[method] && (dr[method].v=undefined)
 			}
 		}
 
@@ -778,26 +816,30 @@
 				v.setDefault(typeId);
 			},
 			
-			setDefault:function(typeId){
-				var arr=opt.gameType;
-			for(var i=0,len=arr.length;i<len;i++){
-					if(typeId==arr[i]){
-						arr.splice(i,1);
+			setDefault : function (typeId) {
+				typeId = parseInt(typeId);
+				var arr = opt.gameType;
+				for (var i = 0, len = arr.length; i < len; i++) {
+					if (typeId == arr[i]) {
+						arr.splice(i, 1);
 						arr.unshift(typeId);
 						break;
 					}
-			}
-				dr.fecth(opt);
+				}
+				dr.firstGetPlaylist();
 			},
 			
 			addTypeTab : function (m) {
+				//console.log('***listen to gameTypemodels create,addTypeTab');
 				var typeId = m.typeId;
 				var gameTypeModel = this.model.getById(typeId);
 				var tv = new TabView({
 						model : gameTypeModel
 					});
+				//console.log('***addTypeTab create new TabView');
 				this.ul.append(tv.render().$);
 				if (m.isShow) {
+					//console.log('***addTypeTab,set currenTab is show');
 					this.currenTab = tv.$;
 				}
 			},
@@ -862,7 +904,7 @@
 				this.tagContent = new TagContentView(); //内容
 				this.tabs = new TabsView(); //标签选项卡
 				this.render();
-				dr.fecth(opt);
+				dr.firstGetPlaylist();
 			},
 			render : function () {
 				this.$.append(this.top.$, this.tabs.render().$, this.tagContent.$);
@@ -874,7 +916,6 @@
 		init : function (settings) {
 			/**设置全局上下文*/
 			content = this;
-
 			$.extend(true, opt, defaults, settings);
 			return opt;
 		},

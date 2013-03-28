@@ -41,123 +41,140 @@
 	},
 	//请求封装
 	dr = {
-		firstGetPlaylist:function(){
+		firstGetPlaylist : function () {
 			dc.stopTimeout();
-			dr.ajax({url:opt.playlist[0],success:function(json){
-				if(json.c==0){
-					ds._addType(json.d);
-					dr.getAll();
+			dr.ajax({
+				url : opt.playlist[0],
+				success : function (json) {
+					if (json.c == 0) {
+						ds._addType(json.d);
+						dr.getAll();
+					}
 				}
-			}});
+			});
 		},
-		
-		
 		//取全量信息
 		getAll : function () {
-			var data={p:ds.getDefaultType()};
-			dr.ajax({url:opt.allData,data:data,success:function(json){
-			if(json.c==0){
-				ds.all(json.d);
-				dr.getIncrease(json.v);
-			}
-			}});
-		},
-		getIncrease:function(v){
-				dr.getFrameInfo(v);
-				dr.getGameInfo(v);
-				dr.getMarketInfo(v);
-				dr.getPlaylist();
-		},
-		getPlaylist:function(){
-			var fun=arguments.callee,
-			url=opt.playlist[0],
-			refreshCycle=opt.playlist[1]||30000;
+			var data = {
+				p : ds.getDefaultType()
+			};
 			dr.ajax({
-			url:url,			
-			success:function(json){
-				if(json.c==0){
-					ds._addType(json.d);
-					dr.timeoutIndex['playlist']=setTimeout(fun,refreshCycle);
+				url : opt.allData,
+				data : data,
+				success : function (json) {
+					if (json.c == 0) {
+						ds.all(json.d);
+						dr.getIncrease(json.v);
+					}
 				}
-			}
+			});
+		},
+		getIncrease : function (v) {
+			dr.getFrameInfo(v);
+			dr.getGameInfo(v);
+			dr.getMarketInfo(v);
+			dr.getPlaylist();
+		},
+		getPlaylist : function () {
+			var fun = arguments.callee,
+			url = opt.playlist[0],
+			refreshCycle = opt.playlist[1] || 30000;
+			dr.ajax({
+				url : url,
+				success : function (json) {
+					if (json.c == 0) {
+						ds._addType(json.d);
+						dr.timeoutIndex['playlist'] = setTimeout(fun, refreshCycle);
+					}
+				}
 			});
 		},
 		//取框架信息
 		getFrameInfo : function (v) {
-			var fun=arguments.callee,
-			url=opt.frameInfo[0],
-			_v=v||fun.v,
-			refreshCycle=opt.frameInfo[1]||3000;
+			var fun = arguments.callee,
+			url = opt.frameInfo[0],
+			_v = v || fun.v,
+			refreshCycle = opt.frameInfo[1] || 3000;
 			dr.ajax({
-			url:url,
-			data:{p:ds.getDefaultType(),v:_v},			
-			success:function(json){
-				if(json.c==0){
-					ds.setFrame(json.d);
-					fun.v=json.v;
-					dr.timeoutIndex['frameInfo']=setTimeout(fun,refreshCycle);
+				url : url,
+				data : {
+					p : ds.getDefaultType(),
+					v : _v
+				},
+				success : function (json) {
+					if (json.c == 0) {
+						ds.setFrame(json.d);
+						fun.v = json.v;
+						dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
+					}
 				}
-			}
 			});
 		},
 		//取状态信息
 		getGameInfo : function (v) {
-			var fun=arguments.callee,
-			_v=v||fun.v,
-			url=opt.gameInfo[0],
-			refreshCycle=opt.gameInfo[1]||3000;
+			var fun = arguments.callee,
+			_v = v || fun.v,
+			url = opt.gameInfo[0],
+			refreshCycle = opt.gameInfo[1] || 3000;
 			dr.ajax({
-			url:url,
-			data:{p:ds.getDefaultType(),v:_v},
-			success:function(json){
-				if(json.c==0){
-					ds.setStatus(json.d);
-					fun.v=json.v;
-					dr.timeoutIndex['gameInfo']=setTimeout(fun,refreshCycle);
+				url : url,
+				data : {
+					p : ds.getDefaultType(),
+					v : _v
+				},
+				success : function (json) {
+					if (json.c == 0) {
+						ds.setStatus(json.d);
+						fun.v = json.v;
+						dr.timeoutIndex['gameInfo'] = setTimeout(fun, refreshCycle);
+					}
 				}
-			}
 			});
 		},
 		//取盘口信息
 		getMarketInfo : function (v) {
-			var fun=arguments.callee,
-			url=opt.marketInfo[0],
-			_v=v||fun.v,
-			refreshCycle=opt.marketInfo[1]||3000;
+			var fun = arguments.callee,
+			url = opt.marketInfo[0],
+			_v = v || fun.v,
+			refreshCycle = opt.marketInfo[1] || 3000;
 			dr.ajax({
-			url:url,
-			data:{p:ds.getDefaultType(),v:_v},
-			success:function(json){
-				if(json.c==0){
-					ds.setStatus(json.d);
-					fun.v=json.v;
-					dr.timeoutIndex['marketInfo']=setTimeout(fun,refreshCycle);
+				url : url,
+				data : {
+					p : ds.getDefaultType(),
+					v : _v
+				},
+				success : function (json) {
+					if (json.c == 0) {
+						ds.setStatus(json.d);
+						fun.v = json.v;
+						dr.timeoutIndex['marketInfo'] = setTimeout(fun, refreshCycle);
+					}
 				}
-			}
 			});
 		},
-		timeoutIndex:{},
+		timeoutIndex : {},
 		//ajax封装
 		ajax : function (settings) {
-			console.log(settings.url,settings.data);
+			console.log(settings.url, settings.data);
 			return $.ajax($.extend({
-				type : "post",
-				dataType : "json"
-			},settings));
+					type : "post",
+					dataType : "json"
+				}, settings));
 		}
 	},
 	//模型填充
 	ds = {
 		all : function (d) {
-				var mIndex =0; //赛事索引
-				ds.setFrame(d[0][mIndex]);
-				ds.setStatus(d[1][mIndex]);
-				ds.setPk(d[2]);
-		},		
+			var mIndex = 0; //赛事索引
+			ds.setFrame(d[0][mIndex]);
+			ds.setStatus(d[1][mIndex]);
+			ds.setPk(d[2]);
+		},
 		//框架的设置
 		setFrame : function (frame) {
 			//框架frame[0][0]
-			if(!frame)return;
+			if (!frame)
+				return;
 			var f = frame,
 			isRollingBall = f[4],
 			teamInfo = f[6],
@@ -168,22 +185,12 @@
 		},
 		setStatus : function (status) {
 			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
-			if(!status)return;
+			if (!status)
+				return;
 			var s = status,
-			i,
-			j,
-			gr,
-			gTimes,
-			rTimes,
-			time, //时间点
-			isFirst, //上下半场标识(1上2下)
 			o = {},
-			pid,
-			player,
-			isHost,
-			halfGoal = 0,
 			attr = ["goal", "red"],
-			events = [],
+			events,
 			mStatus = s[1], //(状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束),
 			mStatusObj = {
 				41 : '',
@@ -191,42 +198,7 @@
 				43 : ''
 			},
 			goalred = s[5];
-			if (goalred) {
-				for (i = 0; i < 2; i++) {
-					gr = goalred[i];
-					pid = gr[0];
-					player = playerModels.getById(pid);
-					isHost = player.hostcustomId();
-					//双方信息
-					gTimes = gr[3] || [];
-
-					//进球时间
-					for (j = gTimes.length; j--; ) {
-						time = gTimes[j][0];
-						isFirst = gTimes[j][1];
-						isFirst && ++halfGoal //半场进球累加
-						events.push({
-							'id' : "g" + isHost + j,
-							'action' : "goal",
-							'type' : i,
-							'time' : time
-						})
-					}
-					player.set('goal', gr[1]); //设置进球数
-					player.set('redcard', gr[2]); //设置红牌数
-					player.set('halfGoal', halfGoal); //设置半场进球数
-					//红牌时间
-					rTimes = gr[4] || [];
-					for (j = rTimes.length; j--; ) {
-						events.push({
-							'id' : "r" + isHost + j,
-							'action' : "red_card",
-							'type' : i,
-							'time' : rTimes[j][0]
-						})
-					}
-				};
-			}
+			events = ds._handlerGoalRed(goalred);
 			o.mStatus = mStatus;
 			o.showHalfScore = /4[23]/.test(mStatus) || false;
 			if (/4[123]/.test(mStatus)) {
@@ -244,10 +216,59 @@
 			topModel.update(o);
 			matchEvents.reset(events);
 		},
+		//处理状态数据中的进球和红牌
+		_handlerGoalRed : function (goalred) {
+			var events = [],
+			player,
+			gTimes,
+			isFirst, //上下半场标识(1上2下)
+			rTimes,
+			time, //时间点
+			pid,
+			gr,
+			isHost,
+			halfGoal = 0;
+			if (goalred) {
+				for (var i = 0; i < 2; i++) {
+					gr = goalred[i];
+					pid = gr[0];
+					player = playerModels.getById(pid);
+					isHost = player.hostcustomId();
+					//双方信息
+					gTimes = gr[3] || [];
+					//进球时间
+					for (j = gTimes.length; j--; ) {
+						time = gTimes[j][0];
+						isFirst = gTimes[j][1];
+						isFirst && ++halfGoal //半场进球累加
+						events.push({
+							'id' : "g" + isHost + j,
+							'action' : "goal",
+							'type' : i,
+							'time' : time
+						})
+					}
+					player.set('goal', gr[1]); //设置进球数
+					player.set('redcard', gr[2]); //设置红牌数
+					player.set('halfGoal', halfGoal); //设置半场进球数
+					//红牌时间
+					rTimes = gr[4] || [];
+					for (var j = rTimes.length; j--; ) {
+						events.push({
+							'id' : "r" + isHost + j,
+							'action' : "red_card",
+							'type' : i,
+							'time' : rTimes[j][0]
+						})
+					}
+				};
+			};
+			return events;
+		},
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
-			
-			if(!pk)return ;
+			if (!pk)
+				return;
 			var tm,
 			pkArr,
 			tradeId,
@@ -267,7 +288,6 @@
 					tm.update(o);
 				}
 			}
-
 		},
 		//设置滚球头部比分model
 		setTop : function (isRollingBall, teamInfo, totalTime) {
@@ -283,7 +303,6 @@
 				p1 = teamInfo[0];
 				p2 = teamInfo[1];
 				isHost = p1[2]; //取第一个队的主客标识
-
 				if (_playerModels.length == 0) {
 					p1m = _playerModels.create({
 							'playerId' : p1[0],
@@ -302,16 +321,14 @@
 			//取出主客队
 			host = _playerModels.host;
 			custom = _playerModels.custom;
-
 			//topModel的设置
 			topModel.set({
 				"isRollingBall" : isRollingBall,
 				"p1name" : host.get('name'),
 				"p2name" : custom.get('name'),
-				'totalTime' : totalTime||90 //总时间
+				'totalTime' : totalTime || 90 //总时间
 			});
 		},
-
 		setGames : function (gameArr) {
 			var game,
 			typeId, //玩法id
@@ -328,15 +345,14 @@
 			gamemodels,
 			i18ns = [],
 			i18n = opt.i18n.gameType,
-			_defaultType=ds.getDefaultType(),
+			_defaultType = ds.getDefaultType(),
 			_playerModels = playerModels; //缓存外部变量
-
 			//玩法国际化
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
 			};
 			for (var i = 0, len = gameArr.length; i < len; i++) {
-				//解析数组
+				//解析交易项数组
 				game = gameArr[i];
 				playerId = game[0];
 				tradeId = game[1];
@@ -345,23 +361,13 @@
 				indicator = game[4];
 				concedeId = game[5];
 				isWhole = game[6];
-				
-				if(typeId!=_defaultType){
+				if (typeId != _defaultType) {
 					//只显示一种玩法
 					continue;
 				}
 				//玩法处理,没有则创建
 				gameTypeModel = gameTypeModels.getById(typeId);
-				if (gameTypeModel == null) {
-					// typeName = i18ns[typeId - 1];
-					// gameTypeModel = gameTypeModels.create({
-							// 'typeId' : typeId,
-							// 'typeName' : typeName,
-							// 'isShow' : opt.gameType == typeId,
-						// });
-				};
 				gamemodels = gameTypeModel.getGameModels(isWhole);
-
 				if (!gamemodels)
 					return;
 				//游戏处理,没有则创建
@@ -379,36 +385,38 @@
 					'u' : '' //小球
 				};
 				//游戏model设置交易项
-				var tm=tradeModels.getById(tradeId);
-				var tmObj={
-						'tradeId' : tradeId,
-						'typeId' : typeId,
-						'name' : game[0],
-						'pk' : concedeObj[concedeId]
-					};
+				var tm = tradeModels.getById(tradeId);
+				var tmObj = {
+					'tradeId' : tradeId,
+					'gameId' : gameId,
+					'typeId' : typeId,
+					'isWhole':isWhole,
+					'name' : game[0],
+					'pk' : concedeObj[concedeId]
+				};
 				if (!tm) {
 					tm = new TradeModel;
 					tm.set(tmObj);
 					gm.addTrade(tm);
-				}else{
+				} else {
 					gm.update(tmObj);
 				}
 			};
 		},
-		firstAddType:function(json){
-			if(json.c==0){
+		firstAddType : function (json) {
+			if (json.c == 0) {
 				ds._addType(json.d);
 				ds.gecth(opt);
 			}
 		},
-		addType:function(json){
+		addType : function (json) {
 			//console.log('--addType,return: ',json);
-			if(json.c==0){
+			if (json.c == 0) {
 				ds._addType(json.d);
 			}
 		},
 		_addType : function (d) {
-			//console.log('--_addType,return: ',d);	
+			//console.log('--_addType,return: ',d);
 			var i18n = opt.i18n.gameType;
 			var typeHandler = {
 				1 : 'standard', //标准
@@ -417,43 +425,41 @@
 				4 : 'sigledouble' //单双
 			};
 			if (d) {
-				opt.gameType=d;
-				var typeId,gameTypeModel;
-				for (i = 0, len = d.length; i < len; i++) {
+				opt.gameType = d;
+				var typeId,
+				gameTypeModel;
+				for (var i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gameTypeModels.getById(typeId);
 					//console.log('--check gameTypeModel',gameTypeModel)
 					if (!gameTypeModel) {
 						//console.log('--create gameTypeModel',typeId);
-						gameTypeModel=gameTypeModels.create({
-							'typeId' : typeId,
-							'typeName' : i18n[typeHandler[typeId]],
-							'isShow' : i == 0
-						});
+						gameTypeModel = gameTypeModels.create({
+								'typeId' : typeId,
+								'typeName' : i18n[typeHandler[typeId]],
+								'isShow' : i == 0
+							});
 					}
 				}
-			}else{
+			} else {
 				//console.log('--_addType,data is null: ');
 			}
 		},
-		
-		
 		//获得默认玩法
-	getDefaultType:function(){
-		return opt.gameType[0];
-	}
-	
+		getDefaultType : function () {
+			return opt.gameType[0];
+		}
 	},
 	dc = {
 		stopTimeout : function () {
-			var timeoutIndex=dr.timeoutIndex,method;
+			var timeoutIndex = dr.timeoutIndex,
+			method;
 			for (var name in timeoutIndex) {
 				timeoutIndex[name] && clearTimeout(timeoutIndex[name]);
-				method='get'+name.replace(/\w/,name.charAt(0).toUpperCase());
-				dr[method] && (dr[method].v=undefined)
+				method = 'get' + name.replace(/\w/, name.charAt(0).toUpperCase());
+				dr[method] && (dr[method].v = undefined)
 			}
 		}
-
 	},
 	//工具函数
 	Utils = {
@@ -571,7 +577,6 @@
 				first = document.createDocumentFragment(),
 				second = document.createDocumentFragment(),
 				arr = this.model.toArr();
-
 				for (var i = arr.length; i--; ) {
 					m = arr[i];
 					time = m.get("time");
@@ -652,7 +657,6 @@
 				var $el = this.$;
 				var typeId = this.model.get('typeId');
 				var name = this.model.get('name');
-
 				if (/(big|small)/.test(name)) {
 					this.model.set('nameStr', opt.i18n.trade[name]);
 				} else {
@@ -812,10 +816,9 @@
 				//将现在的选项卡样式加上
 				var typeId = currenTab.children().attr('typeId');
 				v.currenTab = currenTab;
-				var md=v.model.getById(typeId).set('isShow', true);
+				var md = v.model.getById(typeId).set('isShow', true);
 				v.setDefault(typeId);
 			},
-			
 			setDefault : function (typeId) {
 				typeId = parseInt(typeId);
 				var arr = opt.gameType;
@@ -828,7 +831,6 @@
 				}
 				dr.firstGetPlaylist();
 			},
-			
 			addTypeTab : function (m) {
 				//console.log('***listen to gameTypemodels create,addTypeTab');
 				var typeId = m.typeId;
@@ -868,7 +870,7 @@
 				}
 			},
 			addGameType : function (m) {
-				var typeId =m.typeId|| m.get('typeId');
+				var typeId = m.typeId || m.get('typeId');
 				var fun = this.typeHandler[typeId];
 				fun && this[fun](typeId, fun);
 				return this;
@@ -878,11 +880,11 @@
 				title = this.i18n[title];
 				var whole = new PlayListView({
 						tit : this.i18n.whole + '-' + title,
-						model : new GameModels,
+						model : new GameModels
 					});
 				var half = new PlayListView({
 						tit : this.i18n.half + '-' + title,
-						model : new GameModels,
+						model : new GameModels
 					});
 				var md = this.model.getById(typeId);
 				md.half = half.model;
@@ -894,7 +896,6 @@
 			},
 			sigledouble : function (typeId) {},
 			standard : function (typeId) {}
-
 		}),
 	//整个应用视图
 	Play = sgfmmvc.View.extend({
@@ -909,7 +910,6 @@
 			render : function () {
 				this.$.append(this.top.$, this.tabs.render().$, this.tagContent.$);
 			}
-
 		}),
 	instence = {
 		/**初始化*/
@@ -932,5 +932,68 @@
 		instence.show.call(this, settings);
 		// console.timeEnd("show");
 		return this;
+	};
+	//外部api
+	window.tmatch = {
+		//通过交易项ID获取游戏ID
+		getGamingId : function (tradeId) {
+			var tm=tradeModels.getById(tradeId);
+			return tm.get('gameId');
+		}, 
+		//通过交易项ID获取赛事ID
+		getMatchId : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取玩法ID
+		getPlayId : function (tradeId) {
+			var tm=tradeModels.getById(tradeId);
+			return tm.get('typeId');
+		}, 
+		//通过交易项ID获取赛事名称
+		getMatchName : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取联赛名称
+		getLeMatchName : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取游戏状态
+		getGamingState : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取胜队名称
+		getHostname : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取负队名称
+		getNextname : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取交易项的让球指标
+		isGiveBall : function (tradeId) {}, 
+		//通过交易项ID获取交易项名称
+		getTradeItemName : function (tradeId) {}, 
+		//通过交易项ID获取交易项全场半场标识
+		getFullTimeSign : function (tradeId) {
+			var tm=tradeModels.getById(tradeId);
+			return tm.get('isWhole');
+		}, 
+		//通过交易项ID获取游戏指标
+		getTradeItemNorm : function (tradeId) {}, 
+		//通过交易项ID获取全半场国际化显示信息
+		getFullTimeName : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取指标类型
+		getTradeIndexType : function (tradeId) {
+		
+		}, 
+		//通过交易项ID获取赛事类型ID
+		getMatchTypeId : function (tradeId) {
+		
+		}, 
+		//单式滚球标识
+		getPlaySign : function () {
+		} 
 	};
 })(jQuery, window);

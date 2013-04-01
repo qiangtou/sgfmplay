@@ -255,6 +255,9 @@
 			tag && (this.$=$("<"+tag+"></"+tag+">"));
 			var cls=this.cls;
 			cls && this.$.addClass(cls);
+			if(this.template){
+				this.template=this.template.replace(/[\r\n\t]/g,'');
+			}
 			this.init.call(this, settings);
 			this.addEvents.call(this, settings);
 		};

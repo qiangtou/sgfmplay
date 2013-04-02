@@ -7,6 +7,10 @@
 	var content = window,
 	opt = {},
 	defaults = {
+		ratioClick:$.noop,
+		typeChange:$.noop,
+		REGNOTREMOVE:/^[1-8]|11$/,//需要显示有游戏状态
+		REGUNLOCK:/^[37]$/,//正常游戏状态,锁定时需要解锁
 		i18n : {
 			gameType : {
 				standard : "标准盘",
@@ -158,7 +162,11 @@
 			//console.log(settings.url, settings.data);
 			return $.ajax($.extend({
 					type : "post",
-					dataType : "json"
+					dataType : "text",
+					cache:false,
+					dataFilter : function (data, type) {
+						return (new Function("return " + data))();
+					}
 				}, settings));
 		}
 	},
@@ -185,7 +193,7 @@
 			}
 		},
 		setStatus : function (status) {
-			//状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
+			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			if (!status)
 				return;
 			var s = status,
@@ -203,8 +211,8 @@
 			gameStatusArr=s[6];
 			//检查赛事id
 			if (topModel.checkMatch(matchId)) {
-				events = ds._handlerGoalRed(goalred);
-				ds.setGameStatus(gameStatusArr);
+				events = ds._handlerGoalRed(goalred);//处理红牌,进球事件
+				ds.setGameStatus(gameStatusArr);//设置游戏状态
 
 				o.mStatus = mStatus;
 				o.matchId = matchId;
@@ -276,7 +284,7 @@
 		},
 		
 		setGameStatus:function(gameStatusArr){
-			var gameId,gameStatus,gm;
+			var gameId,gameStatus,gStatus,gm;
 			for(var i=gameStatusArr.length;i--;){
 				gameId=gameStatusArr[i][0];
 				gStatus=gameStatusArr[i][1];
@@ -292,20 +300,21 @@
 			var tm,
 			pkArr,
 			tradeId,
-			o,
-			pkLen = pk.length;
-			var attrs = ['tradeId', 'pdata', 'b1', 'b1n', 'b2', 'b2n', 'b3', 'b3n', 's1', 's1n', 's2', 's2n', 's3', 's3n'],
+			attrs,
+			tradeObj;
+			
+			attrs = ['tradeId', 'pdata', 'b2', 'b2n','b1', 'b1n','b0','b0n','s0','s0n','s1','s1n','s2','s2n'],
 			attrsLen = attrs.length;
-			while (pkLen--) {
+			for (var i=0,pkLen=pk.length;i<pkLen;i++) {
 				pkArr = pk[pkLen];
 				tradeId = pkArr[0];
 				tm = tradeModels.getById(tradeId);
 				if (tm) {
-					o = {};
+					tradeObj = {};
 					for (var j = 0; j < attrsLen; j++) {
-						o[attrs[j]] = pkArr[j];
+						tradeObj[attrs[j]] = pkArr[j];
 					}
-					tm.update(o);
+					tm.update(tradeObj);
 				}
 			}
 		},
@@ -704,7 +713,7 @@
 				this.listenTo(this.model, "hasChange", this.render);
 			},
 			events : {
-				"a click" : this.bet
+				"a click" : "ratioClick"
 			},
 			render : function () {
 				var $el = this.$,
@@ -721,9 +730,35 @@
 				$el.html(html);
 				return this;
 			},
-			bet:function(){
-				opt.
-			
+			ratioClick:function(e){
+				var view,model,pos,action,tid,bors,site,r,q,qs,isFirstsd,paramObj;
+				view=e.data.view;
+				model=view.model;
+				pos=$(this).attr('pos');
+				tid=model.get('tradeId');
+				action=pos.charAt(0);
+				bors={b:1,s:2}[action];
+				site=pos.charAt(1);
+				site=parseInt(site);
+				r=model.get(pos)||'';
+				q=model.get(pos+'n')||'';
+				isFirstsd=false;
+				qs=0;
+				if(site>0){//如果不是最佳赔率,则往前累加
+					for(var i=site;i--;){
+						qs+=parseInt(model.get(action+i+'n')||0);
+					}
+				}
+				paramObj = {
+					"tradeItemId" : tid, //交易项ID
+					"tradeType" : bors, //买卖方向
+					"site" : site, //当前点击的赔率位置
+					"ratio" : r, //当前点击的赔率
+					"qty" : q, //当前货量
+					"allQty" : qs, //扫货货量
+					"isFirstsd" : isFirstsd //这个值现在没有，传false就可以了
+				}
+				opt.ratioClick(paramObj);			
 			}
 		}),
 	//游戏视图
@@ -733,6 +768,7 @@
 			template : $("#game_tmpl").html(),
 			init : function () {
 				this.listenTo(this.model, "addTrade", this.addTrade);
+				this.listenTo(this.model, "change:gStatus", this.changeGStatus);
 			},
 			render : function () {
 				return this;
@@ -743,6 +779,21 @@
 						model : m
 					});
 				this.$.append(tv.render().$);
+			},
+			changeGStatus : function (k, oldStatus, status) {
+				var _opt,
+				gameId;
+				_opt = opt;
+				gameId = this.model.get('gameId');
+				if (!oldStatus) {
+					if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
+						this.model.remove();
+					} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁
+						//this.unlock();
+					} else { //其它状态都锁定
+						//this.lock();
+					}
+				}
 			}
 		}),
 	//玩法视图
@@ -983,7 +1034,8 @@
 		return this;
 	};
 	//外部api
-	window.tmatch = {
+	
+	var tmatch = {
 		//通过交易项ID获取游戏ID
 		getGamingId : function (tradeId) {
 			var tm=tradeModels.getById(tradeId);
@@ -1067,4 +1119,7 @@
 			return topModel.get('isRollingBall');
 		} 
 	};
-})(jQuery, window);
+	var _tmatch=window.tmatch=window.tmatch||{};
+	$.extend(_tmatch,tmatch);
+	
+	})(jQuery, window);

@@ -95,6 +95,7 @@
 		this.model = null;
 		//初始化方法
 		this.init = $.noop;
+		
 		//创建一个新的model并加入当前集合
 		this.create = function (json) {
 			var m = new this.model({
@@ -106,8 +107,11 @@
 		var _add = function (m) {
 			var id = m.get(m.idArr);
 			if (!models[id]) {
-				models[id] = m;
+				models[id] = m;				
 				this.length++;
+				this.listenTo(m,"desdroy",function(){
+					this.del(m);
+				})
 			}
 			return m;
 		};
@@ -172,6 +176,19 @@
 					dataType : "json"
 				})
 			}
+		};
+		
+		this.listenTo=function(md,method,callback){
+				var id,origin;
+				id = md.get(md.idArr);
+				if (models[id]) {//检测存在否在model
+					origin=md[method];
+					md[method]=function(){
+						var ret=origin.apply(this,arguments);
+						callback.apply(this,arguments);
+						return ret;
+					}
+				}
 		};
 		//覆盖默认配置
 		$.extend(this, settings);

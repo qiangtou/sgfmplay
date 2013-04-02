@@ -86,7 +86,14 @@ $(function () {
 		'frameInfo':["frameInfoUrl",5000],//框架数据:[url,周期]
 		'gameInfo':["gameInfoUrl",5000],//状态数据:[url,周期]
 		'marketInfo':["marketInfoUrl",5000],//盘口数据:[url,周期]
-		'playlist':["playlistUrl",5000]
+		'playlist':["playlistUrl",5000],
+		'ratioClick':function(d){
+		//TODO 
+			console.log(d);
+		},
+		'typeChange':function(d){
+			console.log(d);
+		}
 	});
 });
 </script>

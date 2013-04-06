@@ -8,6 +8,7 @@
 <body>
 <div></div>
 
+<!-- Html--template Begin-->
 <script id="gqtop_tmpl" type="text/template">
 <div class="palyer_1">{p1name}</div>
 <div class="player_1_n">{p1goal}</div>
@@ -58,22 +59,21 @@
 	</li>
 </script>
 <script id="trade_tmpl" type="text/template">
-
 	<span class="player">{nameStr}</span>
-	<span class="other_pk">{pk}</span>
-	
+	<span class="other_pk">{pk}</span>	
     <span class="other_data">{pdata}</span>
 		<span class="buy">
-		<a href="#" pos="b2" class="span"><span><b>{b1}</b>{b1n}</span></a>
-		<a href="#" pos="b1" class="span"><span><b>{b2}</b>{b2n}</span></a>
-		<a href="#" pos="b0" class="ons"><span><b>{b3}</b>{b3n}</span></a>
+		<a href="#" pos="b2" class="span"><span><b>{b2}</b>{b2n}</span></a>
+		<a href="#" pos="b1" class="span"><span><b>{b1}</b>{b1n}</span></a>
+		<a href="#" pos="b0" class="ons"><span><b>{b0}</b>{b0n}</span></a>
 		</span>
 		<span class="sell">
-		<a href="#" pos="s0" class="ons"><span><b>{s1}</b>{s1n}</span></a>
-		<a href="#" pos="s1" class="span"><span><b>{s2}</b>{s2n}</span></a>
-		<a href="#" pos="s2" class="span"><span><b>{s3}</b>{s3n}</span></a>
+		<a href="#" pos="s0" class="ons"><span><b>{s0}</b>{s0n}</span></a>
+		<a href="#" pos="s1" class="span"><span><b>{s1}</b>{s1n}</span></a>
+		<a href="#" pos="s2" class="span"><span><b>{s2}</b>{s2n}</span></a>
     </span>
 </script>
+<!-- Html--template End-->
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="jquery.ajaxtest.js"></script>
 <script type="text/javascript" src="play_gq_data.js"></script>
@@ -89,7 +89,7 @@ $(function () {
 		'playlist':["playlistUrl",5000],
 		'ratioClick':function(d){
 		//TODO 
-			console.log(d);
+			
 		},
 		'typeChange':function(d){
 			console.log(d);

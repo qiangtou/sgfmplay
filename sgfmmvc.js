@@ -109,7 +109,7 @@
 			if (!models[id]) {
 				models[id] = m;				
 				this.length++;
-				this.listenTo(m,"desdroy",function(){
+				this.listenTo(m,"destroy",function(){
 					this.del(m);
 				})
 			}
@@ -179,13 +179,14 @@
 		};
 		
 		this.listenTo=function(md,method,callback){
-				var id,origin;
+				var id,origin,self;
 				id = md.get(md.idArr);
+				self=this;
 				if (models[id]) {//检测存在否在model
-					origin=md[method];
+					origin=md[method]||$.noop;
 					md[method]=function(){
 						var ret=origin.apply(this,arguments);
-						callback.apply(this,arguments);
+						callback.apply(self,arguments);
 						return ret;
 					}
 				}

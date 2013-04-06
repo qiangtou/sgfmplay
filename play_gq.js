@@ -7,10 +7,10 @@
 	var content = window,
 	opt = {},
 	defaults = {
-		ratioClick:$.noop,
-		typeChange:$.noop,
-		REGNOTREMOVE:/^[1-8]|11$/,//需要显示有游戏状态
-		REGUNLOCK:/^[37]$/,//正常游戏状态,锁定时需要解锁
+		ratioClick : $.noop,
+		typeChange : $.noop,
+		REGNOTREMOVE : /^[1-8]|11$/, //需要显示有游戏状态
+		REGUNLOCK : /^[37]$/, //正常游戏状态,锁定时需要解锁
 		i18n : {
 			gameType : {
 				standard : "标准盘",
@@ -163,7 +163,7 @@
 			return $.ajax($.extend({
 					type : "post",
 					dataType : "text",
-					cache:false,
+					cache : false,
 					dataFilter : function (data, type) {
 						return (new Function("return " + data))();
 					}
@@ -187,7 +187,7 @@
 			matchId = f[0],
 			gameArr = f[7];
 			//确保赛事相同
-			if(topModel.checkMatch(matchId)){
+			if (topModel.checkMatch(matchId)) {
 				ds.setTop(f);
 				gameArr && ds.setGames(gameArr);
 			}
@@ -200,7 +200,7 @@
 			o = {},
 			attr = ["goal", "red"],
 			events,
-			matchId=s[0],
+			matchId = s[0],
 			mStatus = s[1], //(赛事状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束),
 			mStatusObj = {
 				41 : '',
@@ -208,11 +208,11 @@
 				43 : ''
 			},
 			goalred = s[5],
-			gameStatusArr=s[6];
+			gameStatusArr = s[6];
 			//检查赛事id
 			if (topModel.checkMatch(matchId)) {
-				events = ds._handlerGoalRed(goalred);//处理红牌,进球事件
-				ds.setGameStatus(gameStatusArr);//设置游戏状态
+				events = ds._handlerGoalRed(goalred); //处理红牌,进球事件
+				ds.setGameStatus(gameStatusArr); //设置游戏状态
 
 				o.mStatus = mStatus;
 				o.matchId = matchId;
@@ -282,17 +282,22 @@
 			};
 			return events;
 		},
-		
-		setGameStatus:function(gameStatusArr){
-			var gameId,gameStatus,gStatus,gm;
-			for(var i=gameStatusArr.length;i--;){
-				gameId=gameStatusArr[i][0];
-				gStatus=gameStatusArr[i][1];
-				gm=allGameModels.getById(gameId);
-				gm.set({'gStatus':gStatus});
+
+		setGameStatus : function (gameStatusArr) {
+			var gameId,
+			gameStatus,
+			gStatus,
+			gm;
+			for (var i = gameStatusArr.length; i--; ) {
+				gameId = gameStatusArr[i][0];
+				gStatus = gameStatusArr[i][1];
+				gm = allGameModels.getById(gameId);
+				gm.set({
+					'gStatus' : gStatus
+				});
 			}
 		},
-		
+
 		setPk : function (pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			if (!pk)
@@ -302,11 +307,11 @@
 			tradeId,
 			attrs,
 			tradeObj;
-			
-			attrs = ['tradeId', 'pdata', 'b2', 'b2n','b1', 'b1n','b0','b0n','s0','s0n','s1','s1n','s2','s2n'],
+
+			attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
-			for (var i=0,pkLen=pk.length;i<pkLen;i++) {
-				pkArr = pk[pkLen];
+			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
+				pkArr = pk[i];
 				tradeId = pkArr[0];
 				tm = tradeModels.getById(tradeId);
 				if (tm) {
@@ -326,13 +331,13 @@
 			p2m,
 			host,
 			custom,
-			matchId=f[0],
-			matchName=f[1],
-			leagueName=f[3],
+			matchId = f[0],
+			matchName = f[1],
+			leagueName = f[3],
 			isRollingBall = f[4],
 			teamInfo = f[6],
 			matchTypeId = f[8],
-			totalTime = f[9],//赛事总时长
+			totalTime = f[9], //赛事总时长
 			_playerModels = playerModels, //缓存外部变量
 			isHost; //p1主客标识
 			if (_playerModels.length == 0 && teamInfo) {
@@ -357,10 +362,10 @@
 			custom = _playerModels.custom;
 			//topModel的设置
 			topModel.set({
-				"matchTypeId":matchTypeId,//后台用到的赛事ID
-				"leagueName":leagueName,
-				"matchId":matchId,
-				"matchName":matchName,
+				"matchTypeId" : matchTypeId, //后台用到的赛事ID
+				"leagueName" : leagueName,
+				"matchId" : matchId,
+				"matchName" : matchName,
 				"isRollingBall" : isRollingBall,
 				"p1name" : host.get('name'),
 				"p2name" : custom.get('name'),
@@ -378,7 +383,7 @@
 			concedeId, //让球标识
 			concedeObj, //标识表
 			typeName, //玩法名
-			tradeIndexType,//指标类型
+			tradeIndexType, //指标类型
 			player,
 			gameTypeModel,
 			gamemodels,
@@ -393,7 +398,7 @@
 			for (var i = 0, len = gameArr.length; i < len; i++) {
 				//解析交易项数组
 				game = gameArr[i];
-				playerId = game[0];
+				name = game[0];
 				tradeId = game[1];
 				gameId = game[2];
 				typeId = game[3];
@@ -430,12 +435,13 @@
 					'tradeId' : tradeId,
 					'gameId' : gameId,
 					'typeId' : typeId,
-					'isWhole':isWhole,
-					'name' : game[0],
+					'isWhole' : isWhole,
+					'name' : name,
+					'concedeId':concedeId,
 					'pk' : concedeObj[concedeId]
 				};
 				if (!tm) {
-					if(gm.get('gameId')==gameId ){
+					if (gm.get('gameId') == gameId) {
 						tm = new TradeModel;
 						tm.set(tmObj);
 						gm.addTrade(tm);
@@ -459,8 +465,8 @@
 		},
 		_addType : function (d) {
 			//console.log('--_addType,return: ',d);
-			var _opt=opt,
-			gts=gameTypeModels,
+			var _opt = opt,
+			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
 			var typeHandler = {
 				1 : 'standard', //标准
@@ -469,10 +475,10 @@
 				4 : 'sigledouble' //单双
 			};
 			if (d) {
-				if(!gts.getCurrentGameType()){
+				if (!gts.getCurrentGameType()) {
 					gts.setCurrentGameType(d[0]);
 				};
-				_opt.currentGameType=_opt.currentGameType || d[0];
+				_opt.currentGameType = _opt.currentGameType || d[0];
 				var typeId,
 				gameTypeModel;
 				for (var i = 0, len = d.length; i < len; i++) {
@@ -552,7 +558,7 @@
 			}
 		}),
 	//暴露在外的所有游戏集合
-	allGameModels=new GameModels(),
+	allGameModels = new GameModels(),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 			model : sgfmmvc.Model.extend()
@@ -644,11 +650,11 @@
 		}),
 	//头部模型
 	topModel = new sgfmmvc.Model({
-		checkMatch:function(matchId){
-			var originId=this.get('matchId');
-			return originId?(originId==matchId):true;
-		}
-	}),
+			checkMatch : function (matchId) {
+				var originId = this.get('matchId');
+				return originId ? (originId == matchId) : true;
+			}
+		}),
 	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({
 			model : topModel,
@@ -690,11 +696,11 @@
 				p2,
 				p1vsp2;
 				parent = window.parent;
-				 if (parent) {
-					 p1 = this.model.get('p1name');
-					 p2 = this.model.get('p2name');
-					 p1vsp2 = p1 + ' VS '+p2;
-					 parent.$('#matchName').html(p1vsp2);
+				if (parent) {
+					p1 = this.model.get('p1name');
+					p2 = this.model.get('p2name');
+					p1vsp2 = p1 + ' VS ' + p2;
+					parent.$('#matchName').html(p1vsp2);
 				}
 			}
 		}),
@@ -723,30 +729,45 @@
 				if (/(big|small)/.test(name)) {
 					this.model.set('nameStr', opt.i18n.trade[name]);
 				} else {
-					playerModel=playerModels.getById(name)
-					playerModel && this.model.set('nameStr', playerModel.get('name'));
+					playerModel = playerModels.getById(name)
+						playerModel && this.model.set('nameStr', playerModel.get('name'));
 				}
 				var html = sgfmmvc.replace(this.template, this.model.getAttrs());
 				$el.html(html);
 				return this;
 			},
-			ratioClick:function(e){
-				var view,model,pos,action,tid,bors,site,r,q,qs,isFirstsd,paramObj;
-				view=e.data.view;
-				model=view.model;
-				pos=$(this).attr('pos');
-				tid=model.get('tradeId');
-				action=pos.charAt(0);
-				bors={b:1,s:2}[action];
-				site=pos.charAt(1);
-				site=parseInt(site);
-				r=model.get(pos)||'';
-				q=model.get(pos+'n')||'';
-				isFirstsd=false;
-				qs=0;
-				if(site>0){//如果不是最佳赔率,则往前累加
-					for(var i=site;i--;){
-						qs+=parseInt(model.get(action+i+'n')||0);
+			ratioClick : function (e) {
+				var view,
+				model,
+				pos,
+				action,
+				tid,
+				bors,
+				site,
+				r,
+				q,
+				qs,
+				isFirstsd,
+				paramObj;
+				view = e.data.view;
+				model = view.model;
+				pos = $(this).attr('pos');
+				tid = model.get('tradeId');
+				action = pos.charAt(0);
+				bors = {
+					b : 1,
+					s : 2
+				}
+				[action];
+				site = pos.charAt(1);
+				site = parseInt(site);
+				r = model.get(pos) || '';
+				q = model.get(pos + 'n') || '';
+				isFirstsd = false;
+				qs = 0;
+				if (site > 0) { //如果不是最佳赔率,则往前累加
+					for (var i = site; i--; ) {
+						qs += parseInt(model.get(action + i + 'n') || 0);
 					}
 				}
 				paramObj = {
@@ -758,7 +779,7 @@
 					"allQty" : qs, //扫货货量
 					"isFirstsd" : isFirstsd //这个值现在没有，传false就可以了
 				}
-				opt.ratioClick(paramObj);			
+				opt.ratioClick(paramObj);
 			}
 		}),
 	//游戏视图
@@ -787,13 +808,19 @@
 				gameId = this.model.get('gameId');
 				if (!oldStatus) {
 					if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
-						this.model.remove();
+						this.model.destroy();
 					} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁
-						//this.unlock();
+						this.unlock();
 					} else { //其它状态都锁定
-						//this.lock();
+						this.lock();
 					}
 				}
+			},
+			unlock:function(){
+				this.lock.show();
+			},
+			lock:function(){
+				this.lock.hide();
 			}
 		}),
 	//玩法视图
@@ -803,6 +830,7 @@
 			init : function () {
 				this.listenTo(this.model, "create", this.addGame);
 				this.listenTo(this.model, "showhide", this.showhide);
+				this.listenTo(this.model, "del", this.removeView);
 			},
 			addGame : function (m) {
 				var md = this.model.getById(m.gameId);
@@ -810,7 +838,9 @@
 						model : md
 					});
 				allGameModels.add(md);
-				this.$.append(gv.render().$);
+				var lock=$('<div class="lock_layout"></div>').hide();
+				gv.lock=lock;
+				this.$.append(gv.render().$,lock);
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
@@ -823,6 +853,12 @@
 				if (isShow) {
 					this.model.length > 0 && this.show();
 				} else {
+					this.hide();
+				}
+			},
+			removeView:function(){
+				var len=this.model.length;
+				if(len==0){
 					this.hide();
 				}
 			}
@@ -847,7 +883,7 @@
 					//TODO 其他游戏集合
 					return arr;
 				}
-				
+
 			}),
 			currentGameType : null,
 			getCurrentGameType : function () {
@@ -855,7 +891,7 @@
 				return this.currentGameType;
 			},
 			setCurrentGameType : function (typeId) {
-				this.currentGameType=typeId;
+				this.currentGameType = typeId;
 			}
 		}),
 	TabView = sgfmmvc.View.extend({
@@ -927,7 +963,7 @@
 				var typeId = currenTab.children().attr('typeId');
 				v.currenTab = currenTab;
 				var md = v.model.getById(typeId).set('isShow', true);
-				
+
 				gameTypeModels.setCurrentGameType(typeId);
 				dr.firstGetPlaylist();
 			},
@@ -1034,92 +1070,118 @@
 		return this;
 	};
 	//外部api
-	
+
 	var tmatch = {
 		//通过交易项ID获取游戏ID
 		getGamingId : function (tradeId) {
-			var tm=tradeModels.getById(tradeId);
+			var tm = tradeModels.getById(tradeId);
 			return tm.get('gameId');
-		}, 
+		},
 		//通过交易项ID获取赛事ID
 		getMatchId : function (tradeId) {
 			return topModel.get('matchId');
-		}, 
+		},
 		//通过交易项ID获取玩法ID
 		getPlayId : function (tradeId) {
-			var tm=tradeModels.getById(tradeId);
+			var tm = tradeModels.getById(tradeId);
 			return tm.get('typeId');
-		}, 
+		},
 		//通过交易项ID获取赛事名称
 		getMatchName : function (tradeId) {
-		return topModel.get('matchName');
-		}, 
+			return topModel.get('matchName');
+		},
 		//通过交易项ID获取联赛名称
 		getLeMatchName : function (tradeId) {
 			return topModel.get('leagueName');
-		}, 
+		},
 		//通过交易项ID获取游戏状态
 		getGamingState : function (tradeId) {
-			var tradeModel,gameId,gameModel;
-			tradeModel=tradeModels.getById(tradeId);
-			gameId=tm.get('gameId');
-			gameModel=allGameModels.getById(gameId);
+			var tradeModel,
+			gameId,
+			gameModel;
+			tradeModel = tradeModels.getById(tradeId);
+			gameId = tm.get('gameId');
+			gameModel = allGameModels.getById(gameId);
 			return gameModel.get('gStatus');
-		}, 
+		},
 		//通过交易项ID获取胜队名称
 		getHostname : function (tradeId) {
-			var tm,name,player;
-			tm==tradeModels.getById(tradeId);
-			name=tm.get('name');
-			if(isNaN(parseInt(name))){//如果不是一个数字(big,small),取主队,否则作为playerId
-				player=playerModels.host;
-			}else{
-				player=playerModels.getById(name);
+			var tm,
+			name,
+			player;
+			tm = tradeModels.getById(tradeId);
+			name = tm.get('name');
+			if (isNaN(parseInt(name))) { //如果不是一个数字(big,small),取主队,否则作为playerId
+				player = playerModels.host;
+			} else {
+				player = playerModels.getById(name);
 			}
-			return player && player.get('name')||'';
-		}, 
+			return player && player.get('name') || '';
+		},
 		//通过交易项ID获取负队名称
 		getNextname : function (tradeId) {
-			var tm,name,player;
-			tm==tradeModels.getById(tradeId);
-			name=tm.get('name');
-			if(isNaN(parseInt(name))){//如果不是一个数字(big,small),取主队,否则作为playerId
-				player=playerModels.custom;
-			}else{
-				player=playerModels.getById(name);
+			var tm,
+			name,
+			player;
+			tm = tradeModels.getById(tradeId);
+			name = tm.get('name');
+			if (isNaN(parseInt(name))) { //如果不是一个数字(big,small),取主队,否则作为playerId
+				player = playerModels.custom;
+			} else {
+				player = playerModels.getById(name);
 			}
-			return player && player.get('name')||'';
-		}, 
+			return player && player.get('name') || '';
+		},
 		//通过交易项ID获取交易项的让球指标
-		isGiveBall : function (tradeId) {}, 
-		//通过交易项ID获取交易项名称
-		getTradeItemName : function (tradeId) {}, 
+		isGiveBall : function (tradeId) {
+			var tm;
+			tm = tradeModels.getById(tradeId);
+			return tm.get('concedeId');
+		},
+		//通过交易项ID获取交易项名称,(大小为:大或小，让球为球队名)
+		getTradeItemName : function (tradeId) {
+			var tm,
+			name;
+			tm = tradeModels.getById(tradeId);
+			name = tm.get('nameStr');
+			return name;
+		},
 		//通过交易项ID获取交易项全场半场标识
 		getFullTimeSign : function (tradeId) {
-			var tm=tradeModels.getById(tradeId);
+			var tm = tradeModels.getById(tradeId);
 			return tm.get('isWhole');
-		}, 
+		},
 		//通过交易项ID获取游戏指标
-		getTradeItemNorm : function (tradeId) {}, 
+		getTradeItemNorm : function (tradeId) {
+			var tm,name;
+			tm = tradeModels.getById(tradeId);
+			name = tm.get('pk');
+			return name;
+		},
 		//通过交易项ID获取全半场国际化显示信息
 		getFullTimeName : function (tradeId) {
-			//TODO
-		}, 
+			var tm,isWhole,i18n;
+			i18n=opt.i18n.gameType;
+			tm = tradeModels.getById(tradeId);
+			isWhole=tm.get('isWhole');
+			return {1:i18n.whole,2:i18n.half}[isWhole];
+		},
 		//通过交易项ID获取指标类型
 		getTradeIndexType : function (tradeId) {
-			var tm=tradeModels.getById(tradeId);
+			var tm = tradeModels.getById(tradeId);
 			return tm.get('tradeIndexType');
-		}, 
+		},
 		//通过交易项ID获取赛事类型ID
 		getMatchTypeId : function (tradeId) {
 			return topModel.get('matchTypeId');
-		}, 
+		},
 		//单式滚球标识
 		getPlaySign : function () {
 			return topModel.get('isRollingBall');
-		} 
+		}
 	};
-	var _tmatch=window.tmatch=window.tmatch||{};
-	$.extend(_tmatch,tmatch);
-	
-	})(jQuery, window);
+	var _parent=window.parent;
+	var _tmatch = _parent.tmatch = _parent.tmatch || {};
+	$.extend(_tmatch, tmatch);
+
+})(jQuery, window);

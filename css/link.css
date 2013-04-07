@@ -10,8 +10,11 @@ label{vertical-align:middle;display:inline-block;_display:inline;}
 .input_all {height:20px;border:1px #ccc solid;line-height:20px;padding:0 3px;}
 .date_ico { background:url(../images/date_ico.gif) no-repeat right center #fff;padding-right:18px;}
 
+
+
 .t_right { background:url(../images/y_01.png) no-repeat 5px center;color:#060;padding:2px 2px 2px 18px;}
 .t_err { background:url(../images/del.png) no-repeat 5px center;color:red;padding:2px 2px 2px 18px;}
+.t_bewrite { background:url(../images/left_po.gif) no-repeat 5px center;color:#999;padding:2px 2px 2px 18px;}
 
 .a_clear {}
 .a_clear:after{ content:" "; visibility:hidden; display:block; height:0; overflow:hidden; clear:both;}
@@ -164,6 +167,7 @@ a.a_flag_n:hover {color:#060;border-bottom:1px #060 dashed;}
 .num_select { border-collapse:collapse;border-left:1px #999 solid;border-top:1px #999 solid;border-bottom:1px #999 solid;height:12px;}
 .num_select td {border-right:1px #999 solid;padding:0;margin:0; background:#fff;}
 .num_select td .input_num {width:35px;border:none;height:18px;line-height:18px;padding:0 4px;background:#fff;color:red;margin:0;}
+.num_select td .input_red {width:35px;border:none;height:18px;line-height:18px;padding:0 4px;background:red;color:#fff;margin:0;}
 .num_select td .num_up {display:block;height:9px;width:14px; background:url(../images/num_ac.gif) no-repeat left 0; text-decoration:none;overflow:hidden;}
 .num_select td .num_up:hover { background:url(../images/num_ac.gif) no-repeat right 0;}
 .num_select td .num_down {display:block;height:9px;width:14px; background:url(../images/num_ac.gif) no-repeat left -9px;text-decoration:none;overflow:hidden;}

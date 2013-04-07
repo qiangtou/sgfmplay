@@ -106,8 +106,8 @@
 					v : _v
 				},
 				success : function (json) {
-					if (json.c == 0 && json.d) {
-						ds.setFrame(json.d[0]);
+					if (json.c == 0) {
+						json.d && ds.setFrame(json.d[0]);
 						fun.v = json.v;
 						dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
 					}
@@ -127,8 +127,8 @@
 					v : _v
 				},
 				success : function (json) {
-					if (json.c == 0 && json.d) {
-						ds.setStatus(json.d);
+					if (json.c == 0 ) {
+						json.d && ds.setStatus(json.d);
 						fun.v = json.v;
 						dr.timeoutIndex['gameInfo'] = setTimeout(fun, refreshCycle);
 					}
@@ -148,8 +148,8 @@
 					v : _v
 				},
 				success : function (json) {
-					if (json.c == 0 && json.d) {
-						ds.setStatus(json.d[0]);
+					if (json.c == 0 ) {
+						json.d && ds.setPk(json.d[0]);
 						fun.v = json.v;
 						dr.timeoutIndex['marketInfo'] = setTimeout(fun, refreshCycle);
 					}
@@ -292,7 +292,7 @@
 				gameId = gameStatusArr[i][0];
 				gStatus = gameStatusArr[i][1];
 				gm = allGameModels.getById(gameId);
-				gm.set({
+				gm && gm.set({
 					'gStatus' : gStatus
 				});
 			}
@@ -306,8 +306,7 @@
 			pkArr,
 			tradeId,
 			attrs,
-			tradeObj;
-
+			tradeObj,
 			attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
 			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
@@ -425,7 +424,7 @@
 				};
 				concedeObj = {
 					'1' : indicator, //让球
-					'0' : '-', //非让球
+					'0' : '', //非让球
 					'o' : indicator, //大球
 					'u' : '' //小球
 				};
@@ -436,6 +435,7 @@
 					'gameId' : gameId,
 					'typeId' : typeId,
 					'isWhole' : isWhole,
+					'indicator':indicator,
 					'name' : name,
 					'concedeId':concedeId,
 					'pk' : concedeObj[concedeId]
@@ -484,9 +484,7 @@
 				for (var i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gts.getById(typeId);
-					//console.log('--check gameTypeModel',gameTypeModel)
 					if (!gameTypeModel) {
-						//console.log('--create gameTypeModel',typeId);
 						gameTypeModel = gts.create({
 								'typeId' : typeId,
 								'typeName' : i18n[typeHandler[typeId]],
@@ -494,9 +492,7 @@
 							});
 					}
 				}
-			} else {
-				//console.log('--_addType,data is null: ');
-			}
+			} 
 		}
 	},
 	dc = {
@@ -808,19 +804,31 @@
 				gameId = this.model.get('gameId');
 				if (!oldStatus) {
 					if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
-						this.model.destroy();
+						this.remove(gameId);
 					} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁
-						this.unlock();
+						this.unlock(gameId);
 					} else { //其它状态都锁定
-						this.lock();
+						this.lock(gameId);
 					}
 				}
 			},
-			unlock:function(){
-				this.lock.show();
+			remove:function(gameId){
+				this.model.destroy();
+					opt.typeChange([{
+					"remove":gameId
+				}]);
 			},
-			lock:function(){
+			unlock:function(gameId){
 				this.lock.hide();
+				opt.typeChange([{
+					"unlock":gameId
+				}]);
+			},
+			lock:function(gameId){
+				this.lock.show();
+				opt.typeChange([{
+					"lock":gameId
+				}]);
 			}
 		}),
 	//玩法视图
@@ -840,7 +848,7 @@
 				allGameModels.add(md);
 				var lock=$('<div class="lock_layout"></div>').hide();
 				gv.lock=lock;
-				this.$.append(gv.render().$,lock);
+				this.$.append($('<div class="game"></div>').append(gv.render().$,lock));
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
@@ -883,7 +891,6 @@
 					//TODO 其他游戏集合
 					return arr;
 				}
-
 			}),
 			currentGameType : null,
 			getCurrentGameType : function () {
@@ -898,7 +905,7 @@
 			template : $('#tab_tmpl').html(),
 			tag : 'li',
 			init : function () {
-				this.cls = 'ons';
+				this.cls = 'selectTag';
 				this._init();
 				this.listenTo(this.model, "change:isShow", this.showhide);
 			},
@@ -947,6 +954,7 @@
 				};
 				this.currenTab = null;
 				this.listenTo(this.model, "create", this.addTypeTab);
+				this.listenTo(this.model, "showhide", this.showhide);
 			},
 			events : {
 				'li click' : 'toggleTab'
@@ -985,6 +993,9 @@
 				this.ul = $('<ul></ul>');
 				this.$.append(this.ul);
 				return this;
+			},
+			showhide:function(name,old,isShow){
+				isShow?this.show():this.hide();
 			}
 		}),
 	TagContentView = sgfmmvc.View.extend({
@@ -1001,7 +1012,6 @@
 			},
 			render : function (md) {
 				if (md) {
-					//this.$.empty();
 					this.addGameType(md);
 				}
 			},
@@ -1155,7 +1165,7 @@
 		getTradeItemNorm : function (tradeId) {
 			var tm,name;
 			tm = tradeModels.getById(tradeId);
-			name = tm.get('pk');
+			name = tm.get('indicator')||'';
 			return name;
 		},
 		//通过交易项ID获取全半场国际化显示信息

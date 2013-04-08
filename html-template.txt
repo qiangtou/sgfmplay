@@ -1,13 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="css/layout_cn.css">
-<link type="text/css" rel="stylesheet" href="css/link.css">
-</head>
-<body>
-<div></div>
-
 <!-- Html--template Begin-->
 <script id="gqtop_tmpl" type="text/template">
 <div class="palyer_1">{p1name}</div>
@@ -50,7 +40,7 @@
 </script>
 <script id="game_tmpl" type="text/template">
       <ul class="play_list_ul"></ul>
-      <div class="lock_layout" style="display: none;"></div>
+      <div class="lock_layout1" style="display: none;"></div>
 </script>
 <script id="trade_tmpl" type="text/template">
 	<span class="player">{nameStr}</span>
@@ -68,28 +58,3 @@
     </span>
 </script>
 <!-- Html--template End-->
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="jquery.ajaxtest.js"></script>
-<script type="text/javascript" src="play_gq_data.js"></script>
-<script type="text/javascript" src="sgfmmvc.js"></script>
-<script type="text/javascript" src="play_gq.js"></script>
-<script type="text/javascript">
-$(function () {
-	$('div').sgfmplay({
-		'allData':"allDataUrl", //全量数据
-		'frameInfo':["frameInfoUrl",0],//框架数据:[url,周期]
-		'gameInfo':["gameInfoUrl",0],//状态数据:[url,周期]
-		'marketInfo':["marketInfoUrl",2000],//盘口数据:[url,周期]
-		'playlist':["playlistUrl",5000],
-		'ratioClick':function(d){
-		//TODO 
-			console.log(d);
-		},
-		'typeChange':function(d){
-			//console.log(d);
-		}
-	});
-});
-</script>
-</body>
-</html>

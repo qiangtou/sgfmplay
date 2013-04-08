@@ -670,7 +670,7 @@
 				this.template = $(template[isRollingBall]).html();
 				//如果是滚球则加上滚球时间条
 				if (isRollingBall) {
-					this.timebar = $('<div></div>');
+					this.timebar = $('<div/>');
 					new PlayTimeBarView({
 						$ : this.timebar
 					});
@@ -762,7 +762,7 @@
 				isFirstsd = false;
 				qs = 0;
 				if (site > 0) { //如果不是最佳赔率,则往前累加
-					for (var i = site; i--; ) {
+					for (var i = site; i >= 0; i--) {
 						qs += parseInt(model.get(action + i + 'n') || 0);
 					}
 				}
@@ -780,14 +780,16 @@
 		}),
 	//游戏视图
 	GameView = sgfmmvc.View.extend({
-			cls : "play_list_ul",
-			tag : "ul",
+			cls : "game",
 			template : $("#game_tmpl").html(),
 			init : function () {
 				this.listenTo(this.model, "addTrade", this.addTrade);
 				this.listenTo(this.model, "change:gStatus", this.changeGStatus);
 			},
 			render : function () {
+				this.$.html(this.template);
+				this.ul=this.$.find(".play_list_ul");
+				this.lock=this.$.find(".lock_layout");
 				return this;
 			},
 			addTrade : function (m) {
@@ -795,7 +797,7 @@
 				var tv = new TradeView({
 						model : m
 					});
-				this.$.append(tv.render().$);
+				this.ul.append(tv.render().$);
 			},
 			changeGStatus : function (k, oldStatus, status) {
 				var _opt,
@@ -846,9 +848,8 @@
 						model : md
 					});
 				allGameModels.add(md);
-				var lock=$('<div class="lock_layout"></div>').hide();
-				gv.lock=lock;
-				this.$.append($('<div class="game"></div>').append(gv.render().$,lock));
+
+				this.$.append(gv.render().$);
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
@@ -990,7 +991,7 @@
 				}
 			},
 			render : function () {
-				this.ul = $('<ul></ul>');
+				this.ul = $('<ul/>');
 				this.$.append(this.ul);
 				return this;
 			},

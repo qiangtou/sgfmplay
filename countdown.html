@@ -5,7 +5,7 @@
 	<title></title>
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript">
-	(function ($) {
+(function ($) {
 		$.fn.cowndown = function (settings) {
 			init.call(this, settings)
 		};
@@ -20,8 +20,8 @@
 		var init = function (settings) {
 			var opt,$this;
 			$this=this;
-			
-			if(!$this.is('input'))return;
+			if(!$this.is('input')||$this.data("cowndown"))return;
+			$this.data("cowndown",true);
 			opt = $.extend(defaults, settings);
 			opt.originVal=$this.val();
 			$this.click(function () {
@@ -51,6 +51,9 @@
 			$this.val(time+originVal).attr("disabled",true);
 			intervalIndex=setInterval(function(){
 				time--;
+				if(!checkVisible($this)){
+					clear();
+				}
 				if(time>0){	
 					if(time<=freezeTime){
 						$this.removeAttr("disabled")
@@ -71,6 +74,9 @@
 		var restart=function(){
 			clear();
 			start.call(this,defaults);
+		};
+		var checkVisible=function($this){
+			return $this && $this.is(':visible');
 		};
 	})(jQuery);
 	</script>

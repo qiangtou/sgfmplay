@@ -31,7 +31,7 @@
 </script>
 
 <script id="playlist_tmpl" type="text/template">
-	<div class="play_list_tit_all"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
+	<div class="play_list_tit_all"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="0   "></span></div>
 	<div class="play_ac_tit">
 		<span class="pk_xm">{pkxm}</span>
 		<span class="pk_th">{pk}</span>
@@ -89,6 +89,14 @@ $(function () {
 			//console.log(d);
 		}
 	});
+	
+	setTimeout(function () {
+		var h = tmatch.getHostname(3002);
+		var n = tmatch.getNextname(3002);
+		console.log(h, n)
+	}, 500);
+	
+	
 });
 </script>
 </body>

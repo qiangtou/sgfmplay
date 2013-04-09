@@ -438,6 +438,7 @@
 					'indicator':indicator,
 					'name' : name,
 					'concedeId':concedeId,
+					'tradeIndexType':tradeIndexType,
 					'pk' : concedeObj[concedeId]
 				};
 				if (!tm) {
@@ -687,17 +688,13 @@
 				return this;
 			},
 			setTopFrameMatchName : function () {
-				var parent,
-				p1,
+				var p1,
 				p2,
 				p1vsp2;
-				parent = window.parent;
-				if (parent) {
-					p1 = this.model.get('p1name');
-					p2 = this.model.get('p2name');
-					p1vsp2 = p1 + ' VS ' + p2;
-					parent.$('#matchName').html(p1vsp2);
-				}
+				p1 = this.model.get('p1name');
+				p2 = this.model.get('p2name');
+				p1vsp2 = p1 + ' VS ' + p2;
+				$('#matchName').html(p1vsp2);
 			}
 		}),
 	TradeModel = sgfmmvc.Model.extend({
@@ -842,6 +839,7 @@
 				this.listenTo(this.model, "showhide", this.showhide);
 				this.listenTo(this.model, "del", this.removeView);
 			},
+			
 			addGame : function (m) {
 				var md = this.model.getById(m.gameId);
 				var gv = new GameView({
@@ -855,12 +853,29 @@
 				var i18n = $.extend(opt.i18n.playlist, {
 						title : this.tit
 					});
-				this.$.hide().html(sgfmmvc.replace(this.template, i18n));
+				this.$.hide().html(sgfmmvc.replace(this.template, i18n));				
 				return this;
+			},
+			freshEvent : function (fresh) {
+				fresh.cowndown({
+					time : 30, //倒计时
+					freeze : 3, //冻结时间
+					circulation : 1, //是否循环
+					timeEnd : function () {
+						//TODO
+					},
+					click : function () {
+						//TODO
+					}
+				});
 			},
 			showhide : function (isShow) {
 				if (isShow) {
-					this.model.length > 0 && this.show();
+					if (this.model.length > 0) {
+						this.show();
+						var fresh = this.$.find('.bt_refurbish');
+						this.freshEvent(fresh);
+					}
 				} else {
 					this.hide();
 				}
@@ -1140,6 +1155,7 @@
 				player = playerModels.custom;
 			} else {
 				player = playerModels.getById(name);
+				player=player.get('isHost')?playerModels.custom:playerModels.host;
 			}
 			return player && player.get('name') || '';
 		},
@@ -1191,8 +1207,86 @@
 			return topModel.get('isRollingBall');
 		}
 	};
-	var _parent=window.parent;
-	var _tmatch = _parent.tmatch = _parent.tmatch || {};
+	var _tmatch = window.tmatch = window.tmatch || {};
 	$.extend(_tmatch, tmatch);
-
 })(jQuery, window);
+
+/**
+*倒计时插件
+*/
+(function ($) {
+		$.fn.cowndown = function (settings) {
+			init.call(this, settings)
+		};
+		var defaults = {
+			time : 10,
+			freeze : 3,
+			circulation:false,
+			timeEnd : $.noop,
+			click : $.noop
+		};
+		var $this,intervalIndex;
+		
+		var init = function (settings) {
+			var opt,$this;
+			$this=this;
+			if(!$this.is('input')||$this.data("cowndown"))return;
+			$this.data("cowndown",true);
+			opt = $.extend(defaults, settings);
+			opt.originVal=$this.val();
+			$this.click(function () {
+				opt.click();
+				restart.call($this,opt);
+			});
+			start.call($this,opt);
+		};
+		
+		var start=function(opt){
+			var $this,
+			time,
+			freeze,
+			timeEnd,
+			freezeTime,
+			originVal,
+			circulation;
+			
+			$this=this;
+			time = opt.time;
+			freeze = opt.freeze;
+			timeEnd = opt.timeEnd;	
+			originVal =opt.originVal;
+			circulation=opt.circulation;
+			freezeTime=Math.max(time-freeze,0);
+		
+			$this.val(time+originVal).attr("disabled",true);
+			intervalIndex=setInterval(function(){
+				time--;
+				if(!checkVisible($this)){
+					clear.call($this);
+				}
+				if(time>0){	
+					if(time<=freezeTime){
+						$this.removeAttr("disabled")
+					}
+					$this.val(time+originVal);	
+				}else{
+					clear.call($this);
+					time="";
+					$this.val(time+originVal);
+					timeEnd();
+					circulation && start.call($this,opt);
+				}
+			},1000);
+		};
+		var clear=function(){
+			clearInterval(intervalIndex);
+			this.data("cowndown",false);
+		};
+		var restart=function(){
+			clear.call(this);
+			start.call(this,defaults);
+		};
+		var checkVisible=function($this){
+			return $this && $this.is(':visible');
+		};
+	})(jQuery);

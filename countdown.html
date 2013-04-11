@@ -4,85 +4,11 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<title></title>
 	<script type="text/javascript" src="jquery.min.js"></script>
-	<script type="text/javascript">
-(function ($) {
-		$.fn.cowndown = function (settings) {
-			init.call(this, settings)
-		};
-		var defaults = {
-			time : 10,
-			freeze : 3,
-			circulation:false,
-			timeEnd : $.noop,
-			click : $.noop
-		};
-		var intervalIndex;
-		var init = function (settings) {
-			var opt,$this;
-			$this=this;
-			if(!$this.is('input')||$this.data("cowndown"))return;
-			$this.data("cowndown",true);
-			opt = $.extend(defaults, settings);
-			opt.originVal=$this.val();
-			$this.click(function () {
-				opt.click();
-				restart.call($this,opt);
-			});
-			start.call($this,opt);
-		};
-		
-		var start=function(opt){
-			var $this,
-			time,
-			freeze,
-			timeEnd,
-			freezeTime,
-			originVal,
-			circulation;
-			
-			$this=this;
-			time = opt.time;
-			freeze = opt.freeze;
-			timeEnd = opt.timeEnd;	
-			originVal =opt.originVal;
-			circulation=opt.circulation;
-			freezeTime=Math.max(time-freeze,0);
-		
-			$this.val(time+originVal).attr("disabled",true);
-			intervalIndex=setInterval(function(){
-				time--;
-				if(!checkVisible($this)){
-					clear();
-				}
-				if(time>0){	
-					if(time<=freezeTime){
-						$this.removeAttr("disabled")
-					}
-					$this.val(time+originVal);	
-				}else{
-					clear();
-					time="";
-					$this.val(time+originVal);
-					timeEnd();
-					circulation && start.call($this,opt);
-				}
-			},1000);
-		};
-		var clear=function(){
-			clearInterval(intervalIndex);
-		};
-		var restart=function(){
-			clear();
-			start.call(this,defaults);
-		};
-		var checkVisible=function($this){
-			return $this && $this.is(':visible');
-		};
-	})(jQuery);
-	</script>
+	<script type="text/javascript" src="sgfmmvc.js"></script>
+	<script type="text/javascript" src="play_gq.js"></script>
 	<script type="text/javascript">
 	$(function(){
-		$('#button').cowndown({
+		$('#button').countdown({
 			time:10,//倒计时
 			freeze:2,//冻结时间
 			circulation:true,//是否循环

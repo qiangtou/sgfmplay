@@ -3,7 +3,6 @@
  * 2.轮循状态
  */
 (function ($, window) {
-	//window.//console={log:$.noop};
 	var content = window,
 	opt = {},
 	defaults = {
@@ -33,7 +32,6 @@
 				pause : "中场"
 			},
 			playlist : {
-				title : this.tit,
 				buy : "下注（买）",
 				sell : "（卖）吃货",
 				refresh : "刷新",
@@ -851,21 +849,24 @@
 			},
 			render : function () {
 				var i18n = $.extend(opt.i18n.playlist, {
-						title : this.tit
+						title : this.title
 					});
-				this.$.hide().html(sgfmmvc.replace(this.template, i18n));				
+				this.$.hide().html(sgfmmvc.replace(this.template, i18n));
+				this.fresh = this.$.find('.bt_refurbish');				
 				return this;
 			},
 			freshEvent : function (fresh) {
-				fresh.cowndown({
+				fresh.countdown({
 					time : 30, //倒计时
 					freeze : 3, //冻结时间
-					circulation : 1, //是否循环
+					circulation : true, //是否循环
 					timeEnd : function () {
 						//TODO
+						console.log('timeend');
 					},
 					click : function () {
 						//TODO
+						console.log('click');
 					}
 				});
 			},
@@ -873,11 +874,11 @@
 				if (isShow) {
 					if (this.model.length > 0) {
 						this.show();
-						var fresh = this.$.find('.bt_refurbish');
-						this.freshEvent(fresh);
+						this.freshEvent(this.fresh);
 					}
 				} else {
 					this.hide();
+					this.fresh.countdown('stop');
 				}
 			},
 			removeView:function(){
@@ -1041,11 +1042,11 @@
 			concedepoints : function (typeId, title) {
 				title = this.i18n[title];
 				var whole = new PlayListView({
-						tit : this.i18n.whole + '-' + title,
+						title : this.i18n.whole + '-' + title,
 						model : new GameModels
 					});
 				var half = new PlayListView({
-						tit : this.i18n.half + '-' + title,
+						title : this.i18n.half + '-' + title,
 						model : new GameModels
 					});
 				var md = this.model.getById(typeId);
@@ -1056,8 +1057,7 @@
 			bigsmall : function (typeId, title) {
 				this.concedepoints(typeId, title);
 			},
-			sigledouble : function (typeId) {},
-			standard : function (typeId) {}
+			sigledouble : function (typeId) {}
 		}),
 	//整个应用视图
 	Play = sgfmmvc.View.extend({
@@ -1215,8 +1215,13 @@
 *倒计时插件
 */
 (function ($) {
-		$.fn.cowndown = function (settings) {
-			init.call(this, settings)
+		$.fn.countdown = function (settings) {
+			if(typeof settings == 'string'){
+				var fun=control[settings];
+				fun && fun.call(this,defaults);
+			}else{
+				init.call(this, settings);
+			}
 		};
 		var defaults = {
 			time : 10,
@@ -1228,10 +1233,11 @@
 		var $this,intervalIndex;
 		
 		var init = function (settings) {
+		
 			var opt,$this;
 			$this=this;
-			if(!$this.is('input')||$this.data("cowndown"))return;
-			$this.data("cowndown",true);
+			if(!$this.is('input')||$this.data("countdown"))return;
+			$this.data("countdown",true);
 			opt = $.extend(defaults, settings);
 			opt.originVal=$this.val();
 			$this.click(function () {
@@ -1240,6 +1246,7 @@
 			});
 			start.call($this,opt);
 		};
+		
 		
 		var start=function(opt){
 			var $this,
@@ -1262,7 +1269,7 @@
 			intervalIndex=setInterval(function(){
 				time--;
 				if(!checkVisible($this)){
-					clear.call($this);
+					return clear.call($this);
 				}
 				if(time>0){	
 					if(time<=freezeTime){
@@ -1280,11 +1287,15 @@
 		};
 		var clear=function(){
 			clearInterval(intervalIndex);
-			this.data("cowndown",false);
+			this.val(defaults.originVal).data("countdown",false);
+			return false;
 		};
 		var restart=function(){
 			clear.call(this);
 			start.call(this,defaults);
+		};
+		var control={
+			'stop':clear
 		};
 		var checkVisible=function($this){
 			return $this && $this.is(':visible');

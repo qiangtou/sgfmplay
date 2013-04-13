@@ -304,7 +304,9 @@
 			pkArr,
 			tradeId,
 			attrs,
+			tradeAttr,
 			tradeObj,
+			pkVal,
 			attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
 			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
@@ -314,7 +316,10 @@
 				if (tm) {
 					tradeObj = {};
 					for (var j = 0; j < attrsLen; j++) {
-						tradeObj[attrs[j]] = pkArr[j];
+						tradeAttr=attrs[j];
+						pkVal=pkArr[j];
+						(tradeAttr=='pdata') && !pkVal && (pkVal='--');
+						tradeObj[tradeAttr] = pkVal;
 					}
 					tm.update(tradeObj);
 				}
@@ -1212,7 +1217,7 @@
 })(jQuery, window);
 
 /**
-*倒计时插件
+ *倒计时插件
 */
 (function ($) {
 		$.fn.countdown = function (settings) {

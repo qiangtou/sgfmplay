@@ -2,28 +2,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="css/layout_cn.css">
-<link type="text/css" rel="stylesheet" href="css/link.css">
+<link type="text/css" rel="stylesheet" href="css/layout_cn.css"/>
+<link type="text/css" rel="stylesheet" href="css/link.css"/>
 </head>
 <body>
 <div></div>
 
-<!-- Html--template Begin-->
+<!-- Html template Begin -->
 <script id="gqtop_tmpl" type="text/template">
-<div class="palyer_1">{p1name}</div>
-<div class="player_1_n">{p1goal}</div>
-<div class="play_active">
-	<span class="p_time_ac">{playTime}' {statusStr}</span><span class="p_helf_ac">{p1halfgoal}-{p2halfgoal} {half}</span>
-</div>
-<div class="palyer_2">{p2name}</div>
-<div class="player_2_n">{p2goal}</div>
-<div class="sub_player_1">{p1name}</div>
-<div class="sub_player_2">{p2name}</div>
-<div class="helf_bewrite_1">{first}</div><div class="helf_bewrite_2">{second}</div>         
+  <div class="palyer_1">{p1name}</div>
+  <div class="player_1_n">{p1goal}</div>
+  <div class="play_active">
+    <span class="p_time_ac">{playTime}' {statusStr}</span>
+    <span class="p_helf_ac">{p1halfgoal}-{p2halfgoal} {half}</span>
+  </div>
+  <div class="palyer_2">{p2name}</div>
+  <div class="player_2_n">{p2goal}</div>
+  <div class="sub_player_1">{p1name}</div>
+  <div class="sub_player_2">{p2name}</div>
+  <div class="helf_bewrite_1">{first}</div>
+  <div class="helf_bewrite_2">{second}</div>
 </script>
 
 <script id="dstop_tmpl" type="text/template">
-<div class="live_name">{p1name} VS {p2name}</div><div class="live_time">{livetime}</div>         
+  <div class="live_name">{p1name} VS {p2name}</div>
+  <div class="live_time">{livetime}</div>
 </script>
 
 <script id="tab_tmpl" type="text/template">				
@@ -31,27 +34,37 @@
 </script>
 
 <script id="playlist_tmpl" type="text/template">
-	<div class="play_list_tit_all"><span class="floatleft">{title}</span><span class="floatright"><input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish"></span></div>
-	<div class="play_ac_tit">
-		<span class="pk_xm">{pkxm}</span>
-		<span class="pk_th">{pk}</span>
-		<span class="other_th">{pl}</span>
-		<span class="buy_th">{buy}&nbsp;</span>
-		<span class="sell_th">&nbsp;{sell}</span>
-	</div>
+  <div class="play_list_tit_all">
+    <span class="floatleft">{title}</span>
+    <span class="floatright">
+      <input type="submit" name="button" id="button" value="{refresh}" class="bt_refurbish" />
+    </span>
+  </div>
+  <div class="play_ac_tit">
+    <span class="pk_xm">{pkxm}</span>
+    <span class="pk_th">{pk}</span>
+    <span class="other_th">{pl}</span>
+    <span class="buy_th">{buy}&#160;</span>
+    <span class="sell_th">&#160;{sell}</span>
+  </div>
 </script>
+
 <script id="timebar_tmpl" type="text/template">
-   <div class="helf_timebar">
-       <div class="time_line" style="width:0px;"></div>
-   </div>    
-    <div class="helf_timebar">
-       <div class="time_line" style="width:0px;"><!--这个不能没有，至少要写宽度为0，不然IE6会出错--></div>
-	</div>
+  <div class="helf_timebar">
+    <div class="time_line" style="width:0;"></div>
+  </div>
+  <div class="helf_timebar">
+    <div class="time_line" style="width:0px;">
+      <!--这个不能没有，至少要写宽度为0，不然IE6会出错-->
+    </div>
+  </div>
 </script>
+
 <script id="game_tmpl" type="text/template">
-      <ul class="play_list_ul"></ul>
-      <div class="lock_layout" style="display: none;"></div>
+  <ul class="play_list_ul"></ul>
+  <div class="lock_layout" style="display: none;"></div>
 </script>
+
 <script id="trade_tmpl" type="text/template">
 	<span class="player">{nameStr}</span>
 	<span class="other_pk">{pk}</span>	
@@ -67,7 +80,7 @@
 		<a href="#" pos="s2" class="span"><span><b>{s2}</b>{s2n}</span></a>
     </span>
 </script>
-<!-- Html--template End-->
+<!-- Html template End -->
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="jquery.ajaxtest.js"></script>
 <script type="text/javascript" src="play_gq_data.js"></script>
@@ -89,7 +102,6 @@ $(function () {
 			//console.log(d);
 		}
 	});
-	
 });
 </script>
 </body>

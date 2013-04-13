@@ -57,7 +57,7 @@
 		},
 		//取全量信息
 		getAll : function () {
-			var data = {
+		var data = {
 				p : gameTypeModels.getCurrentGameType()
 			};
 			dr.ajax({
@@ -318,6 +318,7 @@
 					for (var j = 0; j < attrsLen; j++) {
 						tradeAttr=attrs[j];
 						pkVal=pkArr[j];
+						//如果赔率是0的话就用两根横线替换
 						(tradeAttr=='pdata') && !pkVal && (pkVal='--');
 						tradeObj[tradeAttr] = pkVal;
 					}
@@ -862,16 +863,17 @@
 			},
 			freshEvent : function (fresh) {
 				fresh.countdown({
-					time : 30, //倒计时
+					time : 3, //倒计时
 					freeze : 3, //冻结时间
 					circulation : true, //是否循环
 					timeEnd : function () {
 						//TODO
 						console.log('timeend');
+						dr.getAll();
 					},
 					click : function () {
-						//TODO
-						console.log('click');
+					console.log('click');
+						dr.getAll();
 					}
 				});
 			},

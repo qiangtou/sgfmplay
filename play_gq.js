@@ -57,6 +57,7 @@
 		},
 		//取全量信息
 		getAll : function () {
+		dc.stopTimeout();
 		var data = {
 				p : gameTypeModels.getCurrentGameType()
 			};
@@ -83,10 +84,12 @@
 			refreshCycle = opt.playlist[1] || 30000;
 			dr.ajax({
 				url : url,
+				complete:function(){
+					dr.timeoutIndex['playlist'] = setTimeout(fun, refreshCycle);
+				},
 				success : function (json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
-						dr.timeoutIndex['playlist'] = setTimeout(fun, refreshCycle);
 					}
 				}
 			});
@@ -103,11 +106,14 @@
 					p : gameTypeModels.getCurrentGameType(),
 					v : _v
 				},
+				complete:function(){
+					dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
+				},
 				success : function (json) {
+				console.log(123);
 					if (json.c == 0) {
 						json.d && ds.setFrame(json.d[0]);
 						fun.v = json.v;
-						dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
 					}
 				}
 			});
@@ -124,11 +130,13 @@
 					p : gameTypeModels.getCurrentGameType(),
 					v : _v
 				},
+				complete:function(){
+					dr.timeoutIndex['gameInfo'] = setTimeout(fun, refreshCycle);
+				},
 				success : function (json) {
 					if (json.c == 0 ) {
 						json.d && ds.setStatus(json.d);
 						fun.v = json.v;
-						dr.timeoutIndex['gameInfo'] = setTimeout(fun, refreshCycle);
 					}
 				}
 			});
@@ -513,6 +521,13 @@
 	},
 	//工具函数
 	Utils = {
+		add:function(num1,num2){
+			var result,PRECISION=1000;
+			num1=num1*PRECISION|0;
+			num2=num2*PRECISION|0;
+			result=(num1+num2)/PRECISION;
+			return result;
+		},
 		date2String : function (d, formatStr) {
 			//2012-12-6 15:30:22
 			formatStr = formatStr || 'yyyy-MM-dd HH:mm:ss';
@@ -762,9 +777,9 @@
 				q = model.get(pos + 'n') || '';
 				isFirstsd = false;
 				qs = 0;
-				if (site > 0) { //如果不是最佳赔率,则往前累加
+				if (site >= 0) { 
 					for (var i = site; i >= 0; i--) {
-						qs += parseInt(model.get(action + i + 'n') || 0);
+						qs = Utils.add(qs,model.get(action + i + 'n') || 0);
 					}
 				}
 				paramObj = {
@@ -863,16 +878,13 @@
 			},
 			freshEvent : function (fresh) {
 				fresh.countdown({
-					time : 3, //倒计时
+					time : 8, //倒计时
 					freeze : 3, //冻结时间
 					circulation : true, //是否循环
 					timeEnd : function () {
-						//TODO
-						console.log('timeend');
 						dr.getAll();
 					},
 					click : function () {
-					console.log('click');
 						dr.getAll();
 					}
 				});
@@ -1085,21 +1097,32 @@
 		init : function (settings) {
 			/**设置全局上下文*/
 			content = this;
-			$.extend(true, opt, defaults, settings);
-			return opt;
+			$.extend(opt, defaults, settings);
+		},
+		initI18n:function(settings){
+			var opti18n,_i18n,info,key,keys;
+			opti18n=$.extend(opt.i18n,defaults.i18n);
+			_i18n=settings.i18n||{};
+			for(key in  _i18n){
+				info=_i18n[key];
+				keys=key.split('_');
+				module=keys[0];
+				attr=keys[1];
+				module && attr && (opti18n[module][attr]=info);
+				
+			}
 		},
 		/**显示赛事*/
-		show : function (settings) {
+		show : function () {
 			new Play({
 				$ : this
 			});
 		}
 	};
 	$.fn.sgfmplay = function (settings) {
-		settings = instence.init.call(this, settings);
-		// console.time("show");
-		instence.show.call(this, settings);
-		// console.timeEnd("show");
+		instence.init.call(this, settings);
+		instence.initI18n.call(this, settings);
+		instence.show.call(this);
 		return this;
 	};
 	//外部api

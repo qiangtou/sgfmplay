@@ -17,5 +17,6 @@ tmatchAPI
 		getTradeIndexType : function () {}, //通过交易项ID获取指标类型
 		getMatchTypeId : function () {}, //通过交易项ID获取赛事类型ID
 		getPlaySign : function () {} //单式滚球标识
+		getNowQty:function () {getBets}   //获取当前币种的货量
 	};
 

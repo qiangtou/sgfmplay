@@ -3,7 +3,9 @@
  * 2.轮循状态
  */
 (function ($, window) {
-	var content = window,
+//多币种处理
+	var multCurr = (window.sgfm && window.sgfm.multiCurrency)||{currencyFlag : "CNY",multRate : 1},
+	content = window,
 	opt = {},
 	defaults = {
 		ratioClick : $.noop,
@@ -51,6 +53,9 @@
 					if (json.c == 0) {
 						ds._addType(json.d);
 						dr.getAll();
+					}else{
+						dc.stopTimeout();
+						opt.getAlldataError(json);
 					}
 				}
 			});
@@ -84,12 +89,12 @@
 			refreshCycle = opt.playlist[1] || 30000;
 			dr.ajax({
 				url : url,
-				complete:function(){
-					dr.timeoutIndex['playlist'] = setTimeout(fun, refreshCycle);
-				},
 				success : function (json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
+					}else{
+						dc.stopTimeout();
+						opt.getAlldataError(json);
 					}
 				}
 			});
@@ -110,7 +115,6 @@
 					dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
 				},
 				success : function (json) {
-				console.log(123);
 					if (json.c == 0) {
 						json.d && ds.setFrame(json.d[0]);
 						fun.v = json.v;
@@ -528,6 +532,26 @@
 			result=(num1+num2)/PRECISION;
 			return result;
 		},
+		getBets : function () {
+			//没有注额时返回空字符串
+			if ("" == bet) {
+				return bet;
+			}
+			//新的注额
+			var nBet = Math.ceil(Math.round(bet / multCurr.multRate * 100) / 100);
+			//印尼盾特殊处理
+			if (multCurr.currencyFlag == "IDR") {
+				nBet = Math.ceil(nBet / 1000);
+			}
+			return nBet;
+		},
+		getMaxBets : function () {
+			//注额过大的显示处理
+			if (bet !== "" && bet > 9999999) {
+				return 9999999;
+			}
+			return bet;
+		},
 		date2String : function (d, formatStr) {
 			//2012-12-6 15:30:22
 			formatStr = formatStr || 'yyyy-MM-dd HH:mm:ss';
@@ -728,10 +752,24 @@
 			tag : 'li',
 			template : $('#trade_tmpl').html(),
 			init : function () {
-				this.listenTo(this.model, "hasChange", this.render);
+				//this.listenTo(this.model, "hasChange", this.render);
+				this.listenTo(this.model, "change", this.pkchange);
 			},
 			events : {
 				"a click" : "ratioClick"
+			},
+			pkchange:function(name,_old,_new){
+				if(name=='pdata'){
+					this.pdata.html(_new);
+				}else{
+				if(/^[bs]\d$/.test(name)){
+					this.radioChange(name,_old,_new);
+				}else if(/^[bs]\dn$/.test(name)){
+					var aTag=name.substring(0,2);
+					var b=this[aTag].b;
+					this[aTag].empty().append(b,_new);
+				}
+				}
 			},
 			render : function () {
 				var $el = this.$,
@@ -746,7 +784,26 @@
 				}
 				var html = sgfmmvc.replace(this.template, this.model.getAttrs());
 				$el.html(html);
+				this.pdata=$el.find('.other_data');
 				return this;
+			},
+			radioChange:function(name,_old,_new){
+			var aTag=this[name]=this[name]||this.$.find('a[pos="'+name+'"]');
+			var b=aTag.b=aTag.b||aTag.find('b');
+			b.html(_new);
+			if (_old) {
+				var cls,increase;
+				increase =_new-_old;
+				if(increase>0){
+					cls='flash_red';
+				}else{
+					cls='flash_grn';
+				}
+				// b.addClass(cls);
+				// setTimeout(function(){
+					// b.removeClass(cls);
+				// },5000);
+			}
 			},
 			ratioClick : function (e) {
 				var view,
@@ -820,13 +877,13 @@
 				gameId;
 				_opt = opt;
 				gameId = this.model.get('gameId');
-				if (!oldStatus) {
+				if (!oldStatus && this.$.is(':visible')) {
 					if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
 						this.remove(gameId);
 					} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁
-						this.unlock(gameId);
+						this.unlockGame(gameId);
 					} else { //其它状态都锁定
-						this.lock(gameId);
+						this.lockGame(gameId);
 					}
 				}
 			},
@@ -836,13 +893,13 @@
 					"remove":gameId
 				}]);
 			},
-			unlock:function(gameId){
+			unlockGame:function(gameId){
 				this.lock.hide();
 				opt.typeChange([{
 					"unlock":gameId
 				}]);
 			},
-			lock:function(gameId){
+			lockGame:function(gameId){
 				this.lock.show();
 				opt.typeChange([{
 					"lock":gameId
@@ -878,7 +935,7 @@
 			},
 			freshEvent : function (fresh) {
 				fresh.countdown({
-					time : 8, //倒计时
+					time : 30, //倒计时
 					freeze : 3, //冻结时间
 					circulation : true, //是否循环
 					timeEnd : function () {
@@ -1109,7 +1166,6 @@
 				module=keys[0];
 				attr=keys[1];
 				module && attr && (opti18n[module][attr]=info);
-				
 			}
 		},
 		/**显示赛事*/

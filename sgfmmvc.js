@@ -200,7 +200,8 @@
 	_.View = function (settings) {
 		var self = this,
 		oldFuns = {},
-		listenFuns = {};
+		listenFuns = {},
+		changeListenFun;
 		//初始化方法
 		this.init = $.noop;
 		//默认绑定一个空的div给当前视图
@@ -222,32 +223,35 @@
 		*@param callback 监听的回调函数
 		*/
 		this.listenTo = function (model, event, callback) {
-			if(!model)return;
+			if (!model)
+				return;
 			var attrArr,
 			attr,
 			oldFun;
 			attrArr = event.split(":");
 			event = attrArr[0];
-			if(event=='change'){
+			if (event == 'change') {
 				attr = attrArr[1];
-				if(attr){
+				if (attr) {
 					listenFuns[attr] = callback;
+				}else{
+					changeListenFun=callback;
 				}
 			}
-				oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
-				model[event] =function(){
-					var ret,
-					listenFun,
-					key = arguments[0];
-					ret = oldFun.apply(model, arguments);
-					if(event=="change"){
-						listenFun =  listenFuns[key] ;
-					}else{
-						listenFun=callback;
-					}
-					listenFun && listenFun.apply(self, arguments);
-					return ret;
-				};
+			oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
+			model[event] = function () {
+				var ret,
+				listenFun,
+				key = arguments[0];
+				ret = oldFun.apply(model, arguments);
+				if (event == "change") {
+					listenFun = listenFuns[key]||changeListenFun;
+				} else {
+					listenFun = callback;
+				}
+				listenFun && listenFun.apply(self, arguments);
+				return ret;
+			};
 		};
 		//为视图添加事件处理
 		this.addEvents = function () {

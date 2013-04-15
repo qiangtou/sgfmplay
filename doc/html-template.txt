@@ -1,13 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="css/layout_cn.css"/>
-<link type="text/css" rel="stylesheet" href="css/link.css"/>
-</head>
-<body>
-<div></div>
-
 <!-- Html template Begin -->
 <script id="gqtop_tmpl" type="text/template">
   <div class="palyer_1">{p1name}</div>
@@ -81,65 +71,3 @@
     </span>
 </script>
 <!-- Html template End -->
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="jquery.ajaxtest.js"></script>
-<script type="text/javascript" src="play_gq_data.js"></script>
-<script type="text/javascript" src="sgfmmvc.js"></script>
-<script type="text/javascript" src="play_gq.js"></script>
-<script type="text/javascript">
-$(function () {
-	//周期等数据从数据中心写入
-	$('div').sgfmplay({
-		'allData':"allDataUrl", //全量数据
-		'frameInfo':["frameInfoUrl",4000],//框架数据:[url,周期]
-		'gameInfo':["gameInfoUrl",4000],//状态数据:[url,周期]
-		'marketInfo':["marketInfoUrl",4000],//盘口数据:[url,周期]
-		'playlist':["playlistUrl",2000],
-		//点击赔率事件,给投注用
-		'ratioClick':function(d){
-			//intenFun.changeLab(0);
-			//window.parent.$("#leftsubbody").sgfmnewbet(d, function(){});
-			//intenFun.qtid = d.tradeItemId;
-			//intenFun.showTrading();
-			//$("#leftsubbody").sgfmnewbet("betTimer", "/tw/core/today.getMarketInfoByTid.do");
-		},
-		//游戏状态变化事件,给投注用
-		'typeChange':function(d){
-			//$("#leftsubbody").sgfmnewbet(d, function(){});
-		},
-		//取全量数据错误回调函数
-		'getAlldataError':function(json){
-			//console.log(json);
-		},
-		//国际化信息,从后台取
-		'i18n' : {
-			'gameType_standard' : "标准盘",
-			'gameType_concedepoints' : "让球",
-			'gameType_bigsmall' : "大小球",
-			'gameType_sigledouble' : "单双",
-			'gameType_redcard' : "红牌",
-			'gameType_whole' : "全场",
-			'gameType_half' : "半场",
-			
-			'trade_big' : '大球',
-			'trade_small' : '小球',
-			
-			'top_first' : "上半场",
-			'top_second' : "下半场",
-			'top_half' : "半场",
-			'top_playing' : "进行中",
-			'top_pause' : "中场",
-			
-			'playlist_buy' : "下注（买）",
-			'playlist_sell' : "（卖）吃货",
-			'playlist_refresh' : "刷新",
-			'playlist_pkxm' : "玩法",
-			'playlist_pk' : "盘口",
-			'playlist_pl' : "参考赔率"
-		}
-	});
-
-	});
-</script>
-</body>
-</html>

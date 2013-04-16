@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date: 2013-04-16 15:16:33
+ *@date: 2013-04-16 15:24:28
  */
 (function ($, window) {
 	//多币种处理
@@ -768,8 +768,10 @@
 					this.pdata.html(_new);
 				} else {
 					if (/^[bs]\d$/.test(name)) {
+						"n"==_new&&(_new="");
 						this.radioChange(name, _old, _new);
 					} else if (/^[bs]\dn$/.test(name)) {
+						"n"==_new&&(_new="");
 						var aTag = name.substring(0, 2);
 						var b = this[aTag].b;
 						this[aTag].empty().append(b, _new);
@@ -796,7 +798,7 @@
 				var aTag = this[name] = this[name] || this.$.find('a[pos="' + name + '"]');
 				var b = aTag.b = aTag.b || aTag.find('b');
 				b.html(_new);
-				if (_old) {
+				if (_old && _new) {
 					var cls,
 					increase;
 					increase = _new - _old;

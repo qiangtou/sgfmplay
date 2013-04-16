@@ -1,10 +1,13 @@
 /**
- * 1.单场全量
- * 2.轮循状态
+ *@description: 单场赛事js,包括单式和滚球。
+ *@date: 2013-04-16 15:16:33
  */
 (function ($, window) {
-//多币种处理
-	var multCurr = (window.sgfm && window.sgfm.multiCurrency)||{currencyFlag : "CNY",multRate : 1},
+	//多币种处理
+	var multCurr = (window.sgfm && window.sgfm.multiCurrency) || {
+		currencyFlag : "CNY",
+		multRate : 1
+	},
 	content = window,
 	opt = {},
 	defaults = {
@@ -53,7 +56,7 @@
 					if (json.c == 0) {
 						ds._addType(json.d);
 						dr.getAll();
-					}else{
+					} else {
 						dc.stopTimeout();
 						opt.getAlldataError(json);
 					}
@@ -62,8 +65,8 @@
 		},
 		//取全量信息
 		getAll : function () {
-		dc.stopTimeout();
-		var data = {
+			dc.stopTimeout();
+			var data = {
 				p : gameTypeModels.getCurrentGameType()
 			};
 			dr.ajax({
@@ -92,7 +95,7 @@
 				success : function (json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
-					}else{
+					} else {
 						dc.stopTimeout();
 						opt.getAlldataError(json);
 					}
@@ -111,7 +114,7 @@
 					p : gameTypeModels.getCurrentGameType(),
 					v : _v
 				},
-				complete:function(){
+				complete : function () {
 					dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
 				},
 				success : function (json) {
@@ -134,11 +137,11 @@
 					p : gameTypeModels.getCurrentGameType(),
 					v : _v
 				},
-				complete:function(){
+				complete : function () {
 					dr.timeoutIndex['gameInfo'] = setTimeout(fun, refreshCycle);
 				},
 				success : function (json) {
-					if (json.c == 0 ) {
+					if (json.c == 0) {
 						json.d && ds.setStatus(json.d);
 						fun.v = json.v;
 					}
@@ -158,7 +161,7 @@
 					v : _v
 				},
 				success : function (json) {
-					if (json.c == 0 ) {
+					if (json.c == 0) {
 						json.d && ds.setPk(json.d[0]);
 						fun.v = json.v;
 						dr.timeoutIndex['marketInfo'] = setTimeout(fun, refreshCycle);
@@ -328,10 +331,11 @@
 				if (tm) {
 					tradeObj = {};
 					for (var j = 0; j < attrsLen; j++) {
-						tradeAttr=attrs[j];
-						pkVal=pkArr[j];
+						tradeAttr = attrs[j];
+						pkVal = pkArr[j];
 						//如果赔率是0的话就用两根横线替换
-						(tradeAttr=='pdata') && !pkVal && (pkVal='--');
+						(tradeAttr == 'pdata') && !pkVal && (pkVal = '--');
+						(pkVal == 'n') && (pkVal == "");
 						tradeObj[tradeAttr] = pkVal;
 					}
 					tm.update(tradeObj);
@@ -451,10 +455,10 @@
 					'gameId' : gameId,
 					'typeId' : typeId,
 					'isWhole' : isWhole,
-					'indicator':indicator,
+					'indicator' : indicator,
 					'name' : name,
-					'concedeId':concedeId,
-					'tradeIndexType':tradeIndexType,
+					'concedeId' : concedeId,
+					'tradeIndexType' : tradeIndexType,
 					'pk' : concedeObj[concedeId]
 				};
 				if (!tm) {
@@ -509,7 +513,7 @@
 							});
 					}
 				}
-			} 
+			}
 		}
 	},
 	dc = {
@@ -525,14 +529,15 @@
 	},
 	//工具函数
 	Utils = {
-		add:function(num1,num2){
-			var result,PRECISION=1000;
-			num1=num1*PRECISION|0;
-			num2=num2*PRECISION|0;
-			result=(num1+num2)/PRECISION;
+		add : function (num1, num2) {
+			var result,
+			PRECISION = 1000;
+			num1 = num1 * PRECISION | 0;
+			num2 = num2 * PRECISION | 0;
+			result = (num1 + num2) / PRECISION;
 			return result;
 		},
-		getBets : function () {
+		getBets : function (bet) {
 			//没有注额时返回空字符串
 			if ("" == bet) {
 				return bet;
@@ -545,7 +550,7 @@
 			}
 			return nBet;
 		},
-		getMaxBets : function () {
+		getMaxBets : function (bet) {
 			//注额过大的显示处理
 			if (bet !== "" && bet > 9999999) {
 				return 9999999;
@@ -758,17 +763,17 @@
 			events : {
 				"a click" : "ratioClick"
 			},
-			pkchange:function(name,_old,_new){
-				if(name=='pdata'){
+			pkchange : function (name, _old, _new) {
+				if (name == 'pdata') {
 					this.pdata.html(_new);
-				}else{
-				if(/^[bs]\d$/.test(name)){
-					this.radioChange(name,_old,_new);
-				}else if(/^[bs]\dn$/.test(name)){
-					var aTag=name.substring(0,2);
-					var b=this[aTag].b;
-					this[aTag].empty().append(b,_new);
-				}
+				} else {
+					if (/^[bs]\d$/.test(name)) {
+						this.radioChange(name, _old, _new);
+					} else if (/^[bs]\dn$/.test(name)) {
+						var aTag = name.substring(0, 2);
+						var b = this[aTag].b;
+						this[aTag].empty().append(b, _new);
+					}
 				}
 			},
 			render : function () {
@@ -784,26 +789,23 @@
 				}
 				var html = sgfmmvc.replace(this.template, this.model.getAttrs());
 				$el.html(html);
-				this.pdata=$el.find('.other_data');
+				this.pdata = $el.find('.other_data');
 				return this;
 			},
-			radioChange:function(name,_old,_new){
-			var aTag=this[name]=this[name]||this.$.find('a[pos="'+name+'"]');
-			var b=aTag.b=aTag.b||aTag.find('b');
-			b.html(_new);
-			if (_old) {
-				var cls,increase;
-				increase =_new-_old;
-				if(increase>0){
-					cls='flash_red';
-				}else{
-					cls='flash_grn';
+			radioChange : function (name, _old, _new) {
+				var aTag = this[name] = this[name] || this.$.find('a[pos="' + name + '"]');
+				var b = aTag.b = aTag.b || aTag.find('b');
+				b.html(_new);
+				if (_old) {
+					var cls,
+					increase;
+					increase = _new - _old;
+					if (increase > 0) {
+						cls = 'flash_red';
+					} else {
+						cls = 'flash_grn';
+					}
 				}
-				// b.addClass(cls);
-				// setTimeout(function(){
-					// b.removeClass(cls);
-				// },5000);
-			}
 			},
 			ratioClick : function (e) {
 				var view,
@@ -834,10 +836,12 @@
 				q = model.get(pos + 'n') || '';
 				isFirstsd = false;
 				qs = 0;
-				if (site >= 0) { 
+				if (site >= 0) {
 					for (var i = site; i >= 0; i--) {
-						qs = Utils.add(qs,model.get(action + i + 'n') || 0);
+						qs = Utils.add(qs, model.get(action + i + 'n') || 0);
 					}
+					qs = Utils.getBets(qs); //多币种处理
+					qs = Utils.getMaxBets(qs); //过多位数处理
 				}
 				paramObj = {
 					"tradeItemId" : tid, //交易项ID
@@ -861,8 +865,8 @@
 			},
 			render : function () {
 				this.$.html(this.template);
-				this.ul=this.$.find(".play_list_ul");
-				this.lock=this.$.find(".lock_layout");
+				this.ul = this.$.find(".play_list_ul");
+				this.lock = this.$.find(".lock_layout");
 				return this;
 			},
 			addTrade : function (m) {
@@ -887,23 +891,26 @@
 					}
 				}
 			},
-			remove:function(gameId){
+			remove : function (gameId) {
 				this.model.destroy();
-					opt.typeChange([{
-					"remove":gameId
-				}]);
+				opt.typeChange([{
+							"remove" : gameId
+						}
+					]);
 			},
-			unlockGame:function(gameId){
+			unlockGame : function (gameId) {
 				this.lock.hide();
 				opt.typeChange([{
-					"unlock":gameId
-				}]);
+							"unlock" : gameId
+						}
+					]);
 			},
-			lockGame:function(gameId){
+			lockGame : function (gameId) {
 				this.lock.show();
 				opt.typeChange([{
-					"lock":gameId
-				}]);
+							"lock" : gameId
+						}
+					]);
 			}
 		}),
 	//玩法视图
@@ -915,7 +922,7 @@
 				this.listenTo(this.model, "showhide", this.showhide);
 				this.listenTo(this.model, "del", this.removeView);
 			},
-			
+
 			addGame : function (m) {
 				var md = this.model.getById(m.gameId);
 				var gv = new GameView({
@@ -930,7 +937,7 @@
 						title : this.title
 					});
 				this.$.hide().html(sgfmmvc.replace(this.template, i18n));
-				this.fresh = this.$.find('.bt_refurbish');				
+				this.fresh = this.$.find('.bt_refurbish');
 				return this;
 			},
 			freshEvent : function (fresh) {
@@ -957,9 +964,9 @@
 					this.fresh.countdown('stop');
 				}
 			},
-			removeView:function(){
-				var len=this.model.length;
-				if(len==0){
+			removeView : function () {
+				var len = this.model.length;
+				if (len == 0) {
 					this.hide();
 				}
 			}
@@ -1087,8 +1094,8 @@
 				this.$.append(this.ul);
 				return this;
 			},
-			showhide:function(name,old,isShow){
-				isShow?this.show():this.hide();
+			showhide : function (name, old, isShow) {
+				isShow ? this.show() : this.hide();
 			}
 		}),
 	TagContentView = sgfmmvc.View.extend({
@@ -1156,16 +1163,22 @@
 			content = this;
 			$.extend(opt, defaults, settings);
 		},
-		initI18n:function(settings){
-			var opti18n,_i18n,info,key,keys;
-			opti18n=$.extend(opt.i18n,defaults.i18n);
-			_i18n=settings.i18n||{};
-			for(key in  _i18n){
-				info=_i18n[key];
-				keys=key.split('_');
-				module=keys[0];
-				attr=keys[1];
-				module && attr && (opti18n[module][attr]=info);
+		initI18n : function (settings) {
+			var opti18n,
+			_i18n,
+			info,
+			key,
+			keys,
+			attr,
+			module;
+			opti18n = $.extend(opt.i18n, defaults.i18n);
+			_i18n = settings.i18n || {};
+			for (key in _i18n) {
+				info = _i18n[key];
+				keys = key.split('_');
+				module = keys[0];
+				attr = keys[1];
+				module && attr && (opti18n[module][attr] = info);
 			}
 		},
 		/**显示赛事*/
@@ -1182,7 +1195,6 @@
 		return this;
 	};
 	//外部api
-
 	var tmatch = {
 		//通过交易项ID获取游戏ID
 		getGamingId : function (tradeId) {
@@ -1241,7 +1253,7 @@
 				player = playerModels.custom;
 			} else {
 				player = playerModels.getById(name);
-				player=player.get('isHost')?playerModels.custom:playerModels.host;
+				player = player.get('isHost') ? playerModels.custom : playerModels.host;
 			}
 			return player && player.get('name') || '';
 		},
@@ -1266,18 +1278,25 @@
 		},
 		//通过交易项ID获取游戏指标
 		getTradeItemNorm : function (tradeId) {
-			var tm,name;
+			var tm,
+			name;
 			tm = tradeModels.getById(tradeId);
-			name = tm.get('indicator')||'';
+			name = tm.get('indicator') || '';
 			return name;
 		},
 		//通过交易项ID获取全半场国际化显示信息
 		getFullTimeName : function (tradeId) {
-			var tm,isWhole,i18n;
-			i18n=opt.i18n.gameType;
+			var tm,
+			isWhole,
+			i18n;
+			i18n = opt.i18n.gameType;
 			tm = tradeModels.getById(tradeId);
-			isWhole=tm.get('isWhole');
-			return {1:i18n.whole,2:i18n.half}[isWhole];
+			isWhole = tm.get('isWhole');
+			return {
+				1 : i18n.whole,
+				2 : i18n.half
+			}
+			[isWhole];
 		},
 		//通过交易项ID获取指标类型
 		getTradeIndexType : function (tradeId) {
@@ -1291,6 +1310,10 @@
 		//单式滚球标识
 		getPlaySign : function () {
 			return topModel.get('isRollingBall');
+		},
+		//取得当前货量
+		getNowQty : function (bet) {
+			return Utils.getBets(bet);
 		}
 	};
 	var _tmatch = window.tmatch = window.tmatch || {};
@@ -1299,91 +1322,92 @@
 
 /**
  *倒计时插件
-*/
+ */
 (function ($) {
-		$.fn.countdown = function (settings) {
-			if(typeof settings == 'string'){
-				var fun=control[settings];
-				fun && fun.call(this,defaults);
-			}else{
-				init.call(this, settings);
-			}
-		};
-		var defaults = {
-			time : 10,
-			freeze : 3,
-			circulation:false,
-			timeEnd : $.noop,
-			click : $.noop
-		};
-		var $this,intervalIndex;
-		
-		var init = function (settings) {
-		
-			var opt,$this;
-			$this=this;
-			if(!$this.is('input')||$this.data("countdown"))return;
-			$this.data("countdown",true);
-			opt = $.extend(defaults, settings);
-			opt.originVal=$this.val();
-			$this.click(function () {
-				opt.click();
-				restart.call($this,opt);
-			});
-			start.call($this,opt);
-		};
-		
-		
-		var start=function(opt){
-			var $this,
-			time,
-			freeze,
-			timeEnd,
-			freezeTime,
-			originVal,
-			circulation;
-			
-			$this=this;
-			time = opt.time;
-			freeze = opt.freeze;
-			timeEnd = opt.timeEnd;	
-			originVal =opt.originVal;
-			circulation=opt.circulation;
-			freezeTime=Math.max(time-freeze,0);
-		
-			$this.val(time+originVal).attr("disabled",true);
-			intervalIndex=setInterval(function(){
+	$.fn.countdown = function (settings) {
+		if (typeof settings == 'string') {
+			var fun = control[settings];
+			fun && fun.call(this, defaults);
+		} else {
+			init.call(this, settings);
+		}
+	};
+	var defaults = {
+		time : 10,
+		freeze : 3,
+		circulation : false,
+		timeEnd : $.noop,
+		click : $.noop
+	};
+	var $this,
+	intervalIndex;
+
+	var init = function (settings) {
+		var opt,
+		$this;
+		$this = this;
+		if (!$this.is('input') || $this.data("countdown"))
+			return;
+		$this.data("countdown", true);
+		opt = $.extend(defaults, settings);
+		opt.originVal = $this.val();
+		$this.click(function () {
+			opt.click();
+			restart.call($this, opt);
+		});
+		start.call($this, opt);
+	};
+
+	var start = function (opt) {
+		var $this,
+		time,
+		freeze,
+		timeEnd,
+		freezeTime,
+		originVal,
+		circulation;
+
+		$this = this;
+		time = opt.time;
+		freeze = opt.freeze;
+		timeEnd = opt.timeEnd;
+		originVal = opt.originVal;
+		circulation = opt.circulation;
+		freezeTime = Math.max(time - freeze, 0);
+
+		$this.val(time + originVal).attr("disabled", true);
+		intervalIndex = setInterval(function () {
 				time--;
-				if(!checkVisible($this)){
+				if (!checkVisible($this)) {
 					return clear.call($this);
 				}
-				if(time>0){	
-					if(time<=freezeTime){
+				if (time > 0) {
+					if (time <= freezeTime) {
 						$this.removeAttr("disabled")
 					}
-					$this.val(time+originVal);	
-				}else{
+					$this.val(time + originVal);
+				} else {
 					clear.call($this);
-					time="";
-					$this.val(time+originVal);
+					time = "";
+					$this.val(time + originVal);
 					timeEnd();
-					circulation && start.call($this,opt);
+					circulation && start.call($this, opt);
 				}
-			},1000);
-		};
-		var clear=function(){
-			clearInterval(intervalIndex);
-			this.val(defaults.originVal).data("countdown",false);
-			return false;
-		};
-		var restart=function(){
-			clear.call(this);
-			start.call(this,defaults);
-		};
-		var control={
-			'stop':clear
-		};
-		var checkVisible=function($this){
-			return $this && $this.is(':visible');
-		};
-	})(jQuery);
+			}, 1000);
+	};
+	var clear = function () {
+		clearInterval(intervalIndex);
+		this.val(defaults.originVal).data("countdown", false);
+		return false;
+	};
+	var restart = function () {
+		clear.call(this);
+		start.call(this, defaults);
+	};
+	var control = {
+		'stop' : clear
+	};
+	var checkVisible = function ($this) {
+		return $this && $this.is(':visible');
+	};
+})(jQuery);

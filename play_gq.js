@@ -1409,7 +1409,7 @@
 		start.call(this, defaults);
 	};
 	var control = {
-		'stop' : clear
+		'stop' : clear,
 		'restart':restart
 	};
 	var checkVisible = function ($this) {

@@ -948,10 +948,12 @@
 					freeze : 3, //冻结时间
 					circulation : true, //是否循环
 					timeEnd : function () {
-						dr.getAll();
+					    $(".bt_refurbish:visible").not(this).countdown("restart");
+				 	    dr.getAll();
 					},
 					click : function () {
-						dr.getAll();
+					    $(".bt_refurbish:visible").not(this).countdown("restart");
+				 	    dr.getAll();
 					}
 				});
 			},
@@ -1408,6 +1410,7 @@
 	};
 	var control = {
 		'stop' : clear
+		'restart':restart
 	};
 	var checkVisible = function ($this) {
 		return $this && $this.is(':visible');

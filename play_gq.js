@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date: 2013-04-16 15:24:28
+ *@date:2013-04-22 16:00:07
  */
 (function ($, window) {
 	//多币种处理
@@ -562,7 +562,7 @@
 			formatStr = formatStr || 'yyyy-MM-dd HH:mm:ss';
 			var dateObj = {
 				'dd' : d.getDate(),
-				'MM' : d.getMonth(),
+				'MM' : d.getMonth()+1,
 				'yyyy' : d.getFullYear(),
 				'HH' : d.getHours(),
 				'mm' : d.getMinutes(),
@@ -948,11 +948,12 @@
 					freeze : 3, //冻结时间
 					circulation : true, //是否循环
 					timeEnd : function () {
-					    $(".bt_refurbish:visible").not(this).countdown("restart");
+					    $(".bt_refurbish:visible").countdown("restart");
 				 	    dr.getAll();
+					    return false;
 					},
 					click : function () {
-					    $(".bt_refurbish:visible").not(this).countdown("restart");
+					    $(".bt_refurbish:visible").countdown("restart");
 				 	    dr.getAll();
 					}
 				});
@@ -1328,13 +1329,20 @@
  *倒计时插件
  */
 (function ($) {
+	var $this;
 	$.fn.countdown = function (settings) {
-		if (typeof settings == 'string') {
-			var fun = control[settings];
-			fun && fun.call(this, defaults);
-		} else {
-			init.call(this, settings);
+		var $this,fun;
+		
+		for (var i = this.length; i--; ) {
+			$this=this.eq(i);
+			if (typeof settings == 'string') {
+				fun = control[settings];
+				fun && fun.call($this, defaults);
+			} else {
+				init.call($this, settings);
+			}
 		}
+		return this;
 	};
 	var defaults = {
 		time : 10,
@@ -1343,8 +1351,6 @@
 		timeEnd : $.noop,
 		click : $.noop
 	};
-	var $this,
-	intervalIndex;
 
 	var init = function (settings) {
 		var opt,
@@ -1353,11 +1359,11 @@
 		if (!$this.is('input') || $this.data("countdown"))
 			return;
 		$this.data("countdown", true);
-		opt = $.extend(defaults, settings);
+		opt = $.extend({},defaults, settings);
 		opt.originVal = $this.val();
-		$this.click(function () {
+		$this.data("opt",opt);
+		$this.unbind('click').bind('click',function () {
 			opt.click();
-			restart.call($this, opt);
 		});
 		start.call($this, opt);
 	};
@@ -1380,7 +1386,10 @@
 		freezeTime = Math.max(time - freeze, 0);
 
 		$this.val(time + originVal).attr("disabled", true);
-		intervalIndex = setInterval(function () {
+		
+		var arr=$this.data("intervalIndex");
+		!arr && $this.data("intervalIndex",arr=[]);
+		arr.push(setInterval(function () {
 				time--;
 				if (!checkVisible($this)) {
 					return clear.call($this);
@@ -1392,21 +1401,23 @@
 					$this.val(time + originVal);
 				} else {
 					clear.call($this);
-					time = "";
-					$this.val(time + originVal);
-					timeEnd();
-					circulation && start.call($this, opt);
+					$this.val(originVal);
+					var end=timeEnd();
+					end && opt.circulation && start.call($this, opt);
 				}
-			}, 1000);
+			}, 1000));
 	};
-	var clear = function () {
-		clearInterval(intervalIndex);
-		this.val(defaults.originVal).data("countdown", false);
-		return false;
+		var clear = function () {
+			var arr = this.data("intervalIndex") || [];
+			while (arr.length)
+				clearInterval(arr.pop());
+			this.val(defaults.originVal).data("countdown", false);
+			return false;
 	};
 	var restart = function () {
 		clear.call(this);
-		start.call(this, defaults);
+		start.call(this, this.data("opt"));
+		
 	};
 	var control = {
 		'stop' : clear,

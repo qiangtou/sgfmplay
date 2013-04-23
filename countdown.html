@@ -1,26 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-	<title></title>
-	<script type="text/javascript" src="jquery.min.js"></script>
-	<script type="text/javascript" src="sgfmmvc.js"></script>
-	<script type="text/javascript" src="play_gq.js"></script>
-	<script type="text/javascript">
-	$(function(){
-		$('#button').countdown({
-			time:10,//倒计时
-			freeze:2,//冻结时间
-			circulation:true,//是否循环
-			timeEnd:function(){
-				console.log("timeend");
-			},click:function(){
-				console.log("click");
-			}
-		});
-	});
-	
-	</script>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<title></title>
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="sgfmmvc.js"></script>
+		<script type="text/javascript" src="play_gq.js"></script>
+		<script type="text/javascript">
+			$(function(){
+					$('#button').countdown({
+						time:10,//倒计时
+						freeze:2,//冻结时间
+						circulation:true,//是否循环
+						timeEnd:function(){
+						console.log("timeend");
+						},click:function(){
+						console.log("click");
+						}
+						});
+					});
+
+</script>
 </head>
 <body>
 	<input type="submit" name="button" id="button" value="刷新" class="bt_refurbish">

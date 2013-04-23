@@ -50,15 +50,20 @@
 	dr = {
 		firstGetPlaylist : function () {
 			dc.stopTimeout();
+			var fun=arguments.callee,
+			refreshCycle = opt.playlist[1] || 30000;
+			console.log('firstgetplaylist');
 			dr.ajax({
 				url : opt.playlist[0],
+				error:function(){
+					dr.timeoutIndex['firstplaylist'] = setTimeout(fun, refreshCycle);
+				},
 				success : function (json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
 						dr.getAll();
-					} else {
-						dc.stopTimeout();
-						opt.getAlldataError(json);
+					}else{
+						dr.timeoutIndex['firstplaylist'] = setTimeout(fun, refreshCycle);
 					}
 				}
 			});
@@ -90,14 +95,15 @@
 			var fun = arguments.callee,
 			url = opt.playlist[0],
 			refreshCycle = opt.playlist[1] || 30000;
+			console.log('getplaylist');
 			dr.ajax({
 				url : url,
+				complete : function () {
+					dr.timeoutIndex['playlistInfo'] = setTimeout(fun, refreshCycle);
+				},
 				success : function (json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
-					} else {
-						dc.stopTimeout();
-						opt.getAlldataError(json);
 					}
 				}
 			});

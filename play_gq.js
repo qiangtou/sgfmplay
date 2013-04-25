@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-04-22 16:00:07
+ *@date:2013-04-25 18:10:51
  */
 (function ($, window) {
 	//多币种处理
@@ -52,7 +52,7 @@
 			dc.stopTimeout();
 			var fun=arguments.callee,
 			refreshCycle = opt.playlist[1] || 30000;
-			console.log('firstgetplaylist');
+			//console.log('firstgetplaylist');
 			dr.ajax({
 				url : opt.playlist[0],
 				error:function(){
@@ -339,9 +339,14 @@
 					for (var j = 0; j < attrsLen; j++) {
 						tradeAttr = attrs[j];
 						pkVal = pkArr[j];
-						//如果赔率是0的话就用两根横线替换
-						(tradeAttr == 'pdata') && !pkVal && (pkVal = '--');
 						(pkVal == 'n') && (pkVal == "");
+						//如果赔率是0的话就用两根横线替换
+						if(tradeAttr == 'pdata'){
+						       !pkVal && (pkVal = '--');
+						}else if(tradeAttr.indexOf('n')){
+							pkVal= Utils.getBets(pkVal); //多币种处理
+							pkVal = Utils.getMaxBets(pkVal); //过多位数处理
+						};
 						tradeObj[tradeAttr] = pkVal;
 					}
 					tm.update(tradeObj);
@@ -848,7 +853,6 @@
 					for (var i = site; i >= 0; i--) {
 						qs = Utils.add(qs, model.get(action + i + 'n') || 0);
 					}
-					qs = Utils.getBets(qs); //多币种处理
 					qs = Utils.getMaxBets(qs); //过多位数处理
 				}
 				paramObj = {
@@ -1417,7 +1421,8 @@
 			var arr = this.data("intervalIndex") || [];
 			while (arr.length)
 				clearInterval(arr.pop());
-			this.val(defaults.originVal).data("countdown", false);
+			var opt=this.data("opt");
+			this.val(opt.originVal).data("countdown", false);
 			return false;
 	};
 	var restart = function () {

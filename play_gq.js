@@ -1,14 +1,10 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-04-25 18:10:51
+ *@date:2013-04-26 15:09:52
  */
 (function ($, window) {
 	//多币种处理
-	var multCurr = (window.sgfm && window.sgfm.multiCurrency) || {
-		currencyFlag : "CNY",
-		multRate : 1
-	},
-	content = window,
+	var multCurr,content = window,
 	opt = {},
 	defaults = {
 		ratioClick : $.noop,
@@ -95,7 +91,7 @@
 			var fun = arguments.callee,
 			url = opt.playlist[0],
 			refreshCycle = opt.playlist[1] || 30000;
-			console.log('getplaylist');
+			//console.log('getplaylist');
 			dr.ajax({
 				url : url,
 				complete : function () {
@@ -343,7 +339,7 @@
 						//如果赔率是0的话就用两根横线替换
 						if(tradeAttr == 'pdata'){
 						       !pkVal && (pkVal = '--');
-						}else if(tradeAttr.indexOf('n')){
+						}else if(tradeAttr.indexOf('n')>0){
 							pkVal= Utils.getBets(pkVal); //多币种处理
 							pkVal = Utils.getMaxBets(pkVal); //过多位数处理
 						};
@@ -1176,6 +1172,11 @@
 		init : function (settings) {
 			/**设置全局上下文*/
 			content = this;
+		multCurr = (window.sgfm && window.sgfm.multiCurrency) || {
+		currencyFlag : "CNY",
+		multRate : 1
+	};
+
 			$.extend(opt, defaults, settings);
 		},
 		initI18n : function (settings) {

@@ -33,7 +33,7 @@ $.ajax = function (settings) {
 	if (typeof returndata == 'function') {
 		returndata = returndata();
 	};
-	console.warn(opt.url);
+	//console.warn(opt.url);
 	setTimeout(function () {
 		opt.success.call(this, returndata,"success",jqXHR);
 		opt.complete.call(this, jqXHR,"complete");

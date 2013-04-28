@@ -236,8 +236,11 @@
 					o.statusStr = mStatusObj[mStatus];
 				}
 				//开赛时间
-				var u = Utils.date2String;
-				o.livetime = s[2] ? (u(new Date, 'yyyy-MM-dd ') + u(new Date(s[2] + 8 * 3600 * 1000), 'HH:mm')) : '';
+				var u = Utils.date2String,
+				    timeZone=opt.timeZone||(8 * 3600 * 1000);
+				//console.log('livetime'+s[2]);
+				o.livetime = s[2] ? u(new Date(s[2] + timeZone), 'yyyy-MM-dd HH:mm') : '';
+				//console.log('livetime'+o.livetime);
 				//滚球时间
 				o.playTime = (s[7] / 60000) | 0;
 				o['p1goal'] = playerModels.host.get('goal');

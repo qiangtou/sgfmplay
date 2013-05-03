@@ -85,7 +85,7 @@
 <script type="text/javascript" src="jquery.ajaxtest.js"></script>
 <script type="text/javascript" src="play_gq_data.js"></script>
 <script type="text/javascript" src="sgfmmvc.js"></script>
-<script type="text/javascript" src="play_gq.js"></script>
+<script type="text/javascript" src="jquery.sgfmplay.js"></script>
 <script type="text/javascript">
 $(function () {
 	//周期等数据从数据中心写入
@@ -95,6 +95,7 @@ $(function () {
 		'gameInfo':["gameInfoUrl",4000],//状态数据:[url,周期]
 		'marketInfo':["marketInfoUrl",4000],//盘口数据:[url,周期]
 		'playlist':["playlistUrl",2000],
+		"timezone":"+8",
 		//点击赔率事件,给投注用
 		'ratioClick':function(d){
 			//intenFun.changeLab(0);

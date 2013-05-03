@@ -5,6 +5,7 @@ $('div').sgfmplay({
 	'gameInfo':["gameInfoUrl",4000],//状态数据:[url,周期]
 	'marketInfo':["marketInfoUrl",4000],//盘口数据:[url,周期]
 	'playlist':["playlistUrl",2000],
+	'timezone':'+8';//正负零都行
 	//点击赔率事件,给投注用
 	'ratioClick':function(d){
 		//intenFun.changeLab(0);

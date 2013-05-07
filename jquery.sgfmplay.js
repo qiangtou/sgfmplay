@@ -662,12 +662,12 @@
 			 *@pram totalTime 全场时间
 			 */
 			showTimeLine : function (playTime, totalTime) {
-				var timeLine = this.first.children(".time_line"),
+				var mStatus,timeLine = this.first.children(".time_line"),
 				barWidth = this.width,
 				halfTime = totalTime / 2 | 0; //与0或取整
-				if (playTime > halfTime) {
+				mStatus=topModel.get("mStatus");
+				if (mStatus==43) {//滚球下半场
 					timeLine.css("width", barWidth); //填满上半场
-					playTime -= halfTime; //如果是下半场，自减掉半场时间
 					timeLine = this.second.children(".time_line"); //切换到下半场
 				}
 				var width = (playTime / halfTime * barWidth) | 0; //计算时间条比例

@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-05-03 16:50:56
+ *@date:2013-05-13 16:06:49
  */
 (function ($, window) {
 	//多币种处理
@@ -905,6 +905,7 @@
 			},
 			remove : function (gameId) {
 				this.model.destroy();
+				this.$.remove();
 				opt.typeChange([{
 							"remove" : gameId
 						}

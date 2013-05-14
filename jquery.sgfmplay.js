@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-05-13 16:06:49
+ *@date:2013-05-14 13:27:39
  */
 (function ($, window) {
 	//多币种处理
@@ -339,7 +339,7 @@
 					for (var j = 0; j < attrsLen; j++) {
 						tradeAttr = attrs[j];
 						pkVal = pkArr[j];
-						(pkVal == 'n') && (pkVal == "");
+						(pkVal == 'n') && (pkVal = "");
 						//如果赔率是0的话就用两根横线替换
 						if(tradeAttr == 'pdata'){
 						       !pkVal && (pkVal = '--');
@@ -1369,14 +1369,15 @@
 	};
 
 	var init = function (settings) {
-		var opt,
+		var opt,_opt,
 		$this;
 		$this = this;
 		if (!$this.is('input') || $this.data("countdown"))
 			return;
 		$this.data("countdown", true);
 		opt = $.extend({},defaults, settings);
-		opt.originVal = $this.val();
+		_opt=$this.data("opt");
+		opt.originVal = (_opt && _opt.originVal)||$this.val();
 		$this.data("opt",opt);
 		$this.unbind('click').bind('click',function () {
 			opt.click();

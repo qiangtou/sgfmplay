@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-05-14 13:27:39
+ *@date:2013-05-17 17:59:27
  */
 (function ($, window) {
 	//多币种处理
@@ -9,7 +9,7 @@
 	defaults = {
 		ratioClick : $.noop,
 		typeChange : $.noop,
-		REGNOTREMOVE : /^[1-8]|11$/, //需要显示有游戏状态
+		REGNOTREMOVE : /^([1-8]|11)$/, //需要显示有游戏状态
 		REGUNLOCK : /^[37]$/, //正常游戏状态,锁定时需要解锁
 		i18n : {
 			gameType : {
@@ -82,7 +82,7 @@
 			});
 		},
 		getIncrease : function (v) {
-			dr.getFrameInfo(v);
+			//dr.getFrameInfo(v);
 			dr.getGameInfo(v);
 			dr.getMarketInfo(v);
 			dr.getPlaylist();
@@ -91,7 +91,6 @@
 			var fun = arguments.callee,
 			url = opt.playlist[0],
 			refreshCycle = opt.playlist[1] || 30000;
-			//console.log('getplaylist');
 			dr.ajax({
 				url : url,
 				complete : function () {
@@ -108,16 +107,12 @@
 		getFrameInfo : function (v) {
 			var fun = arguments.callee,
 			url = opt.frameInfo[0],
-			_v = v || fun.v,
-			refreshCycle = opt.frameInfo[1] || 3000;
+			_v = v || fun.v;
 			dr.ajax({
 				url : url,
 				data : {
 					p : gameTypeModels.getCurrentGameType(),
 					v : _v
-				},
-				complete : function () {
-					dr.timeoutIndex['frameInfo'] = setTimeout(fun, refreshCycle);
 				},
 				success : function (json) {
 					if (json.c == 0) {
@@ -311,9 +306,13 @@
 				gameId = gameStatusArr[i][0];
 				gStatus = gameStatusArr[i][1];
 				gm = allGameModels.getById(gameId);
-				gm && gm.set({
-					'gStatus' : gStatus
-				});
+				if(!gm){
+					dr.getFrameInfo(v)
+				}else{
+					gm.set({
+						'gStatus' : gStatus
+					});
+				}
 			}
 		},
 
@@ -893,7 +892,7 @@
 				gameId;
 				_opt = opt;
 				gameId = this.model.get('gameId');
-				if (!oldStatus && this.$.is(':visible')) {
+				if ( this.$.is(':visible')) {
 					if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
 						this.remove(gameId);
 					} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁

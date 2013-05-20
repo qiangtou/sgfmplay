@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-05-17 17:59:27
+ *@date:2013-05-20 17:52:43
  */
 (function ($, window) {
 	//多币种处理
@@ -307,7 +307,7 @@
 				gStatus = gameStatusArr[i][1];
 				gm = allGameModels.getById(gameId);
 				if(!gm){
-					dr.getFrameInfo(v)
+					dr.getFrameInfo()
 				}else{
 					gm.set({
 						'gStatus' : gStatus
@@ -1214,32 +1214,33 @@
 		instence.show.call(this);
 		return this;
 	};
-	//外部api
-	var tmatch = {
+	
+	//外部api扩展
+	window.tmatch = (function(t){
 		//通过交易项ID获取游戏ID
-		getGamingId : function (tradeId) {
+		t.getGamingId = function (tradeId) {
 			var tm = tradeModels.getById(tradeId);
 			return tm.get('gameId');
-		},
+		};
 		//通过交易项ID获取赛事ID
-		getMatchId : function (tradeId) {
+		t.getMatchId = function (tradeId) {
 			return topModel.get('matchId');
-		},
+		};
 		//通过交易项ID获取玩法ID
-		getPlayId : function (tradeId) {
+		t.getPlayId = function (tradeId) {
 			var tm = tradeModels.getById(tradeId);
 			return tm.get('typeId');
-		},
+		};
 		//通过交易项ID获取赛事名称
-		getMatchName : function (tradeId) {
+		t.getMatchName = function (tradeId) {
 			return topModel.get('matchName');
-		},
+		};
 		//通过交易项ID获取联赛名称
-		getLeMatchName : function (tradeId) {
+		t.getLeMatchName = function (tradeId) {
 			return topModel.get('leagueName');
-		},
+		};
 		//通过交易项ID获取游戏状态
-		getGamingState : function (tradeId) {
+		t.getGamingState = function (tradeId) {
 			var tradeModel,
 			gameId,
 			gameModel;
@@ -1247,9 +1248,9 @@
 			gameId = tm.get('gameId');
 			gameModel = allGameModels.getById(gameId);
 			return gameModel.get('gStatus');
-		},
+		};
 		//通过交易项ID获取胜队名称
-		getHostname : function (tradeId) {
+		t.getHostname = function (tradeId) {
 			var tm,
 			name,
 			player;
@@ -1261,9 +1262,9 @@
 				player = playerModels.getById(name);
 			}
 			return player && player.get('name') || '';
-		},
+		};
 		//通过交易项ID获取负队名称
-		getNextname : function (tradeId) {
+		t.getNextname = function (tradeId) {
 			var tm,
 			name,
 			player;
@@ -1276,36 +1277,36 @@
 				player = player.get('isHost') ? playerModels.custom : playerModels.host;
 			}
 			return player && player.get('name') || '';
-		},
+		};
 		//通过交易项ID获取交易项的让球指标
-		isGiveBall : function (tradeId) {
+		t.isGiveBall = function (tradeId) {
 			var tm;
 			tm = tradeModels.getById(tradeId);
 			return tm.get('concedeId');
-		},
+		};
 		//通过交易项ID获取交易项名称,(大小为:大或小，让球为球队名)
-		getTradeItemName : function (tradeId) {
+		t.getTradeItemName = function (tradeId) {
 			var tm,
 			name;
 			tm = tradeModels.getById(tradeId);
 			name = tm.get('nameStr');
 			return name;
-		},
+		};
 		//通过交易项ID获取交易项全场半场标识
-		getFullTimeSign : function (tradeId) {
+		t.getFullTimeSign = function (tradeId) {
 			var tm = tradeModels.getById(tradeId);
 			return tm.get('isWhole');
-		},
+		};
 		//通过交易项ID获取游戏指标
-		getTradeItemNorm : function (tradeId) {
+		t.getTradeItemNorm = function (tradeId) {
 			var tm,
 			name;
 			tm = tradeModels.getById(tradeId);
 			name = tm.get('indicator') || '';
 			return name;
-		},
+		};
 		//通过交易项ID获取全半场国际化显示信息
-		getFullTimeName : function (tradeId) {
+		t.getFullTimeName = function (tradeId) {
 			var tm,
 			isWhole,
 			i18n;
@@ -1317,27 +1318,26 @@
 				2 : i18n.half
 			}
 			[isWhole];
-		},
+		};
 		//通过交易项ID获取指标类型
-		getTradeIndexType : function (tradeId) {
+		t.getTradeIndexType = function (tradeId) {
 			var tm = tradeModels.getById(tradeId);
 			return tm.get('tradeIndexType');
-		},
+		};
 		//通过交易项ID获取赛事类型ID
-		getMatchTypeId : function (tradeId) {
+		t.getMatchTypeId = function (tradeId) {
 			return topModel.get('matchTypeId');
-		},
+		};
 		//单式滚球标识
-		getPlaySign : function () {
+		t.getPlaySign = function () {
 			return topModel.get('isRollingBall');
-		},
+		};
 		//取得当前货量
-		getNowQty : function (bet) {
+		t.getNowQty = function (bet) {
 			return Utils.getBets(bet);
-		}
-	};
-	var _tmatch = window.tmatch = window.tmatch || {};
-	$.extend(_tmatch, tmatch);
+		};
+		return t;
+	})(window.tmatch||{});
 })(jQuery, window);
 
 /**

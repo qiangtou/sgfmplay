@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-05-20 17:52:43
+ *@date:2013-05-21 18:04:15
  */
 (function ($, window) {
 	//多币种处理
@@ -210,8 +210,11 @@
 			o = {},
 			attr = ["goal", "red"],
 			events,
+			u,
+			timezone,
 			matchId = s[0],
 			mStatus = s[1], //(赛事状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束),
+			livetime=s[2],
 			mStatusObj = {
 				41 : '',
 				42 : opt.i18n.top.pause,
@@ -226,16 +229,20 @@
 
 				o.mStatus = mStatus;
 				o.matchId = matchId;
+				o.livetime='';	
 				o.showHalfScore = /4[23]/.test(mStatus) || false;
 				if (/4[123]/.test(mStatus)) {
 					o.statusStr = mStatusObj[mStatus];
 				}
-				//开赛时间
-				var u = Utils.date2String,
-				    timezone=eval(opt.timezone||0);
-				timezone=timezone*3600*1000;
 				//console.log('livetime'+new Date(s[2]));
-				o.livetime = s[2] ? u(new Date(s[2] + timezone), 'yyyy-MM-dd HH:mm') : '';
+				//开赛时间
+				if(livetime){
+					u = Utils.date2String;
+					timezone=eval(opt.timezone||0);
+					livetime=new Date(livetime);
+					livetime=livetime.getTime()+livetime.getTimezoneOffset()*60000+timezone*3600*1000;
+					o.livetime = u(new Date(livetime), 'yyyy-MM-dd HH:mm');
+				}
 				//console.log('livetime'+o.livetime);
 				//滚球时间
 				o.playTime = (s[7] / 60000) | 0;
@@ -540,49 +547,55 @@
 	//工具函数
 	Utils = {
 		add : function (num1, num2) {
-			var result,
-			PRECISION = 1000;
-			num1 = num1 * PRECISION | 0;
-			num2 = num2 * PRECISION | 0;
-			result = (num1 + num2) / PRECISION;
-			return result;
-		},
+			      var result,
+			      PRECISION = 1000;
+			      num1 = num1 * PRECISION | 0;
+			      num2 = num2 * PRECISION | 0;
+			      result = (num1 + num2) / PRECISION;
+			      return result;
+		      },
 		getBets : function (bet) {
-			//没有注额时返回空字符串
-			if ("" == bet) {
-				return bet;
-			}
-			//新的注额
-			var nBet = Math.ceil(Math.round(bet / multCurr.multRate * 100) / 100);
-			//印尼盾特殊处理
-			if (multCurr.currencyFlag == "IDR") {
-				nBet = Math.ceil(nBet / 1000);
-			}
-			return nBet;
-		},
+				  //没有注额时返回空字符串
+				  if ("" == bet) {
+					  return bet;
+				  }
+				  //新的注额
+				  var nBet = Math.ceil(Math.round(bet / multCurr.multRate * 100) / 100);
+				  //印尼盾特殊处理
+				  if (multCurr.currencyFlag == "IDR") {
+					  nBet = Math.ceil(nBet / 1000);
+				  }
+				  return nBet;
+			  },
 		getMaxBets : function (bet) {
-			//注额过大的显示处理
-			if (bet !== "" && bet > 9999999) {
-				return 9999999;
-			}
-			return bet;
-		},
+				     //注额过大的显示处理
+				     if (bet !== "" && bet > 9999999) {
+					     return 9999999;
+				     }
+				     return bet;
+			     },
 		date2String : function (d, formatStr) {
-			//2012-12-6 15:30:22
-			formatStr = formatStr || 'yyyy-MM-dd HH:mm:ss';
-			var dateObj = {
-				'dd' : d.getDate(),
-				'MM' : d.getMonth()+1,
-				'yyyy' : d.getFullYear(),
-				'HH' : d.getHours(),
-				'mm' : d.getMinutes(),
-				'ss' : d.getSeconds()
-			};
-			for (var attr in dateObj) {
-				formatStr = formatStr.replace(attr, dateObj[attr]);
-			}
-			return formatStr;
-		}
+			      var dateObj,attr,val;
+			      //2012-12-6 15:30:22
+			      formatStr = formatStr || 'yyyy-MM-dd HH:mm:ss';
+			      dateObj = {
+				      'dd' : d.getDate(),
+				      'MM' : d.getMonth()+1,
+				      'yyyy' : d.getFullYear(),
+				      'HH' : d.getHours(),
+				      'mm' : d.getMinutes(),
+				      'ss' : d.getSeconds()
+			      };
+			      for (attr in dateObj) {
+				      val=dateObj[attr];
+				      //补齐两位数
+				      if(val<10){
+					      val='0'+val;
+				      }
+				      formatStr = formatStr.replace(attr, val);
+			      }
+			      return formatStr;
+		      }
 	},
 	//球队集合
 	playerModels = new sgfmmvc.Models({
@@ -1067,6 +1080,7 @@
 					3 : 'bigsmall', //大小球
 					4 : 'sigledouble' //单双
 				};
+				this.$.hide();
 				this.currenTab = null;
 				this.listenTo(this.model, "create", this.addTypeTab);
 				this.listenTo(this.model, "showhide", this.showhide);
@@ -1099,6 +1113,7 @@
 					});
 				//console.log('***addTypeTab create new TabView');
 				this.ul.append(tv.render().$);
+				this.$.show();
 				if (m.isShow) {
 					//console.log('***addTypeTab,set currenTab is show');
 					this.currenTab = tv.$;

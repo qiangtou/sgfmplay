@@ -22,6 +22,8 @@ $('div').sgfmplay({
 	'getAlldataError':function(json){
 		//console.log(json);
 	},
+	//json解析错误后中转的地址
+	'conerr':'http://aa.bb.cc',
 	//国际化信息,从后台取
 	'i18n' : {
 		'gameType_standard' : "标准盘",

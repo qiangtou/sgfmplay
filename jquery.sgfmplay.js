@@ -269,6 +269,7 @@
 				//console.log('livetime'+o.livetime);
 				//滚球时间
 				o.playTime = (s[7] / 60000) | 0;
+				if(mStatus==43){o.playTime=parseInt(o.playTime)+45;}
 				o['p1goal'] = playerModels.host.get('goal');
 				o['p2goal'] = playerModels.custom.get('goal');
 				o['p1halfgoal'] = playerModels.host.get('halfGoal');
@@ -302,12 +303,13 @@
 					//进球时间
 					for (j = gTimes.length; j--;) {
 						time = gTimes[j][0];
-						isFirst = gTimes[j][1];
+						isFirst = !gTimes[j][1];//0上半场，1下半场
 						isFirst && ++halfGoal //半场进球累加
 						events.push({
 							'id': "g" + isHost + j,
 							'action': "goal",
 							'type': i,
+							'isFirst':isFirst,
 							'time': time
 						})
 					}
@@ -317,11 +319,14 @@
 					//红牌时间
 					rTimes = gr[4] || [];
 					for (var j = rTimes.length; j--;) {
+						time=rTimes[j][0];
+						isFirst=!rTimes[j][1];
 						events.push({
 							'id': "r" + isHost + j,
 							'action': "red_card",
 							'type': i,
-							'time': rTimes[j][0]
+							'isFirst':isFirst,
+							'time': time
 						})
 					}
 				};
@@ -659,6 +664,9 @@
 		},
 		render: function() {
 			var time = this.model.get("time");
+			//下半场时间处理
+			var isFirst=this.model.get("isFirst");
+			!isFirst&&(time=45+parseInt(time));
 			this.$.html(time + "'");
 			return this;
 		}
@@ -685,33 +693,31 @@
 			 *@pram totalTime 全场时间
 			 */
 		showTimeLine: function(playTime, totalTime) {
-			var mStatus, timeLine = this.first.children(".time_line"),
+			var _time=playTime,mStatus, timeLine = this.first.children(".time_line"),
 			barWidth = this.width,
 			halfTime = totalTime / 2 | 0; //与0或取整
 			mStatus = topModel.get("mStatus");
 			if (mStatus == 43) { //滚球下半场
 				timeLine.css("width", barWidth); //填满上半场
 				timeLine = this.second.children(".time_line"); //切换到下半场
+				_time-=halfTime;
 			}
-			var width = (playTime / halfTime * barWidth) | 0; //计算时间条比例
+			var width = (_time / halfTime * barWidth) | 0; //计算时间条比例
 			timeLine.css("width", width).html(playTime + "'");
 		},
 		reset: function() {
 			this.render();
 			var left, width = this.width,
-			m, time, bar, fragment, first = document.createDocumentFragment(),
+			m, time,isFirst, bar, fragment, first = document.createDocumentFragment(),
 			second = document.createDocumentFragment(),
 			arr = this.model.toArr();
+			width-=12;//修正偏移
 			for (var i = arr.length; i--;) {
 				m = arr[i];
 				time = m.get("time");
-				if (time <= 45) {
-					fragment = first;
-				} else if (time > 45) {
-					time -= 45;
-					fragment = second;
-				}
-				left = - 10 + (time / 45 * width) | 0;
+				isFirst=m.get("isFirst");
+				fragment = isFirst?first:second;
+				left = -2+(time / 45 * width) | 0;
 				m.set("left", left)
 				var me = new matchEventsView({
 					model: m
@@ -727,7 +733,10 @@
 		checkMatch: function(matchId) {
 			var originId = this.get('matchId');
 			return originId ? (originId == matchId) : true;
-		}
+		},
+	isSecond:function(){
+			 return this.get("mStatus")==43;//43是滚球下半场
+		 }
 	}),
 	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({

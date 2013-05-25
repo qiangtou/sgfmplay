@@ -280,7 +280,8 @@
 		},
 		//处理状态数据中的进球和红牌
 		_handlerGoalRed: function(goalred) {
-			var events = [],
+			var i,j,
+			events = [],
 			player,
 			gTimes,
 			isFirst,
@@ -291,9 +292,10 @@
 			pid,
 			gr,
 			isHost,
-			halfGoal = 0;
+			halfGoal;
 			if (goalred) {
-				for (var i = 0; i < 2; i++) {
+				for (i = 0; i < 2; i++) {
+					halfGoal = 0;
 					gr = goalred[i];
 					pid = gr[0];
 					player = playerModels.getById(pid);
@@ -318,7 +320,7 @@
 					player.set('halfGoal', halfGoal); //设置半场进球数
 					//红牌时间
 					rTimes = gr[4] || [];
-					for (var j = rTimes.length; j--;) {
+					for (j = rTimes.length; j--;) {
 						time=rTimes[j][0];
 						isFirst=!rTimes[j][1];
 						events.push({

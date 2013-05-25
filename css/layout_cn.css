@@ -1,5 +1,5 @@
 /**
- * 单场样式表
+ * 单场样式表kk
  * date:2013-05-24 13:43:32
  */
 @charset "utf-8";
@@ -148,8 +148,8 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 				.helf_timebar .time_line {height:12px;line-height:12px;overflow:hidden;text-align:right;color:#000;background:url(../images/gq_time_bg.gif) repeat-x left -12px;}
 				.red_card_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:80px;width:16px;height:26px; background: url(../images/p_redcard.gif) no-repeat center bottom;z-index:100;color:red;}
 				.red_card_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:50px;width:16px;height:16px;padding-top:12px;z-index:100;background: url(../images/p_redcard.gif) no-repeat center top;color:red;}
-				.goal_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:200px;width:16px;height:26px; background: url(../images/p_goal.gif) no-repeat center bottom;z-index:10;color:red;}
-				.goal_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:160px;width:16px;height:16px;padding-top:12px;z-index:10;background: url(../images/p_goal.gif) no-repeat center top;color:red;}
+				.goal_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:200px;width:16px;height:26px; background: url(../images/p_goal.gif) no-repeat center bottom;z-index:10;color:red;text-align:center}
+				.goal_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:160px;width:16px;height:16px;padding-top:12px;z-index:10;background: url(../images/p_goal.gif) no-repeat center top;color:red;text-align:center}
 	
 			.ds_top { background:url(../images/ds_top_bg.jpg) no-repeat;height:56px;position:relative;padding:0;margin:10px 0 0 0;}
 				.live_name { position:absolute;top:12px;left:10px;color:#3c567c;height:20px;line-height:20px;font-size:14px;font-weight:bold;}

@@ -53,8 +53,9 @@ var v = new sgfmmvc.View({
 			}
 		},
 		changeName : function (e) {
+			var v=e.data.view;
 			if (e.keyCode == 13) {
-				this.model.set("name", this.cn.val());
+				v.model.set("name", v.cn.val());
 			}
 		},
 		print : function (e) {
@@ -74,5 +75,16 @@ var v = new sgfmmvc.View({
 			}
 		}
 	});
+var a=function(){
+    console.log(123);
+}
+var b=function(str){
+    console.log(str+''+456);
+}
+e.on('gg',a);
+e.on('gg',a);
+e.on('gg',b);
+e.trigger('gg',777);
+	
 	</script>
 </body>

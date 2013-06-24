@@ -2,11 +2,11 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time 2013-05-14 14:59:40
+ *@time 2013-06-24 09:12:07
  */
 (function ($, window) {
-	var _ = window.sgfmmvc = window.sgfmmvc || {}
-		,uniqueId=0;
+	var _ = window.sgfmmvc = window.sgfmmvc || {};
+	var uniqueId=0;
 	//Model类
 	_.Model = function (settings) {
 		settings = settings || {};
@@ -27,39 +27,31 @@
 			attrs={};
 			return this.set(json);
 		};
-		//属性变化时调用此方法
-		this.change = function (key, oldV, newV) {
-			//console && console.log && console.log(this.idArr+":" + this.get(this.idArr) + ',[' + key + '] changed from [' + oldV + '] to [' + newV + ']');
-		};
 		
 		var _set = function (k, v) {
-			if(!k)return;
-			var objs,oldVal,newVal,changed = false;
-			if (typeof k == "string") {
+			if(!k){return;}
+			var objs,oldVal,newVal,key,changed = false;
+			if (typeof k === "string") {
 				(objs={})[k]=v;
 			}else{
 				objs=k;
-			};
-			for (var key in objs) {
+			}
+			for (key in objs) {
 				oldVal = attrs[key];
 				newVal = objs[key];
 				if (oldVal != newVal) {
 					attrs[key] = newVal;
 					changed = true;
-					this.change(key, oldVal, newVal);
+					this.change && this.change(key, oldVal, newVal);
 				}
-			};
+			}
 			if(changed){
 				this.hasChange.call(this);
 			}
 			return this;
 		};
 		//设置Model属性，支持单个key-value,也支持对象集合
-		this.set=function(k,v){
-			return _set.call(this,k,v);
-		};
-		//更新Model属性，支持单个key-value,也支持对象集合
-		this.update=function(k,v){
+		this.set=this.update=function(k,v){
 			return _set.call(this,k,v);
 		};
 		//向服务器拉数据callback暴露给外部处理响应
@@ -74,12 +66,12 @@
 				$.ajax({
 					url : url,
 					success : function (json) {
-						if (typeof callback == "function") {
+						if (typeof callback === "function") {
 							cb.call(self, json);
 						}
 					},
 					dataType : "json"
-				})
+				});
 			}
 		};
 		$.extend(this, settings);
@@ -112,7 +104,7 @@
 				this.length++;
 				this.listenTo(m,"destroy",function(){
 					this.del(m);
-				})
+				});
 			}
 			return m;
 		};
@@ -135,8 +127,8 @@
 		};
 		//转换此集合成数组
 		this.toArr = function () {
-			var arr = [];
-			for (var m in models) {
+			var m,arr = [];
+			for (m in models) {
 				arr.push(models[m]);
 			}
 			return arr;
@@ -147,10 +139,10 @@
 		};
 		//通过集合的索引取得model，很耗性能
 		this.get = function (index) {
-			var i = 0;
+			var m,i = 0;
 			for (m in models) {
 				i++;
-				if (i == index) {
+				if (i === index) {
 					return models[m];
 				}
 			}
@@ -170,12 +162,12 @@
 				$.ajax({
 					url : url,
 					success : function (json) {
-						if (typeof callback == "function") {
+						if (typeof callback === "function") {
 							callback.call(self, json);
 						}
 					},
 					dataType : "json"
-				})
+				});
 			}
 		};
 		
@@ -189,7 +181,7 @@
 						var ret=origin.apply(this,arguments);
 						callback.apply(self,arguments);
 						return ret;
-					}
+					};
 				}
 		};
 		//覆盖默认配置
@@ -224,14 +216,14 @@
 		*@param callback 监听的回调函数
 		*/
 		this.listenTo = function (model, event, callback) {
-			if (!model)
-				return;
+			if (!model){
+				return;}
 			var attrArr,
 			attr,
 			oldFun;
 			attrArr = event.split(":");
 			event = attrArr[0];
-			if (event == 'change') {
+			if (event === 'change') {
 				attr = attrArr[1];
 				if (attr) {
 					listenFuns[attr] = callback;
@@ -245,7 +237,7 @@
 				listenFun,
 				key = arguments[0];
 				ret = oldFun.apply(model, arguments);
-				if (event == "change") {
+				if (event === "change") {
 					listenFun = listenFuns[key]||changeListenFun;
 				} else {
 					listenFun = callback;
@@ -263,7 +255,7 @@
 				selector = es[0];
 				eventType = es[1];
 				fun = events[eventsStr];
-				if (typeof fun == "string") {
+				if (typeof fun === "string") {
 					fun = this[fun];
 				}
 				this.$.delegate(selector, eventType, {'view':this},fun);
@@ -287,6 +279,35 @@
 		this._init();
 		
 	};
+	var e=window.e={
+		on:function(name,callback){
+			if(!name)return false;
+			var self=this;
+			var methods=self._method=self._method||{};
+			var callbacks=methods[name]=methods[name]||[];
+			for(var i=callbacks.length;i--;){
+				if (callbacks[i]===callback){
+					return false;
+				}
+			}
+			if(typeof callback ==='function'){
+				callbacks.push(callback);
+			}
+		},
+		off:function(name,callback){
+
+		},
+		trigger:function(name){
+			if(!name)return false;
+			var self=this;
+			var methods=self._method||{};
+			var marr=methods[name]||[];
+			var args=Array.prototype.slice.call(arguments,1);
+			for (var i=0,len=marr.length;i<len;i++){
+				marr[i].apply(self,args);
+			}
+		}
+	}
 	//为Model,Models,View添加扩展方法，类似于继承
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
 		var self = this;
@@ -301,7 +322,7 @@
 	 *  return:'tom<div>10</div><span>99</span>' 
 	 */
 	_.replace = function (str, json) {
-		if(!json || !str)return '';
+		if(!json || !str){return '';}
 		if(json instanceof _.Model){
 			json=json.getAttrs();
 		}

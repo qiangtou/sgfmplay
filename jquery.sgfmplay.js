@@ -180,7 +180,7 @@
 					return (new Function("return " + data))();
 				},
 			error: function(jqXHR,textStatus,errorThrown) {
-				       if(textStatus=="parsererror" && jqXHR){
+				       if(textStatus=="parsererror"&&jqXHR){
 					       try{
 						       var str,responseText,conerr;
 						       responseText=jqXHR.responseText;

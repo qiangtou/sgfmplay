@@ -279,35 +279,6 @@
 		this._init();
 		
 	};
-	var e=window.e={
-		on:function(name,callback){
-			if(!name)return false;
-			var self=this;
-			var methods=self._method=self._method||{};
-			var callbacks=methods[name]=methods[name]||[];
-			for(var i=callbacks.length;i--;){
-				if (callbacks[i]===callback){
-					return false;
-				}
-			}
-			if(typeof callback ==='function'){
-				callbacks.push(callback);
-			}
-		},
-		off:function(name,callback){
-
-		},
-		trigger:function(name){
-			if(!name)return false;
-			var self=this;
-			var methods=self._method||{};
-			var marr=methods[name]||[];
-			var args=Array.prototype.slice.call(arguments,1);
-			for (var i=0,len=marr.length;i<len;i++){
-				marr[i].apply(self,args);
-			}
-		}
-	}
 	//为Model,Models,View添加扩展方法，类似于继承
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
 		var self = this;

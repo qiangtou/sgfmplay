@@ -952,14 +952,12 @@
 			this.listenTo(this.model, "showhide", this.showhide);
 			this.listenTo(this.model, "del", this.removeView);
 		},
-
 		addGame: function(m) {
 			var md = this.model.getById(m.gameId);
 			var gv = new GameView({
 				model: md
 			});
 			allGameModels.add(md);
-
 			this.$.append(gv.render().$);
 		},
 		render: function() {

@@ -75,5 +75,16 @@ var v = new sgfmmvc.View({
 			}
 		}
 	});
+var a=function(){
+    console.log(123);
+}
+var b=function(str){
+    console.log(str+''+456);
+}
+e.on('gg',a);
+e.on('gg',a);
+e.on('gg',b);
+e.trigger('gg',777);
+	
 	</script>
 </body>

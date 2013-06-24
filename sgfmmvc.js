@@ -2,7 +2,7 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time 2013-05-14 14:59:40
+ *@time 2013-06-24 09:12:07
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
@@ -279,13 +279,14 @@
 		this._init();
 		
 	};
-	var e={
+	var e=window.e={
 		on:function(name,callback){
+			if(!name)return false;
 			var self=this;
-			var methods=self._method=self._method||[];
+			var methods=self._method=self._method||{};
 			var callbacks=methods[name]=methods[name]||[];
-			for(var fun in callbacks){
-				if (fun===callback){
+			for(var i=callbacks.length;i--;){
+				if (callbacks[i]===callback){
 					return false;
 				}
 			}
@@ -297,8 +298,9 @@
 
 		},
 		trigger:function(name){
+			if(!name)return false;
 			var self=this;
-			var methods=self._method||[];
+			var methods=self._method||{};
 			var marr=methods[name]||[];
 			var args=Array.prototype.slice.call(arguments,1);
 			for (var i=0,len=marr.length;i<len;i++){

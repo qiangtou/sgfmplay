@@ -2,7 +2,7 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time 2013-06-24 09:12:07
+ *@time :2013-07-02 18:00:52
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
@@ -141,8 +141,7 @@
 		this.get = function (index) {
 			var m,i = 0;
 			for (m in models) {
-				i++;
-				if (i === index) {
+				if (i++ === index) {
 					return models[m];
 				}
 			}
@@ -216,8 +215,7 @@
 		*@param callback 监听的回调函数
 		*/
 		this.listenTo = function (model, event, callback) {
-			if (!model){
-				return;}
+			if (!model){ return;}
 			var attrArr,
 			attr,
 			oldFun;
@@ -231,12 +229,12 @@
 					changeListenFun=callback;
 				}
 			}
-			oldFun = oldFuns[event] || (oldFuns[event] = model[event]) || $.noop;
+			oldFun = oldFuns[event] || (oldFuns[event] = model[event]||$.noop);
 			model[event] = function () {
 				var ret,
 				listenFun,
 				key = arguments[0];
-				ret = oldFun.apply(model, arguments);
+				ret = oldFun && oldFun.apply(model, arguments);
 				if (event === "change") {
 					listenFun = listenFuns[key]||changeListenFun;
 				} else {
@@ -261,22 +259,21 @@
 				this.$.delegate(selector, eventType, {'view':this},fun);
 			}
 		};
+
 		//覆盖默认配置
-		this._init=function(){
-			$.extend(self, settings);
-			//调用初始化方法和添加事件处理
-			//覆盖默认的jquery对象
-			var tag=this.tag;
-			tag && (this.$=$("<"+tag+"></"+tag+">"));
-			var cls=this.cls;
-			cls && this.$.addClass(cls);
-			if(this.template){
-				this.template=this.template.replace(/[\r\n\t]/g,'');
-			}
-			this.init.call(this, settings);
-			this.addEvents.call(this, settings);
-		};
-		this._init();
+		$.extend(self, settings);
+		//调用初始化方法和添加事件处理
+		//覆盖默认的jquery对象
+		var tag=this.tag;
+		tag && (this.$=$("<"+tag+"></"+tag+">"));
+		var cls=this.cls;
+		cls && this.$.addClass(cls);
+		if(this.template){
+			this.template=this.template.replace(/[\r\n\t]/g,'');
+		}
+		this.init.call(this, settings);
+		this.addEvents.call(this, settings);
+		this.listenTo(this.model,'destroy',function(){ this.$.remove(); });	
 		
 	};
 	//为Model,Models,View添加扩展方法，类似于继承

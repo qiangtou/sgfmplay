@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-06-28 14:47:03
+ *@date:2013-07-02 18:01:08
  */
 (function($, window) {
 	//多币种处理
@@ -50,7 +50,6 @@
 			dc.stopTimeout();
 			var fun = arguments.callee,
 			refreshCycle = opt.playlist[1] || 30000;
-			//console.log('firstgetplaylist');
 			dr.ajax({
 				url: opt.playlist[0],
 				error: function() {
@@ -171,7 +170,6 @@
 		timeoutIndex: {},
 		//ajax封装
 		ajax: function(settings) {
-			//console.log(settings.url, settings.data);
 			return $.ajax($.extend({
 				type: "post",
 				dataType: "text",
@@ -230,6 +228,7 @@
 			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			if (!status) return;
 			var s = status,
+			tp=topModel,
 			o = {},
 			attr = ["goal", "red"],
 			events,
@@ -247,17 +246,16 @@
 			goalred = s[5],
 			gameStatusArr = s[6];
 			//检查赛事id
-			if (topModel.checkMatch(matchId)) {
+			if (tp.checkMatch(matchId)) {
 				events = ds._handlerGoalRed(goalred); //处理红牌,进球事件
 				ds.setGameStatus(gameStatusArr); //设置游戏状态
 				o.mStatus = mStatus;
 				o.matchId = matchId;
 				o.livetime = '';
-				o.showHalfScore = /4[23]/.test(mStatus) || false;
-				if (/4[123]/.test(mStatus)) {
+				o.showHalfScore =tp.isHalfAnd2nd(mStatus);
+				if(tp.isRoll(mStatus)){
 					o.statusStr = mStatusObj[mStatus];
 				}
-				//console.log('livetime'+new Date(s[2]));
 				//开赛时间
 				if (livetime) {
 					u = Utils.date2String;
@@ -266,15 +264,14 @@
 					livetime = livetime.getTime() + livetime.getTimezoneOffset() * 60000 + timezone * 3600 * 1000;
 					o.livetime = u(new Date(livetime), 'yyyy-MM-dd HH:mm');
 				}
-				//console.log('livetime'+o.livetime);
 				//滚球时间
 				o.playTime = (s[7] / 60000) | 0;
-				if(mStatus==43){o.playTime=parseInt(o.playTime)+45;}
+				if(tp.is2nd(mStatus)){o.playTime=parseInt(o.playTime)+45;}
 				o['p1goal'] = playerModels.host.get('goal');
 				o['p2goal'] = playerModels.custom.get('goal');
 				o['p1halfgoal'] = playerModels.host.get('halfGoal');
 				o['p2halfgoal'] = playerModels.custom.get('halfGoal');
-				topModel.update(o);
+				tp.update(o);
 				matchEvents.reset(events);
 			}
 		},
@@ -513,13 +510,11 @@
 			}
 		},
 		addType: function(json) {
-			//console.log('--addType,return: ',json);
 			if (json.c == 0) {
 				ds._addType(json.d);
 			}
 		},
 		_addType: function(d) {
-			//console.log('--_addType,return: ',d);
 			var _opt = opt,
 			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
@@ -633,6 +628,12 @@
 		idArr: "gameId",
 		addTrade: function(m) {
 			tradeModels.add(m);
+		},
+		isRemoved:function(status){
+			return !opt.REGNOTREMOVE.test(status);
+		},
+		isUnlocked:function(status){
+			return opt.REGUNLOCK.test(status)
 		}
 	}),
 	//游戏模型集合类
@@ -695,11 +696,10 @@
 			 *@pram totalTime 全场时间
 			 */
 		showTimeLine: function(playTime, totalTime) {
-			var _time=playTime,mStatus, timeLine = this.first.children(".time_line"),
+			var _time=playTime,timeLine = this.first.children(".time_line"),
 			barWidth = this.width,
 			halfTime = totalTime / 2 | 0; //与0或取整
-			mStatus = topModel.get("mStatus");
-			if (mStatus == 43) { //滚球下半场
+			if (topModel.is2nd()) { //滚球下半场
 				timeLine.css("width", barWidth); //填满上半场
 				timeLine = this.second.children(".time_line"); //切换到下半场
 				_time-=halfTime;
@@ -731,14 +731,24 @@
 		}
 	}),
 	//头部模型
-	topModel = new sgfmmvc.Model({
+	topModel =window.t= new sgfmmvc.Model({
 		checkMatch: function(matchId) {
 			var originId = this.get('matchId');
 			return originId ? (originId == matchId) : true;
 		},
-	isSecond:function(){
-			 return this.get("mStatus")==43;//43是滚球下半场
-		 }
+		checkStatus:function(reg,mStatus){
+			mStatus=mStatus||this.get('mStatus');
+			return reg.test(mStatus);
+		},
+		isRoll:function(mStatus){
+			return this.checkStatus(/4[123]/,mStatus);
+		},
+		is2nd:function(mStatus){
+			return this.checkStatus(/43/,mStatus);
+		},
+		isHalfAnd2nd:function(mStatus){
+			return this.checkStatus(/4[23]/,mStatus);
+		}
 	}),
 	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({
@@ -747,9 +757,9 @@
 			this.i18n = opt.i18n.top;
 			this.listenTo(this.model, "change:isRollingBall", this._init);
 			this.listenTo(this.model, "change:p2name", this.setTopFrameMatchName);
+			this.listenTo(this.model, "change:mStatus", this.statusChange);
 			this.listenTo(this.model, "update", this.render);
 		},
-		showhalf: function(n, old, mStatus) {},
 		_init: function(key, oldV, isRollingBall) {
 			//isRollingBall:0是单式;1是滚球;
 			var addClass = ['ds_top', 'gq_top'],
@@ -757,6 +767,7 @@
 			template = ["#dstop_tmpl", "#gqtop_tmpl"];
 			this.$.removeClass(removeClass[isRollingBall]).addClass(addClass[isRollingBall]);
 			this.template = $(template[isRollingBall]).html();
+			this.timbar=null;
 			//如果是滚球则加上滚球时间条
 			if (isRollingBall) {
 				this.timebar = $('<div/>');
@@ -769,12 +780,16 @@
 		render: function() {
 			var html = sgfmmvc.replace(this.template, $.extend({},
 			this.model.getAttrs(), this.i18n));
-			this.$.html(html).append(this.timebar);
+			this.$.html(html);
+			this.model.get('isRollingBall')&&this.$.append(this.timebar);
 			var showHalfScore = this.model.get("showHalfScore");
 			if (!showHalfScore) {
 				this.$.find('.p_helf_ac').hide();
 			};
 			return this;
+		},
+		statusChange:function(name,oldVal,newVal){
+			console.log(name,oldVal,newVal);
 		},
 		setTopFrameMatchName: function() {
 			var p1, p2, p1vsp2;
@@ -785,7 +800,11 @@
 		}
 	}),
 	TradeModel = sgfmmvc.Model.extend({
-		idArr: "tradeId"
+		idArr: "tradeId",
+		containBigSmall:function(name){
+			name=name||this.get('name');
+			return /(big|small)/.test(name);
+		}
 	}),
 	//暴露在外的交易项集合
 	tradeModels = new sgfmmvc.Models({
@@ -819,16 +838,16 @@
 		},
 		render: function() {
 			var $el = this.$,
-			typeId = this.model.get('typeId'),
+			mo=this.model,
 			playerModel,
-			name = this.model.get('name');
-			if (/(big|small)/.test(name)) {
-				this.model.set('nameStr', opt.i18n.trade[name]);
+			name = mo.get('name');
+			if (mo.containBigSmall(name)) {
+				mo.set('nameStr', opt.i18n.trade[name]);
 			} else {
 				playerModel = playerModels.getById(name)
-				playerModel && this.model.set('nameStr', playerModel.get('name'));
+				playerModel && mo.set('nameStr', playerModel.get('name'));
 			}
-			var html = sgfmmvc.replace(this.template, this.model.getAttrs());
+			var html = sgfmmvc.replace(this.template, mo.getAttrs());
 			$el.html(html);
 			this.pdata = $el.find('.other_data');
 			return this;
@@ -912,13 +931,14 @@
 			this.show();
 		},
 		changeGStatus: function(k, oldStatus, status) {
-			var _opt, gameId;
+			var _opt, gameId,mo;
 			_opt = opt;
-			gameId = this.model.get('gameId');
+			mo=this.model;
+			gameId = mo.get('gameId');
 			if (this.$.is(':visible')) {
-				if (!_opt.REGNOTREMOVE.test(status)) { //不是需要显示的游戏状态删除
+				if (mo.isRemoved(status)) { //不是需要显示的游戏状态删除
 					this.remove(gameId);
-				} else if (_opt.REGUNLOCK.test(status)) { //正常游戏状态需要解锁
+				} else if (mo.isUnlocked(status)) { //正常游戏状态需要解锁
 					this.unlockGame(gameId);
 				} else { //其它状态都锁定
 					this.lockGame(gameId);
@@ -954,14 +974,6 @@
 			this.listenTo(this.model, "showhide", this.showhide);
 			this.listenTo(this.model, "del", this.removeView);
 		},
-		addGame: function(m) {
-			var md = this.model.getById(m.gameId);
-			var gv = new GameView({
-				model: md
-			});
-			allGameModels.add(md);
-			this.$.append(gv.render().$);
-		},
 		render: function() {
 			var i18n = $.extend(opt.i18n.playlist, {
 				title: this.title
@@ -969,6 +981,14 @@
 			this.$.hide().html(sgfmmvc.replace(this.template, i18n));
 			this.fresh = this.$.find('.bt_refurbish');
 			return this;
+		},
+		addGame: function(m) {
+			var md = this.model.getById(m.gameId);
+			var gv = new GameView({
+				model: md
+			});
+			allGameModels.add(md);
+			this.$.append(gv.render().$);
 		},
 		freshEvent: function(fresh) {
 			fresh.countdown({
@@ -1029,7 +1049,6 @@
 		}),
 		currentGameType: null,
 		getCurrentGameType: function() {
-			//console.log('currentGameType',this.currentGameType);
 			return this.currentGameType;
 		},
 		setCurrentGameType: function(typeId) {
@@ -1115,17 +1134,14 @@
 			dr.firstGetPlaylist();
 		},
 		addTypeTab: function(m) {
-			//console.log('***listen to gameTypemodels create,addTypeTab');
 			var typeId = m.typeId;
 			var gameTypeModel = this.model.getById(typeId);
 			var tv = new TabView({
 				model: gameTypeModel
 			});
-			//console.log('***addTypeTab create new TabView');
 			this.ul.append(tv.render().$);
 			this.$.show();
 			if (m.isShow) {
-				//console.log('***addTypeTab,set currenTab is show');
 				this.currenTab = tv.$;
 			}
 		},

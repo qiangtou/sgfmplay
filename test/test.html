@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src='../jquery.min.js'></script>
+	<script type="text/javascript" src='../sgfmmvc.js'></script>
+</head>
+<body>
+<div id="d"></div>	
+	<script type="text/javascript">
+			var M=sgfmmvc.Model.extend();			
+			var MS=sgfmmvc.Models.extend({model:M});			
+			var ms=new MS;
+			var V1=sgfmmvc.View.extend({
+				template:'id:{id}:name:<span>{name}</span>,age:<span>{age}</span>,time:<span>{time}</span></br>',
+				init:function(){
+					this.listenTo(this.model,'change',this.render);	
+			},
+				render:function(){
+					var t=this.template;
+					return this.$.html(sgfmmvc.replace(t,this.model.getAttrs()));
+			}
+			});
+			var V=sgfmmvc.View.extend({
+				$:$('#d'),
+				model:ms,
+				init:function(){
+					this.listenTo(this.model,'del',this.hehe);
+					this.listenTo(this.model,'add',this.add);
+				},
+				add:function(m){
+					var v=new V1({model:m});
+					this.$.append(v.render());
+			},
+				hehe:function(){
+					console.log('hehe');
+				}
+			});
+			var v=new V;
+			var m1=new M;
+			var m2=new M;
+			m1.set({time:123});
+			m2.set({time:123});
+			ms.add(m1);
+			ms.add(m2);
+	</script>
+</body>
+</html>

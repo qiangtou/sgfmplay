@@ -727,7 +727,7 @@
 		}
 	}),
 	//头部模型
-	topModel = new sgfmmvc.Model({
+	topModel= new sgfmmvc.Model({
 		checkMatch: function(matchId) {
 			var originId = this.get('matchId');
 			return originId ? (originId == matchId) : true;
@@ -785,7 +785,11 @@
 			return this;
 		},
 		statusChange:function(name,oldVal,newVal){
-			console.log(name,oldVal,newVal);
+			if(/^4?[123]$/.test(newVal)){
+				if(typeof opt.matchEnd==='function'){
+					opt.matchEnd.call(null,newVal);
+				}
+			}
 		},
 		setTopFrameMatchName: function() {
 			var p1, p2, p1vsp2;

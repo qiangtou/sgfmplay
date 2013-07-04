@@ -22,6 +22,10 @@ $('div').sgfmplay({
 	'getAlldataError':function(json){
 		//console.log(json);
 	},
+	'matchEnd':function(status){
+		//赛事状态：0删除、1新建、2准备、3普通盘交易、(41,42,43)滚球盘上中下场、5交易已停止、6结束,
+		//当状态不是1,2,3,41,42,43时会调用这个函数	
+	},
 	//json解析错误后跳转的地址
 	'conerr':'http://aa.bb.cc',
 	//国际化信息,从后台取

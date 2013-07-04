@@ -77,7 +77,7 @@
 				success: function(json) {
 					if (json.c == 0) {
 						ds.all(json.d);
-						dr.getIncrease(json.v);
+						//dr.getIncrease(json.v);
 					}
 				}
 			});
@@ -464,19 +464,14 @@
 				if (!gamemodels) return;
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
-				if (gm == null) {
-					gm = gamemodels.create({
-						"gameId": gameId
-					});
+				if (!gm && !allGameModels.getById(gameId)) {
+					gm = gamemodels.create({ "gameId": gameId });
 					gamemodels.showhide(_defaultType == typeId);
 				};
 				concedeObj = {
-					'1': indicator,
-					//让球
-					'0': '',
-					//非让球
-					'o': indicator,
-					//大球
+					'1': indicator, //让球
+					'0': '', //非让球
+					'o': indicator, //大球
 					'u': '' //小球
 				};
 				//游戏model设置交易项
@@ -645,7 +640,7 @@
 		}
 	}),
 	//暴露在外的所有游戏集合
-	allGameModels = new GameModels(),
+	allGameModels= GameModels(),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 		model: sgfmmvc.Model.extend()
@@ -731,7 +726,7 @@
 		}
 	}),
 	//头部模型
-	topModel =window.t= new sgfmmvc.Model({
+	topModel = new sgfmmvc.Model({
 		checkMatch: function(matchId) {
 			var originId = this.get('matchId');
 			return originId ? (originId == matchId) : true;

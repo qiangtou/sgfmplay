@@ -700,7 +700,8 @@
 				_time-=halfTime;
 			}
 			var width = (_time / halfTime * barWidth) | 0; //计算时间条比例
-			timeLine.css("width", width).html(playTime + "'");
+			if(width>15) timeLine.html(playTime + "'");
+			timeLine.css("width", width);
 		},
 		reset: function() {
 			this.render();

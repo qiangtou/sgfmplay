@@ -60,6 +60,9 @@
 						ds._addType(json.d);
 						dr.getAll();
 					} else {
+					if(json.c==1){
+						$('#matchName').html('该赛事没有游戏');
+					}
 						dr.timeoutIndex['firstplaylist'] = setTimeout(fun, refreshCycle);
 					}
 				}
@@ -77,7 +80,7 @@
 				success: function(json) {
 					if (json.c == 0) {
 						ds.all(json.d);
-						//dr.getIncrease(json.v);
+						dr.getIncrease(json.v);
 					}
 				}
 			});
@@ -215,12 +218,11 @@
 		setFrame: function(frame) {
 			//框架frame[0][0]
 			if (!frame) return;
-			var f = frame,
-			matchId = f[0],
-			gameArr = f[7];
+			matchId = frame[0],
+			gameArr = frame[7];
 			//确保赛事相同
 			if (topModel.checkMatch(matchId)) {
-				ds.setTop(f);
+				ds.setTop(frame);
 				gameArr && ds.setGames(gameArr);
 			}
 		},
@@ -468,6 +470,8 @@
 					gm = gamemodels.create({ "gameId": gameId });
 					gamemodels.showhide(_defaultType == typeId);
 				};
+				var tm = tradeModels.getById(tradeId);
+				//让球显示相关
 				concedeObj = {
 					'1': indicator, //让球
 					'0': '', //非让球
@@ -475,7 +479,6 @@
 					'u': '' //小球
 				};
 				//游戏model设置交易项
-				var tm = tradeModels.getById(tradeId);
 				var tmObj = {
 					'tradeId': tradeId,
 					'gameId': gameId,
@@ -640,7 +643,7 @@
 		}
 	}),
 	//暴露在外的所有游戏集合
-	allGameModels= GameModels(),
+	allGameModels = GameModels(),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 		model: sgfmmvc.Model.extend()

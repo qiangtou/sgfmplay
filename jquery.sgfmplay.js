@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-04 15:08:50
+ *@date:2013-07-11 18:04:29
  */
 (function($, window) {
 	//多币种处理
@@ -9,10 +9,10 @@
 	defaults = {
 		ratioClick: $.noop,
 		typeChange: $.noop,
-		REGNOTREMOVE: /^([1-8]|11)$/,
 		//需要显示有游戏状态
-		REGUNLOCK: /^[37]$/,
+		REGNOTREMOVE: /^([1-8]|11)$/,
 		//正常游戏状态,锁定时需要解锁
+		REGUNLOCK: /^[37]$/,
 		i18n: {
 			gameType: {
 				standard: "标准盘",
@@ -61,7 +61,8 @@
 						dr.getAll();
 					} else {
 					if(json.c==1){
-						$('#matchName').html('该赛事没有游戏');
+						//$('#matchName').html('该赛事没有游戏');
+						$('#matchName').html('');
 					}
 						dr.timeoutIndex['firstplaylist'] = setTimeout(fun, refreshCycle);
 					}
@@ -197,7 +198,7 @@
 						       }
 					       }catch(e){
 						       if(typeof(console)==="object"){
-							       console.log("errorInfo:["+jqXHR+"]");
+							       conslole.log("errorInfo:["+jqXHR+"]");
 						       }
 					       }
 				       }
@@ -337,18 +338,21 @@
 
 		setGameStatus: function(gameStatusArr) {
 			var gameId, gameStatus, gStatus, gm;
+			var gmChange=false;
 			for (var i = gameStatusArr.length; i--;) {
 				gameId = gameStatusArr[i][0];
 				gStatus = gameStatusArr[i][1];
 				gm = allGameModels.getById(gameId);
-				if (!gm) {
-					dr.getFrameInfo()
-				} else {
-					gm.set({
-						'gStatus': gStatus
-					});
+				if(gm){
+					gm.set({ 'gStatus': gStatus });
+					//conslole.log('gameId:'+gameId+',status:'+gStatus+',after set status:',allGameModels.getById(gameId));
+
+				}else{
+					gmChange=true;
 				}
 			}
+			//game若有变化则重新请求框架
+			gmChange && dr.getFrameInfo();
 		},
 
 		setPk: function(pk) {
@@ -467,6 +471,7 @@
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (!gm && !allGameModels.getById(gameId)) {
+					//conslole.log('game '+gameId+' is not exist');
 					gm = gamemodels.create({ "gameId": gameId });
 					gamemodels.showhide(_defaultType == typeId);
 				};

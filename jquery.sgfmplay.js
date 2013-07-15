@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-15 12:23:38
+ *@date:2013-07-15 17:05:51
  */
 (function($, window) {
 	//多币种处理
@@ -221,6 +221,7 @@
 		setFrame: function(frame) {
 			//框架frame[0][0]
 			if (!frame) return;
+			var gameArr,matchId;
 			matchId = frame[0],
 			gameArr = frame[7];
 			//确保赛事相同
@@ -778,18 +779,18 @@
 			this.timbar=null;
 			//如果是滚球则加上滚球时间条
 			if (isRollingBall) {
-				this.timebar = $('<div/>');
-				new PlayTimeBarView({
-					$: this.timebar
+				this.timebar = new PlayTimeBarView({
+					$: $('<div/>')
 				});
-				this.$.append(this.timebar);
+				this.$.append(this.timebar.$);
 			}
 		},
 		render: function() {
 			var html = sgfmmvc.replace(this.template, $.extend({},
 			this.model.getAttrs(), this.i18n));
+			var timebar=this.timebar.$.detach();
 			this.$.html(html);
-			this.model.get('isRollingBall')&&this.$.append(this.timebar);
+			this.model.get('isRollingBall')&&this.$.append(timebar);
 			var showHalfScore = this.model.get("showHalfScore");
 			if (!showHalfScore) {
 				this.$.find('.p_helf_ac').hide();

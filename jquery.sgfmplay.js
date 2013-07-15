@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-11 18:04:29
+ *@date:2013-07-15 12:23:38
  */
 (function($, window) {
 	//多币种处理
@@ -144,7 +144,9 @@
 				},
 				success: function(json) {
 					if (json.c == 0) {
-						json.d && ds.setStatus(json.d);
+						if(json.d && json.d[0]){
+							ds.setStatus(json.d[0]);
+						}
 						fun.v = json.v;
 					}
 				}
@@ -275,7 +277,9 @@
 				o['p1halfgoal'] = playerModels.host.get('halfGoal');
 				o['p2halfgoal'] = playerModels.custom.get('halfGoal');
 				tp.update(o);
-				matchEvents.reset(events);
+				if(events.length>0){
+					matchEvents.reset(events);
+				}
 			}
 		},
 		//处理状态数据中的进球和红牌

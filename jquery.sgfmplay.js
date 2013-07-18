@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-15 17:05:51
+ *@date:2013-07-18 14:59:47
  */
 (function($, window) {
 	//多币种处理
@@ -235,7 +235,7 @@
 			if (!status) return;
 			var s = status,
 			tp=topModel,
-			o = {},
+			o={},
 			attr = ["goal", "red"],
 			events,
 			u,
@@ -257,7 +257,7 @@
 				ds.setGameStatus(gameStatusArr); //设置游戏状态
 				o.mStatus = mStatus;
 				o.matchId = matchId;
-				o.livetime = '';
+				//o.livetime = '';
 				o.showHalfScore =tp.isHalfAnd2nd(mStatus);
 				if(tp.isRoll(mStatus)){
 					o.statusStr = mStatusObj[mStatus];
@@ -350,8 +350,6 @@
 				gm = allGameModels.getById(gameId);
 				if(gm){
 					gm.set({ 'gStatus': gStatus });
-					//conslole.log('gameId:'+gameId+',status:'+gStatus+',after set status:',allGameModels.getById(gameId));
-
 				}else{
 					gmChange=true;
 				}
@@ -696,8 +694,6 @@
 			var c = this.$.children();
 			this.first = c.eq(0);
 			this.second = c.eq(1);
-			this.width = this.first.width();
-			this.showTimeLine(topModel.get("playTime"), topModel.get("totalTime"));
 		},
 		/** 设置时间条颜色
 			 *@pram playTime 滚球进行时间，相对全场
@@ -705,7 +701,7 @@
 			 */
 		showTimeLine: function(playTime, totalTime) {
 			var _time=playTime,timeLine = this.first.children(".time_line"),
-			barWidth = this.width,
+			barWidth = this.getTimebarWidth(),
 			halfTime = totalTime / 2 | 0; //与0或取整
 			if (topModel.is2nd()) { //滚球下半场
 				timeLine.css("width", barWidth); //填满上半场
@@ -715,6 +711,9 @@
 			var width = (_time / halfTime * barWidth) | 0; //计算时间条比例
 			if(width>15) timeLine.html(playTime + "'");
 			timeLine.css("width", width);
+		},
+		getTimebarWidth:function(){
+			return this.first.width();
 		},
 		reset: function() {
 			this.render();
@@ -765,7 +764,8 @@
 		init: function() {
 			this.i18n = opt.i18n.top;
 			this.listenTo(this.model, "change:isRollingBall", this._init);
-			this.listenTo(this.model, "change:p2name", this.setTopFrameMatchName);
+			this.listenTo(this.model, "change:playTime", this.setPlayTime);
+			this.listenTo(this.model, "change:p2name", this.setMatchName);
 			this.listenTo(this.model, "change:mStatus", this.statusChange);
 			this.listenTo(this.model, "update", this.render);
 		},
@@ -785,12 +785,19 @@
 				this.$.append(this.timebar.$);
 			}
 		},
+		setPlayTime:function(name,old,playTime){
+			this.timebar.showTimeLine(playTime,topModel.get("totalTime"));
+		},
 		render: function() {
-			var html = sgfmmvc.replace(this.template, $.extend({},
-			this.model.getAttrs(), this.i18n));
-			var timebar=this.timebar.$.detach();
+			var timebar,isRollingBall, html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
+			isRollingBall= this.model.get('isRollingBall');
+			if(isRollingBall){
+				timebar=this.timebar.$.detach();
+			}
 			this.$.html(html);
-			this.model.get('isRollingBall')&&this.$.append(timebar);
+			if(isRollingBall){
+				this.$.append(timebar);
+			}
 			var showHalfScore = this.model.get("showHalfScore");
 			if (!showHalfScore) {
 				this.$.find('.p_helf_ac').hide();
@@ -804,7 +811,7 @@
 				}
 			}
 		},
-		setTopFrameMatchName: function() {
+		setMatchName: function() {
 			var p1, p2, p1vsp2;
 			p1 = this.model.get('p1name');
 			p2 = this.model.get('p2name');

@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-18 14:59:47
+ *@date:2013-07-19 16:53:23
  */
 (function($, window) {
 	//多币种处理
@@ -694,6 +694,7 @@
 			var c = this.$.children();
 			this.first = c.eq(0);
 			this.second = c.eq(1);
+			this.showTimeLine(topModel.get('playTime'),topModel.get('totalTime'));
 		},
 		/** 设置时间条颜色
 			 *@pram playTime 滚球进行时间，相对全场
@@ -717,7 +718,7 @@
 		},
 		reset: function() {
 			this.render();
-			var left, width = this.width,
+			var left, width = this.getTimebarWidth(),
 			m, time,isFirst, bar, fragment, first = document.createDocumentFragment(),
 			second = document.createDocumentFragment(),
 			arr = this.model.toArr();
@@ -786,7 +787,7 @@
 			}
 		},
 		setPlayTime:function(name,old,playTime){
-			this.timebar.showTimeLine(playTime,topModel.get("totalTime"));
+			this.timebar && this.timebar.showTimeLine(playTime,topModel.get("totalTime"));
 		},
 		render: function() {
 			var timebar,isRollingBall, html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));

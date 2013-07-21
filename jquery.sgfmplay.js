@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-19 16:53:23
+ *@date:2013-07-20 20:26:50
  */
 (function($, window) {
 	//多币种处理
@@ -271,8 +271,10 @@
 					o.livetime = u(new Date(livetime), 'yyyy-MM-dd HH:mm');
 				}
 				//滚球时间
-				o.playTime = (s[7] / 60000) | 0;
-				if(tp.is2nd(mStatus)){o.playTime=parseInt(o.playTime)+45;}
+				if(typeof(s[7])==="number" && typeof(mStatus)==="number"){
+					o.playTime = (s[7] / 60000) | 0;
+					if(tp.is2nd(mStatus)){o.playTime=parseInt(o.playTime)+45;}
+				}
 				o['p1goal'] = playerModels.host.get('goal');
 				o['p2goal'] = playerModels.custom.get('goal');
 				o['p1halfgoal'] = playerModels.host.get('halfGoal');
@@ -1485,3 +1487,4 @@
 		return $this && $this.is(':visible');
 	};
 })(jQuery);
+

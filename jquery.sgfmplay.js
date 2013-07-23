@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-20 20:26:50
+ *@date:2013-07-23 17:50:57
  */
 (function($, window) {
 	//多币种处理
@@ -649,7 +649,7 @@
 		model: GameModel,
 		isShow: false,
 		showhide: function(isShow) {
-			this.isShow = isShow;
+			this.isShow = this.length===0?false:isShow;
 		}
 	}),
 	//暴露在外的所有游戏集合
@@ -1145,6 +1145,8 @@
 			v = e.data.view;
 			//把先前的选项卡样式去掉
 			if (v.currenTab) {
+				//如果是同一个标签就不操作
+				if(v.currenTab[0]===this)return;
 				var id = v.currenTab.children().attr('typeId');
 				v.model.getById(id).set('isShow', false);
 			}

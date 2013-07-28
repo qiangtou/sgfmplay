@@ -1,10 +1,10 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-23 17:50:57
+ *@date:2013-07-28 16:59:52
  */
 (function($, window) {
 	//多币种处理
-	var multCurr, content = window,
+	var multCurr, 
 	opt = {},
 	defaults = {
 		ratioClick: $.noop,
@@ -82,6 +82,9 @@
 					if (json.c == 0) {
 						ds.all(json.d);
 						dr.getIncrease(json.v);
+					}else if(json.c==1){
+						//赛事已收盘
+						topModel.end();
 					}
 				}
 			});
@@ -231,7 +234,8 @@
 			}
 		},
 		setStatus: function(status) {
-			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
+			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、
+			//10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			if (!status) return;
 			var s = status,
 			tp=topModel,
@@ -475,7 +479,7 @@
 				if (!gamemodels) return;
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
-				if (!gm && !allGameModels.getById(gameId)) {
+				if (!gm ) {
 					//conslole.log('game '+gameId+' is not exist');
 					gm = gamemodels.create({ "gameId": gameId });
 					gamemodels.showhide(_defaultType == typeId);
@@ -636,12 +640,20 @@
 		idArr: "gameId",
 		addTrade: function(m) {
 			tradeModels.add(m);
+			this.trades=this.trades||[];
+			this.trades.push(m);
 		},
 		isRemoved:function(status){
 			return !opt.REGNOTREMOVE.test(status);
 		},
 		isUnlocked:function(status){
 			return opt.REGUNLOCK.test(status)
+		},
+		destroyTades:function(){
+			var trades=this.trades;
+			for(var i=trades.length;i--;){
+				trades[i].destroy();
+			}
 		}
 	}),
 	//游戏模型集合类
@@ -759,6 +771,9 @@
 		},
 		isHalfAnd2nd:function(mStatus){
 			return this.checkStatus(/4[23]/,mStatus);
+		},
+		end:function(){
+			this.set('mStatus',6);
 		}
 	}),
 	//头部视图，用于显示滚球比分红牌进球等信息
@@ -808,7 +823,13 @@
 			return this;
 		},
 		statusChange:function(name,oldVal,newVal){
-			if(/^4?[123]$/.test(newVal)){
+			if(newVal && !/^4[123]$/.test(newVal)){
+				var currentGameType=gameTypeModels.getCurrentGameType();
+				var gameTypeModel=gameTypeModels.getById(currentGameType);
+				var gms=gameTypeModel.getAllGameModels();
+				for(var i=gms.length;i--;){
+					gms[i].destroy();
+				}
 				if(typeof opt.matchEnd==='function'){
 					opt.matchEnd.call(null,newVal);
 				}
@@ -946,7 +967,6 @@
 			return this;
 		},
 		addTrade: function(m) {
-			var tradeId = this.model.get(name);
 			var tv = new TradeView({
 				model: m
 			});
@@ -969,6 +989,7 @@
 			}
 		},
 		remove: function(gameId) {
+			this.model.destroyTades();
 			this.model.destroy();
 			this.$.remove();
 			opt.typeChange([{
@@ -1044,8 +1065,7 @@
 			}
 		},
 		removeView: function() {
-			var len = this.model.length;
-			if (len == 0) {
+			if (this.model.length == 0) {
 				this.hide();
 			}
 		}
@@ -1184,13 +1204,14 @@
 		init: function() {
 			this.i18n = opt.i18n.gameType;
 			this.typeHandler = {
-				1: 'standard',
 				//标准
-				2: 'concedepoints',
+				1: 'standard',
 				//让球
-				3: 'bigsmall',
+				2: 'concedepoints',
 				//大小球
-				4: 'sigledouble' //单双
+				3: 'bigsmall',
+				//单双 
+				4: 'sigledouble'
 			};
 			this.listenTo(this.model, "create", this.render);
 		},
@@ -1243,13 +1264,10 @@
 	instence = {
 		/**初始化*/
 		init: function(settings) {
-			/**设置全局上下文*/
-			content = this;
 			multCurr = (window.sgfm && window.sgfm.multiCurrency) || {
 				currencyFlag: "CNY",
 				multRate: 1
 			};
-
 			$.extend(opt, defaults, settings);
 		},
 		initI18n: function(settings) {

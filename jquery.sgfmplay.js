@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-28 16:59:52
+ *@date:2013-07-29 17:07:58
  */
 (function($, window) {
 	//多币种处理
@@ -84,7 +84,7 @@
 						dr.getIncrease(json.v);
 					}else if(json.c==1){
 						//赛事已收盘
-						topModel.end();
+						matchModel.end();
 					}
 				}
 			});
@@ -228,7 +228,7 @@
 			matchId = frame[0],
 			gameArr = frame[7];
 			//确保赛事相同
-			if (topModel.checkMatch(matchId)) {
+			if (matchModel.checkMatch(matchId)) {
 				ds.setTop(frame);
 				gameArr && ds.setGames(gameArr);
 			}
@@ -238,7 +238,7 @@
 			//10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			if (!status) return;
 			var s = status,
-			tp=topModel,
+			tp=matchModel,
 			o={},
 			attr = ["goal", "red"],
 			events,
@@ -426,8 +426,8 @@
 			//取出主客队
 			host = _playerModels.host;
 			custom = _playerModels.custom;
-			//topModel的设置
-			topModel.set({
+			//matchModel的设置
+			matchModel.set({
 				"matchTypeId": matchTypeId,
 				//后台用到的赛事ID
 				"leagueName": leagueName,
@@ -708,7 +708,7 @@
 			var c = this.$.children();
 			this.first = c.eq(0);
 			this.second = c.eq(1);
-			this.showTimeLine(topModel.get('playTime'),topModel.get('totalTime'));
+			this.showTimeLine(matchModel.get('playTime'),matchModel.get('totalTime'));
 		},
 		/** 设置时间条颜色
 			 *@pram playTime 滚球进行时间，相对全场
@@ -718,7 +718,7 @@
 			var _time=playTime,timeLine = this.first.children(".time_line"),
 			barWidth = this.getTimebarWidth(),
 			halfTime = totalTime / 2 | 0; //与0或取整
-			if (topModel.is2nd()) { //滚球下半场
+			if (matchModel.is2nd()) { //滚球下半场
 				timeLine.css("width", barWidth); //填满上半场
 				timeLine = this.second.children(".time_line"); //切换到下半场
 				_time-=halfTime;
@@ -754,7 +754,7 @@
 		}
 	}),
 	//头部模型
-	topModel= new sgfmmvc.Model({
+	matchModel= new sgfmmvc.Model({
 		checkMatch: function(matchId) {
 			var originId = this.get('matchId');
 			return originId ? (originId == matchId) : true;
@@ -778,7 +778,7 @@
 	}),
 	//头部视图，用于显示滚球比分红牌进球等信息
 	TopView = sgfmmvc.View.extend({
-		model: topModel,
+		model: matchModel,
 		init: function() {
 			this.i18n = opt.i18n.top;
 			this.listenTo(this.model, "change:isRollingBall", this._init);
@@ -804,7 +804,7 @@
 			}
 		},
 		setPlayTime:function(name,old,playTime){
-			this.timebar && this.timebar.showTimeLine(playTime,topModel.get("totalTime"));
+			this.timebar && this.timebar.showTimeLine(playTime,matchModel.get("totalTime"));
 		},
 		render: function() {
 			var timebar,isRollingBall, html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
@@ -823,7 +823,7 @@
 			return this;
 		},
 		statusChange:function(name,oldVal,newVal){
-			if(newVal && !/^4[123]$/.test(newVal)){
+			if(newVal && !/^4?[123]$/.test(newVal)){
 				var currentGameType=gameTypeModels.getCurrentGameType();
 				var gameTypeModel=gameTypeModels.getById(currentGameType);
 				var gms=gameTypeModel.getAllGameModels();
@@ -1305,7 +1305,7 @@
 		};
 		//通过交易项ID获取赛事ID
 		t.getMatchId = function(tradeId) {
-			return topModel.get('matchId');
+			return matchModel.get('matchId');
 		};
 		//通过交易项ID获取玩法ID
 		t.getPlayId = function(tradeId) {
@@ -1314,11 +1314,11 @@
 		};
 		//通过交易项ID获取赛事名称
 		t.getMatchName = function(tradeId) {
-			return topModel.get('matchName');
+			return matchModel.get('matchName');
 		};
 		//通过交易项ID获取联赛名称
 		t.getLeMatchName = function(tradeId) {
-			return topModel.get('leagueName');
+			return matchModel.get('leagueName');
 		};
 		//通过交易项ID获取游戏状态
 		t.getGamingState = function(tradeId) {
@@ -1396,11 +1396,11 @@
 		};
 		//通过交易项ID获取赛事类型ID
 		t.getMatchTypeId = function(tradeId) {
-			return topModel.get('matchTypeId');
+			return matchModel.get('matchTypeId');
 		};
 		//单式滚球标识
 		t.getPlaySign = function() {
-			return topModel.get('isRollingBall');
+			return matchModel.get('isRollingBall');
 		};
 		//取得当前货量
 		t.getNowQty = function(bet) {

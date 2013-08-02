@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-07-29 17:07:58
+ *@date:2013-08-02 11:16:14
  */
 (function($, window) {
 	//多币种处理
@@ -521,6 +521,10 @@
 				ds.gecth(opt);
 			}
 		},
+        /**
+         * 添加类型的包装方法
+         * @param json
+         */
 		addType: function(json) {
 			if (json.c == 0) {
 				ds._addType(json.d);

@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-02 11:16:14
+ *@date:2013-08-05 14:53:08
  */
 (function($, window) {
 	//多币种处理
@@ -234,9 +234,11 @@
 			}
 		},
 		setStatus: function(status) {
+            //如果状态数组为空的话，则不处理
+            if (!status || status.toString().indexOf(',,,,,,,')!=-1) return;
+	    //console.log('状态：',status);
 			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、
 			//10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
-			if (!status) return;
 			var s = status,
 			tp=matchModel,
 			o={},
@@ -367,6 +369,7 @@
 		setPk: function(pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			if (!pk) return;
+			//console.log('盘口:',pk);
 			var tm, pkArr, tradeId, attrs, tradeAttr, tradeObj, pkVal, attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
 			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
@@ -450,10 +453,13 @@
 			concedeObj, //标识表
 			typeName, //玩法名
 			tradeIndexType, //指标类型
-			player, gameTypeModel, gamemodels, i18ns = [],
+			player,gameTypeModel,gamemodels,i18ns=[],
 			i18n = opt.i18n.gameType,
-			_defaultType = gameTypeModels.getCurrentGameType(),
-			_playerModels = playerModels; //缓存外部变量
+			_defaultType = gameTypeModels.getCurrentGameType();
+
+			//原来的数据与全量对比，找出在全量中不存在的游戏并删除之
+			gameTypeModels.delNotExistGame(gameArr);
+
 			//玩法国际化
 			for (var k in i18n) {
 				i18ns.push(i18n[k]);
@@ -480,7 +486,6 @@
 				//游戏处理,没有则创建
 				var gm = gamemodels.getById(gameId);
 				if (!gm ) {
-					//conslole.log('game '+gameId+' is not exist');
 					gm = gamemodels.create({ "gameId": gameId });
 					gamemodels.showhide(_defaultType == typeId);
 				};
@@ -652,6 +657,10 @@
 		},
 		isUnlocked:function(status){
 			return opt.REGUNLOCK.test(status)
+		},
+		destroyAll:function(){
+			this.destroyTades();
+			this.destroy();
 		},
 		destroyTades:function(){
 			var trades=this.trades;
@@ -828,11 +837,9 @@
 		},
 		statusChange:function(name,oldVal,newVal){
 			if(newVal && !/^4?[123]$/.test(newVal)){
-				var currentGameType=gameTypeModels.getCurrentGameType();
-				var gameTypeModel=gameTypeModels.getById(currentGameType);
-				var gms=gameTypeModel.getAllGameModels();
+				var gms=gameTypeModels.getCurrentGameModels();
 				for(var i=gms.length;i--;){
-					gms[i].destroy();
+					gms[i].destroyAll();
 				}
 				if(typeof opt.matchEnd==='function'){
 					opt.matchEnd.call(null,newVal);
@@ -863,19 +870,19 @@
 		tag: 'li',
 		template: $('#trade_tmpl').html(),
 		init: function() {
-			//this.listenTo(this.model, "hasChange", this.render);
 			this.listenTo(this.model, "change", this.pkchange);
 		},
 		events: {
 			"a click": "ratioClick"
 		},
 		pkchange: function(name, _old, _new) {
+			console.log(name,_old,_new);
 			if (name == 'pdata') {
 				this.pdata.html(_new);
 			} else {
 				if (/^[bs]\d$/.test(name)) {
 					"n" == _new && (_new = "");
-					this.radioChange(name, _old, _new);
+					this.ratioChange(name, _old, _new);
 				} else if (/^[bs]\dn$/.test(name)) {
 					"n" == _new && (_new = "");
 					var aTag = name.substring(0, 2);
@@ -900,7 +907,7 @@
 			this.pdata = $el.find('.other_data');
 			return this;
 		},
-		radioChange: function(name, _old, _new) {
+		ratioChange: function(name, _old, _new) {
 			var aTag = this[name] = this[name] || this.$.find('a[pos="' + name + '"]');
 			var b = aTag.b = aTag.b || aTag.find('b');
 			b.html(_new);
@@ -993,8 +1000,8 @@
 			}
 		},
 		remove: function(gameId) {
-			this.model.destroyTades();
-			this.model.destroy();
+            //console.log('要移除的游戏:',gameId);
+			this.model.destroyAll();
 			this.$.remove();
 			opt.typeChange([{
 				"remove": gameId
@@ -1069,7 +1076,9 @@
 			}
 		},
 		removeView: function() {
+		//console.log(this.$.find('.floatleft').html(),'剩余游戏数：',this.model.length);
 			if (this.model.length == 0) {
+			//console.log('移除玩法');
 				this.hide();
 			}
 		}
@@ -1088,10 +1097,14 @@
 			},
 			getAllGameModels: function() {
 				var arr = [];
-				this.half && arr.push(this.half);
-				this.whole && arr.push(this.whole);
+				this.half && (arr=arr.concat(this.half.toArr()));
+				this.whole && (arr=arr.concat(this.whole.toArr()));
 				//TODO 其他游戏集合
 				return arr;
+			},
+			showhide:function(isShow){
+				this.half.showhide(isShow);
+				this.whole.showhide(isShow);
 			}
 		}),
 		currentGameType: null,
@@ -1100,6 +1113,29 @@
 		},
 		setCurrentGameType: function(typeId) {
 			this.currentGameType = typeId;
+		},
+		getCurrentGameModels:function(){
+			var gtm=this.getById(this.currentGameType);
+			return gtm.getAllGameModels();
+		},
+		delNotExistGame:function(gameArr){
+			var ga,gm,gmId,_gmId,i,j,arr=[],gms=this.getCurrentGameModels();
+			if(gameArr.length===0 || gms.length===0)return;
+			for(i=gms.length;i--;){
+				gm=gms[i];
+				gId=gm.get('gameId');
+				for(var j=gameArr.length;j--;){
+					ga=gameArr[j];
+					_gId=ga[2];
+					if(gId==_gId){
+						gms.splice(i);
+						break;
+					}
+				}
+			}
+			for(i=gms.length;i--;){
+				(gm=gms[i]) && gm.destroyAll();
+			}
 		}
 	}),
 	TabView = sgfmmvc.View.extend({
@@ -1135,10 +1171,7 @@
 		},
 		showhide: function(name, o, isShow) {
 			this.render();
-			var arr = this.model.getAllGameModels();
-			for (var i = arr.length; i--;) {
-				arr[i].showhide(isShow);
-			}
+			this.model.showhide(isShow);
 		}
 	}),
 	//玩法选项卡视图

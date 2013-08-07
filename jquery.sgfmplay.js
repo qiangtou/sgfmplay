@@ -1,12 +1,13 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-05 14:53:08
+ *@date:2013-08-07 15:15:09
  */
 (function($, window) {
 	//多币种处理
 	var multCurr, 
 	opt = {},
 	defaults = {
+		ratioPromptTime:3,//赔率变化闪动时间
 		ratioClick: $.noop,
 		typeChange: $.noop,
 		//需要显示有游戏状态
@@ -169,7 +170,7 @@
 				},
 				success: function(json) {
 					if (json.c == 0) {
-						json.d && ds.setPk(json.d[0]);
+						json.d && ds.setPk(json.d);
 						fun.v = json.v;
 						dr.timeoutIndex['marketInfo'] = setTimeout(fun, refreshCycle);
 					}
@@ -263,7 +264,6 @@
 				ds.setGameStatus(gameStatusArr); //设置游戏状态
 				o.mStatus = mStatus;
 				o.matchId = matchId;
-				//o.livetime = '';
 				o.showHalfScore =tp.isHalfAnd2nd(mStatus);
 				if(tp.isRoll(mStatus)){
 					o.statusStr = mStatusObj[mStatus];
@@ -369,7 +369,6 @@
 		setPk: function(pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			if (!pk) return;
-			//console.log('盘口:',pk);
 			var tm, pkArr, tradeId, attrs, tradeAttr, tradeObj, pkVal, attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
 			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
@@ -724,13 +723,13 @@
 			this.showTimeLine(matchModel.get('playTime'),matchModel.get('totalTime'));
 		},
 		/** 设置时间条颜色
-			 *@pram playTime 滚球进行时间，相对全场
-			 *@pram totalTime 全场时间
-			 */
+		*@pram playTime 滚球进行时间，相对全场
+		*@pram totalTime 全场时间
+		*/
 		showTimeLine: function(playTime, totalTime) {
 			var _time=playTime,timeLine = this.first.children(".time_line"),
 			barWidth = this.getTimebarWidth(),
-			halfTime = totalTime / 2 | 0; //与0或取整
+			halfTime = totalTime / 2 | 0; 
 			if (matchModel.is2nd()) { //滚球下半场
 				timeLine.css("width", barWidth); //填满上半场
 				timeLine = this.second.children(".time_line"); //切换到下半场
@@ -876,20 +875,47 @@
 			"a click": "ratioClick"
 		},
 		pkchange: function(name, _old, _new) {
-			console.log(name,_old,_new);
-			if (name == 'pdata') {
-				this.pdata.html(_new);
+			var el,cls,up,down,flash,isPk,isBsRatio,isBsQuantity;
+			flash=false;
+			isPk=name == 'pdata';//参考赔率
+			isBsRatio=/^[bs]\d$/.test(name);//买卖盘赔率
+			isBsQuantity=/^[bs]\dn$/.test(name);//买卖盘货量
+			if (isPk) {
+				el=this.pdata.html(_new);
+				up='other_data_red'; down='other_data_grn';
+				flash=true;
 			} else {
-				if (/^[bs]\d$/.test(name)) {
-					"n" == _new && (_new = "");
-					this.ratioChange(name, _old, _new);
-				} else if (/^[bs]\dn$/.test(name)) {
-					"n" == _new && (_new = "");
-					var aTag = name.substring(0, 2);
-					var b = this[aTag].b;
-					this[aTag].empty().append(b, _new);
+				flash=name.indexOf('0')!=-1;//最优赔率b0,b0n,s0,s0n都有这个class,
+				if (isBsRatio) {
+					_new=_new=='n'?'':_new;
+					el = this[name] = this[name] || this.$.find('a[pos="' + name + '"]');
+					el.b = el.b || el.find('b');
+					el.b.html(_new);
+					up='span_red'; down='span_grn';
+				} else if (isBsQuantity) {
+					_new=_new=='n'?'':_new;
+					el = this[name.slice(0, 2)];
+					el.empty().append(el.b, _new);
+					up=down='span_yel';
 				}
 			}
+			cls=_new>_old?up:down;
+			if(flash && _old && _new){ this.flash(el,cls,isPk) }
+		},
+		flash:function(el,cls,isPk){
+			var p,flag,isPk;
+			flag=el.p;
+			p=flag||el.n();
+			el.p=p.n(function(){
+				!isPk && el.removeClass('ons');
+				el.addClass(cls);
+			})
+			.w(opt.ratioPromptTime)
+			.n(function(){
+				el.removeClass(cls);
+				!isPk && el.addClass('ons')
+				flag && (delete el.p)
+			});
 		},
 		render: function() {
 			var $el = this.$,
@@ -906,20 +932,6 @@
 			$el.html(html);
 			this.pdata = $el.find('.other_data');
 			return this;
-		},
-		ratioChange: function(name, _old, _new) {
-			var aTag = this[name] = this[name] || this.$.find('a[pos="' + name + '"]');
-			var b = aTag.b = aTag.b || aTag.find('b');
-			b.html(_new);
-			if (_old && _new) {
-				var cls, increase;
-				increase = _new - _old;
-				if (increase > 0) {
-					cls = 'flash_red';
-				} else {
-					cls = 'flash_grn';
-				}
-			}
 		},
 		ratioClick: function(e) {
 			var view, model, pos, action, tid, bors, site, r, q, qs, isFirstsd, paramObj;
@@ -945,18 +957,12 @@
 				qs = Utils.getMaxBets(qs); //过多位数处理
 			}
 			paramObj = {
-				"tradeItemId": tid,
-				//交易项ID
-				"tradeType": bors,
-				//买卖方向
-				"site": site,
-				//当前点击的赔率位置
-				"ratio": r,
-				//当前点击的赔率
-				"qty": q,
-				//当前货量
-				"allQty": qs,
-				//扫货货量
+				"tradeItemId": tid, //交易项ID
+				"tradeType": bors, //买卖方向
+				"site": site, //当前点击的赔率位置
+				"ratio": r, //当前点击的赔率
+				"qty": q, //当前货量
+				"allQty": qs, //扫货货量
 				"isFirstsd": isFirstsd //这个值现在没有，传false就可以了
 			}
 			opt.ratioClick(paramObj);
@@ -1503,7 +1509,8 @@
 
 		$this.val(time + originVal).attr("disabled", true);
 
-		var arr = $this.data("intervalIndex"); ! arr && $this.data("intervalIndex", arr = []);
+		var arr = $this.data("intervalIndex"); 
+		! arr && $this.data("intervalIndex", arr = []);
 		arr.push(setInterval(function() {
 			time--;
 			if (!checkVisible($this)) {
@@ -1545,3 +1552,50 @@
 	};
 })(jQuery);
 
+/**一个延时插件,支持链式调用
+ *@example
+ *$(obj).w(t).n(fun);延时t秒执行fun
+ *$(obj).n(fun).w(t).n(fun2).w(t2).n(fun3);先执行fun再延时t秒，再执行fun2,再延时t2秒，再执行fun3
+ */
+(function ($) {
+	var P=function (el) { this.el=el; }
+	P.prototype = {
+		constructor : P,
+		ok : function (x) { return x; },
+		n : function (fun) {
+			var p = new P(this.el);
+			this._n = p;
+			p.ok = fun||p.ok;
+			return p;
+		},
+		w : function (t) {
+			var p = new P(this.el);
+			p.ok=function(x){
+				setTimeout(function () { p._n && p._n._fire(x); }, t * 1000);
+				return p;
+			}
+			this._n=p;
+			return p;
+		},
+		call:function(){ this._fire();},
+		_fire : function (val) {
+			val = this.ok.call(this.el, val);
+			if (val instanceof P) {
+				val._n = this._n;
+			} else if (this._n)this._n._fire(val);
+		}
+	};
+	$.extend($.fn,{
+		n : function (fun) {
+			var p = new P(this);
+			p.ok = fun||p.ok;
+			setTimeout(function () { p._fire(); }, 0);
+			return p;
+		},
+		w : function (t) {
+			var p = new P(this);
+			setTimeout(function () { p._fire(); }, t*1000);
+			return p;
+		}
+	});	
+})(jQuery);

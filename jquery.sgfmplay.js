@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-07 15:15:09
+ *@date:2013-08-12 17:31:38
  */
 (function($, window) {
 	//多币种处理
@@ -14,9 +14,15 @@
 		REGNOTREMOVE: /^([1-8]|11)$/,
 		//正常游戏状态,锁定时需要解锁
 		REGUNLOCK: /^[37]$/,
+		typeHolder:{
+			1: 'standard', //标准
+			2: 'concedepoints', //让球
+			3: 'bigsmall', //大小球
+			4: 'sigledouble' //单双
+		},
 		i18n: {
 			gameType: {
-				standard: "标准盘",
+				standard: "1×2",
 				concedepoints: "让球",
 				bigsmall: "大小球",
 				sigledouble: "单双",
@@ -26,7 +32,8 @@
 			},
 			trade: {
 				big: '大球',
-				small: '小球'
+				small: '小球',
+				draw:'和局'
 			},
 			top: {
 				first: "上半场",
@@ -225,13 +232,13 @@
 		setFrame: function(frame) {
 			//框架frame[0][0]
 			if (!frame) return;
-			var gameArr,matchId;
+			var tradeArr,matchId;
 			matchId = frame[0],
-			gameArr = frame[7];
+			tradeArr = frame[7];
 			//确保赛事相同
 			if (matchModel.checkMatch(matchId)) {
 				ds.setTop(frame);
-				gameArr && ds.setGames(gameArr);
+				tradeArr && ds.setGames(tradeArr);
 			}
 		},
 		setStatus: function(status) {
@@ -441,7 +448,7 @@
 				'totalTime': totalTime || 90 //总时间
 			});
 		},
-		setGames: function(gameArr) {
+		setGames: function(tradeArr) {
 			var game, typeId, //玩法id
 			gameId, //游戏id
 			tradeId, //交易项id
@@ -452,28 +459,26 @@
 			concedeObj, //标识表
 			typeName, //玩法名
 			tradeIndexType, //指标类型
-			player,gameTypeModel,gamemodels,i18ns=[],
+			order,//排序码
+			player,gameTypeModel,gamemodels,
 			i18n = opt.i18n.gameType,
 			_defaultType = gameTypeModels.getCurrentGameType();
 
 			//原来的数据与全量对比，找出在全量中不存在的游戏并删除之
-			gameTypeModels.delNotExistGame(gameArr);
+			gameTypeModels.delNotExistGame(tradeArr);
 
-			//玩法国际化
-			for (var k in i18n) {
-				i18ns.push(i18n[k]);
-			};
-			for (var i = 0, len = gameArr.length; i < len; i++) {
+			for (var i = 0, len = tradeArr.length; i < len; i++) {
 				//解析交易项数组
-				game = gameArr[i];
-				name = game[0];
-				tradeId = game[1];
-				gameId = game[2];
-				typeId = game[3];
-				indicator = game[4];
-				concedeId = game[5];
-				isWhole = game[6];
-				tradeIndexType = game[7];
+				trade = tradeArr[i];
+				name = trade[0];
+				tradeId = trade[1];
+				gameId = trade[2];
+				typeId = trade[3];
+				indicator = trade[4];
+				concedeId = trade[5];
+				isWhole = trade[6];
+				tradeIndexType = trade[7];
+				order=trade[8];
 				if (typeId != _defaultType) {
 					//只显示一种玩法
 					continue;
@@ -506,6 +511,7 @@
 					'name': name,
 					'concedeId': concedeId,
 					'tradeIndexType': tradeIndexType,
+					'order': order,
 					'pk': concedeObj[concedeId]
 				};
 				if (!tm) {
@@ -535,31 +541,23 @@
 			}
 		},
 		_addType: function(d) {
-			var _opt = opt,
+			var typeId, gameTypeModel,
+			_opt = opt,
 			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
-			var typeHandler = {
-				1: 'standard',
-				//标准
-				2: 'concedepoints',
-				//让球
-				3: 'bigsmall',
-				//大小球
-				4: 'sigledouble' //单双
-			};
+
 			if (d) {
 				if (!gts.getCurrentGameType()) {
 					gts.setCurrentGameType(d[0]);
 				};
 				_opt.currentGameType = _opt.currentGameType || d[0];
-				var typeId, gameTypeModel;
 				for (var i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gts.getById(typeId);
 					if (!gameTypeModel) {
 						gameTypeModel = gts.create({
 							'typeId': typeId,
-							'typeName': i18n[typeHandler[typeId]],
+							'typeName': i18n[opt.typeHolder[typeId]],
 							'isShow': i == 0
 						});
 					}
@@ -745,7 +743,7 @@
 		reset: function() {
 			this.render();
 			var left, width = this.getTimebarWidth(),
-			m, time,isFirst, bar, fragment, first = document.createDocumentFragment(),
+			m, time,isFirst, fragment, first = document.createDocumentFragment(),
 			second = document.createDocumentFragment(),
 			arr = this.model.toArr();
 			width-=12;//修正偏移
@@ -858,6 +856,21 @@
 		containBigSmall:function(name){
 			name=name||this.get('name');
 			return /(big|small)/.test(name);
+		},
+		handleName:function(){
+			var name=this.get('name');
+			var nameStr;
+			if (this.containBigSmall(name)) {
+				nameStr=opt.i18n.trade[name];
+			}else if(name=='e'){
+				//处理和局
+				nameStr=opt.i18n.trade['draw'];
+			}else {
+				playerModel = playerModels.getById(name)
+				nameStr=playerModel?playerModel.get('name'):'';
+			}
+			this.set('nameStr', nameStr);
+			return this;
 		}
 	}),
 	//暴露在外的交易项集合
@@ -873,6 +886,14 @@
 		},
 		events: {
 			"a click": "ratioClick"
+		},
+		render: function() {
+			var html,$el = this.$,
+			m=this.model.handleName();
+			html = sgfmmvc.replace(this.template, m.getAttrs());
+			$el.html(html);
+			this.pdata = $el.find('.other_data');
+			return this;
 		},
 		pkchange: function(name, _old, _new) {
 			var el,cls,up,down,flash,isPk,isBsRatio,isBsQuantity;
@@ -903,47 +924,29 @@
 			if(flash && _old && _new){ this.flash(el,cls,isPk) }
 		},
 		flash:function(el,cls,isPk){
-			var p,flag,isPk;
+			var p,flag;
 			flag=el.p;
 			p=flag||el.n();
 			el.p=p.n(function(){
 				!isPk && el.removeClass('ons');
 				el.addClass(cls);
-			})
-			.w(opt.ratioPromptTime)
+			}).w(opt.ratioPromptTime)
 			.n(function(){
 				el.removeClass(cls);
 				!isPk && el.addClass('ons')
-				flag && (delete el.p)
+				if(flag ||isPk) {
+					delete el.p;
+				}
 			});
 		},
-		render: function() {
-			var $el = this.$,
-			mo=this.model,
-			playerModel,
-			name = mo.get('name');
-			if (mo.containBigSmall(name)) {
-				mo.set('nameStr', opt.i18n.trade[name]);
-			} else {
-				playerModel = playerModels.getById(name)
-				playerModel && mo.set('nameStr', playerModel.get('name'));
-			}
-			var html = sgfmmvc.replace(this.template, mo.getAttrs());
-			$el.html(html);
-			this.pdata = $el.find('.other_data');
-			return this;
-		},
 		ratioClick: function(e) {
-			var view, model, pos, action, tid, bors, site, r, q, qs, isFirstsd, paramObj;
+			var view, model, pos, action, tid, bors, site, r, q, qs, isFirstsd;
 			view = e.data.view;
 			model = view.model;
 			pos = $(this).attr('pos');
 			tid = model.get('tradeId');
 			action = pos.charAt(0);
-			bors = {
-				b: 1,
-				s: 2
-			} [action];
+			bors = {b:1,s:2}[action];
 			site = pos.charAt(1);
 			site = parseInt(site);
 			r = model.get(pos) || '';
@@ -956,7 +959,7 @@
 				}
 				qs = Utils.getMaxBets(qs); //过多位数处理
 			}
-			paramObj = {
+			opt.ratioClick({
 				"tradeItemId": tid, //交易项ID
 				"tradeType": bors, //买卖方向
 				"site": site, //当前点击的赔率位置
@@ -964,8 +967,7 @@
 				"qty": q, //当前货量
 				"allQty": qs, //扫货货量
 				"isFirstsd": isFirstsd //这个值现在没有，传false就可以了
-			}
-			opt.ratioClick(paramObj);
+			});
 		}
 	}),
 	//游戏视图
@@ -974,6 +976,7 @@
 		template: $("#game_tmpl").html(),
 		init: function() {
 			this.hide();
+			this.order=[];
 			this.listenTo(this.model, "addTrade", this.addTrade);
 			this.listenTo(this.model, "change:gStatus", this.changeGStatus);
 		},
@@ -984,11 +987,20 @@
 			return this;
 		},
 		addTrade: function(m) {
-			var tv = new TradeView({
-				model: m
-			});
-			this.ul.append(tv.render().$);
 			this.show();
+			var tv= new TradeView({model: m});
+			var order=m.get('order');
+			tv.$.attr('order',order);
+			//为了排序码
+			for(var i=0,len=this.order.length;i<len;i++){
+				if(order<this.order[i]){
+					tv.render().$.insertBefore(this.ul.children().eq(i));
+					this.order.splice(i,0,order);
+					return;
+				}
+			}
+			this.ul.append(tv.render().$);
+			this.order.push(order);
 		},
 		changeGStatus: function(k, oldStatus, status) {
 			var _opt, gameId,mo;
@@ -1036,9 +1048,7 @@
 			this.listenTo(this.model, "del", this.removeView);
 		},
 		render: function() {
-			var i18n = $.extend(opt.i18n.playlist, {
-				title: this.title
-			});
+			var i18n = $.extend(opt.i18n.playlist, this.i18n);
 			this.$.hide().html(sgfmmvc.replace(this.template, i18n));
 			this.fresh = this.$.find('.bt_refurbish');
 			return this;
@@ -1109,8 +1119,8 @@
 				return arr;
 			},
 			showhide:function(isShow){
-				this.half.showhide(isShow);
-				this.whole.showhide(isShow);
+				this.half && this.half.showhide(isShow);
+				this.whole && this.whole.showhide(isShow);
 			}
 		}),
 		currentGameType: null,
@@ -1124,14 +1134,14 @@
 			var gtm=this.getById(this.currentGameType);
 			return gtm.getAllGameModels();
 		},
-		delNotExistGame:function(gameArr){
+		delNotExistGame:function(tradeArr){
 			var ga,gm,gmId,_gmId,i,j,arr=[],gms=this.getCurrentGameModels();
-			if(gameArr.length===0 || gms.length===0)return;
+			if(tradeArr.length===0 || gms.length===0)return;
 			for(i=gms.length;i--;){
 				gm=gms[i];
 				gId=gm.get('gameId');
-				for(var j=gameArr.length;j--;){
-					ga=gameArr[j];
+				for(var j=tradeArr.length;j--;){
+					ga=tradeArr[j];
 					_gId=ga[2];
 					if(gId==_gId){
 						gms.splice(i);
@@ -1186,16 +1196,7 @@
 		cls: 'other_play',
 		init: function() {
 			this.i18n = opt.i18n.gameType;
-			this.typeHandler = {
-				1: 'standard',
-				//标准
-				2: 'concedepoints',
-				//让球
-				3: 'bigsmall',
-				//大小球
-				4: 'sigledouble' //单双
-			};
-			this.$.hide();
+			this.hide();
 			this.currenTab = null;
 			this.listenTo(this.model, "create", this.addTypeTab);
 			this.listenTo(this.model, "showhide", this.showhide);
@@ -1213,7 +1214,7 @@
 				var id = v.currenTab.children().attr('typeId');
 				v.model.getById(id).set('isShow', false);
 			}
-			//将现在的选项卡样式加上
+			//将新的选项卡样式加上
 			var typeId = currenTab.children().attr('typeId');
 			v.currenTab = currenTab;
 			var md = v.model.getById(typeId).set('isShow', true);
@@ -1228,7 +1229,7 @@
 				model: gameTypeModel
 			});
 			this.ul.append(tv.render().$);
-			this.$.show();
+			this.show();
 			if (m.isShow) {
 				this.currenTab = tv.$;
 			}
@@ -1246,16 +1247,6 @@
 		model: gameTypeModels,
 		init: function() {
 			this.i18n = opt.i18n.gameType;
-			this.typeHandler = {
-				//标准
-				1: 'standard',
-				//让球
-				2: 'concedepoints',
-				//大小球
-				3: 'bigsmall',
-				//单双 
-				4: 'sigledouble'
-			};
 			this.listenTo(this.model, "create", this.render);
 		},
 		render: function(md) {
@@ -1265,21 +1256,25 @@
 		},
 		addGameType: function(m) {
 			var typeId = m.typeId || m.get('typeId');
-			var fun = this.typeHandler[typeId];
-			fun && this[fun](typeId, fun);
+			var type = opt.typeHolder[typeId];
+			type && this[type](typeId, type);
 			return this;
 		},
-		standard: function(typeId) {},
+		standard: function(typeId,title) {
+			this.concedepoints(typeId, title);
+		},
+		//让球
 		concedepoints: function(typeId, title) {
 			title = this.i18n[title];
 			var whole = new PlayListView({
-				title: this.i18n.whole + '-' + title,
 				model: new GameModels
 			});
+			whole.i18n={title: this.i18n.whole + '-' + title};
 			var half = new PlayListView({
-				title: this.i18n.half + '-' + title,
 				model: new GameModels
 			});
+			half.i18n={title: this.i18n.half + '-' + title};
+			
 			var md = this.model.getById(typeId);
 			md.half = half.model;
 			md.whole = whole.model;
@@ -1294,9 +1289,9 @@
 	Play = sgfmmvc.View.extend({
 		cls: 'ac_frame',
 		init: function() {
-			this.top = new TopView(); //头部
+			this.top = new TopView; //头部
 			this.tagContent = new TagContentView(); //内容
-			this.tabs = new TabsView(); //标签选项卡
+			this.tabs = new TabsView; //标签选项卡
 			this.render();
 			dr.firstGetPlaylist();
 		},

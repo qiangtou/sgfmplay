@@ -1,20 +1,16 @@
-/**
- * 单场样式表kk
- * date:2013-05-24 13:43:32
- */
-@charset "utf-8";
+﻿@charset "utf-8";
 body {padding:0;margin:0; text-align:left;font-family:"微软雅黑","宋体", Verdana, Arial, Helvetica, sans-serif;font-size:12px;}
 img a {border:none;}
 body.sub_body { background:#fff;padding:0;margin:0;}
-.wrap {width:1245px;overflow:hidden;font-size:12px;margin-left:10px; background:#fff;}
+.wrap {overflow:hidden;font-size:12px;margin-left:10px; background:#fff;}
 .ac_frame {width:100%;*width:960px;_width:960px;min-width:940px;}
 .help_ico {font-weight:normal;height:26px;line-height:26px;padding:0 0 0 16px;background:url(../images/help_ico.gif) no-repeat left center;}
 	/*login*/
 	.wrap_login {width:850px;margin:10% auto 10px auto;background:#fff;}
 	.lg_table {width:850px;}
 	.lg_table td.login_ad {background:url(../images/logo_ad.jpg) no-repeat left top;width:500px;height:420px;}
-	.login_tit {height:24px;width:60px; background:#8080C0;color: #C0C0E0;padding:0 10px;line-height:24px;font-weight:bold;}
-	.login_frame {border:1px #C0C0E0 solid;background:#fff;width:350px;height:auto;text-align:center;margin-bottom:10px;}
+	.login_tit {height:24px;width:70px; background:#8080C0;color: #C0C0E0;padding:0 10px;line-height:24px;font-weight:bold;float:left;}
+	.login_frame {border:1px #C0C0E0 solid;background:#fff;width:350px;height:auto;text-align:center;margin-bottom:10px;clear:both;}
 		.login_table {width:320px;margin:10px auto;}
 		.login_table td {padding:0 4px;height:32px;color:#666;}
 		.login_table td.t_width {width:90px;line-height:12px;}
@@ -34,9 +30,9 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 	.login_footer {border-top:1px #8080C0 solid;padding:5px 0; text-align:center;color:#333;line-height:20px;}
 	.login_footer p {margin:0;padding:5px;line-height:16px;font-size:12px;color:#999;}
 	/*top*/
-	.top {height:130px; position:relative;}
+	.top {height:130px; position:relative;*z-index:1;}
 	.logo { background:url(../images/logo.gif) no-repeat left top;display:block;height:58px;width:190px;}
-	.top_nav { position:absolute;top:0;right:120px;background:url(../images/top_nav_bg.gif) repeat-x left -30px;height:30px;white-space:nowrap;display:block;z-index:100;}
+	.top_nav { position:absolute;top:0;right:120px;background:url(../images/top_nav_bg.gif) repeat-x left -30px;height:30px;white-space:nowrap;display:block;z-index:100; }
 		.top_nav_left {height:30px;_float:left;padding-left:10px; background:url(../images/top_nav_bg.gif) no-repeat left top;}
 		.top_nav_right {height:30px;_float:left;padding-right:10px; background:url(../images/top_nav_bg.gif) no-repeat right bottom;line-height:30px; text-align:right;}
 			.top_nav_right_ul {overflow:hidden;padding-top:6px;}
@@ -47,7 +43,7 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 			.top_nav_right_ul li.none a {display:inline;padding:0 2px;text-decoration:none;_width:30px;color:#369;white-space:nowrap}
 			.top_nav_right_ul li.none a:hover {background:none;color:#f60;}
 
-			.top_nav_right_ul li ul {position: absolute;visibility: hidden; background:#EEE;display:block;_width:120px;}	
+			.top_nav_right_ul li ul {position:absolute;visibility: hidden; background:#EEE;display:block;_width:120px;*+overflow:hidden;}	
 			.if_layout {width:100%;_width:120px;boder:none;filter:alpha(opacity=0);-moz-opacity:0;position:absolute; z-index:-1;display:none;*display:block;_height:150px;}	
 			.top_nav_right_ul li ul li {float:none;display:block;border:none; text-align:left;padding:2px;z-index:22}
 			.top_nav_right_ul li ul li a {width:auto;display:block;}
@@ -56,9 +52,17 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 	.top_right_ad { background:url(../images/top_right_ad.gif) no-repeat;height:119px;width:120px; position:absolute;top:0;right:0;_right:-1px;z-index:10;}
 	.top_time {position:absolute;top:30px;left:200px;z-index:10;height:26px;line-height:26px;width:205px;text-align:right; white-space:nowrap;overflow:hidden;color:#369}
 	.top_pk {position:absolute;top:89px;_top:91px;right:120px;z-index:10;height:26px;line-height:26px;width:380px; text-align:right; white-space:nowrap;overflow:hidden;color:#fff;}
-	.user_about {height:28px;width:410px; background:url(../images/main_nav_bg.gif) repeat-x left -28px;overflow:hidden;}
+	.user_about {height:28px;width:410px; background:url(../images/main_nav_bg.gif) repeat-x left -28px;}
+		.hidden_money { position:relative;padding-right:60px;}
+			.show_money span {position:absolute;overflow:hidden;top:0;_top:-3px;*top:-3px;top:-3px\9; left:0px;line-height:20px;text-align:left;color:#fff;width:60px;text-decoration:none;cursor: pointer;}
+			.show_money:visited {text-decoration:none;color:#000}
+			.show_money:active {cursor: auto!important;cursor:pointer;}
+			.show_money:hover {cursor: auto!important;cursor:pointer}
+			.show_money:hover span { background:#4b5876;border:1px #4b5876 solid;padding:0 5px;width:200px;}
+			.show_money:active span {background:#4b5876;border:1px #4b5876 solid;padding:0 5px;width:200px;}
+				
 		.about_body {line-height:28px; background:url(../images/main_nav_bg.gif) no-repeat right -56px;display:block;padding:0 10px;color:#fff;}
-	.site_ad {height:28px;width:705px; background:url(../images/main_nav_bg.gif) repeat-x left top; position:absolute;top:58px;right:120px;_right:118px;overflow:hidden;z-index:10px;}
+	.site_ad {height:28px;width:705px; background:#f1f1f1; position:absolute;top:58px;right:120px;_right:118px;overflow:hidden;z-index:10px;}
 		#scrlContent{position:absolute;left:0;top:0;white-space:nowrap; height:28px;line-height:28px;}  
 		#msg_more {display:inline;height:28px;line-height:28px; position: absolute;top:0;right:0; background:#f1f1f1;padding-left:4px;white-space:nowrap;}
 	.main_nav {height:33px; background:url(../images/main_nav_bg.gif) repeat-x left bottom;}
@@ -77,12 +81,12 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.main_nav_ul li ul li a:hover {background:#51698a;color:#f30;}
 	
 	.main {clear:both;display:block;min-height:300px;_height:300px;} 
-	.leftsubbody {border-left:1px #7089ae solid;border-bottom:1px #7089ae solid;border-right:1px #7089ae solid;overflow:auto;}
+	.leftsubbody {border-left:1px #7089ae solid;border-bottom:1px #7089ae solid;border-right:1px #7089ae solid;overflow:auto;*position:relative;*left:0;*top:0;}
 	/*left menu*/
 	.sub_nav {width:210px;float:left;overflow:hidden;}
 		.sub_nav_top { background:url(../images/sub_nav_top_bg.gif) no-repeat right top #3a547b;height:31px;padding-left:5px;}
 		.sub_nav_top ul li {margin-top:4px;float:left;height:27px;line-height:27px;font-weight:bold;}
-		.sub_nav_top ul li a {display:block;padding:0 10px;color:#fff;}
+		.sub_nav_top ul li a {display:block;padding:0 8px;color:#fff;}
 		.sub_nav_top ul li a:hover {color:#f60;}
 		.sub_nav_top ul li.ons {margin-top:4px;float:left;height:27px;line-height:27px;font-weight:bold; background:url(../images/sub_nav_top_ons.gif) repeat-x top left;}
 		.sub_nav_top ul li.ons a {display:block; background:url(../images/sub_nav_top_ons.gif) repeat-x right bottom;padding:0 10px;color:#39547a;}
@@ -94,10 +98,12 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.about_login { border-collapse:collapse;width:100%;border-top:1px #e3e3e3 solid;border-right:1px #e3e3e3 solid;margin-top:6px;}
 		.about_login td {border-left:1px #e3e3e3 solid;border-bottom:1px #e3e3e3 solid;padding:3px 5px;color:#999;}
 		
+	.f666t {color:#666;text-decoration:none;font-size:12px; background:url(../images/stime2.gif) no-repeat left center;padding-left:12px;}
 	.ac_ing {clear:both;border:1px #fff solid;padding:1px;_zoom:1;*zoom:1; text-align:center;}
 		.ac_buy { background:#dbeef3;}
 		.ac_sell { background:#f2dddc;}
-		.ac_tit {margin:0;line-height:26px; padding:0;font-size:12px; text-align:center;height:26px; background: #dde1ed; position:relative;border-bottom:1px #fff solid;}
+		
+		.ac_tit {margin:0;line-height:26px;padding:0;font-size:12px; text-align:center;height:26px; background: #dde1ed; position:relative;border-bottom:1px #fff solid;}
 			.ac_un_num { position:absolute;top:5px;right:4px;height:17px;width:35px;overflow:hidden; background:url(../images/re_num.gif) no-repeat left top; cursor:pointer;}
 			.ac_auto_num { position:absolute;top:5px;right:4px;height:17px;line-height:17px;color:#fff;font-weight:bold;width:35px;overflow:hidden; background:url(../images/re_num.gif) no-repeat left bottom;cursor:pointer;}
 			.ac_auto_num span {padding-left:16px; text-align:left;}
@@ -125,6 +131,9 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.s_ac_table td.ifnum_b {padding:6px 2px 6px 10px;text-align:left;border-bottom:1px #ccc solid;}
 		p.yy_bewrite {padding:2px;line-height:16px;margin:0; text-align:left;border-bottom:1px #CCC dashed;}
 		p.ff_bewrite{padding:2px;line-height:16px;margin:2px 0 0 0; text-align:left; background:#fff;}
+		.ac_disabled { background: #F2F2F2;}
+		.ac_disabled td.s_ac_buying_0, .ac_disabled td.s_ac_buying,.ac_disabled td.s_ac_selling_0, .ac_disabled td.s_ac_selling { background:#e3e3e3;}
+		.ac_disabled td.s_ac_buying .auto_time, .ac_disabled td.s_ac_selling .auto_time { background:#ccc;}
 		
 	.content {float:right;_width:715px;}
 		.today_play_tit {background:url(../images/point_001.gif) no-repeat 10px 9px #fff;padding-left:30px;height:30px;line-height:30px;border-bottom:1px #ccc solid;}
@@ -148,8 +157,8 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 				.helf_timebar .time_line {height:12px;line-height:12px;overflow:hidden;text-align:right;color:#000;background:url(../images/gq_time_bg.gif) repeat-x left -12px;}
 				.red_card_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:80px;width:16px;height:26px; background: url(../images/p_redcard.gif) no-repeat center bottom;z-index:100;color:red;}
 				.red_card_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:50px;width:16px;height:16px;padding-top:12px;z-index:100;background: url(../images/p_redcard.gif) no-repeat center top;color:red;}
-				.goal_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:200px;width:16px;height:26px; background: url(../images/p_goal.gif) no-repeat center bottom;z-index:10;color:red;text-align:center}
-				.goal_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:160px;width:16px;height:16px;padding-top:12px;z-index:10;background: url(../images/p_goal.gif) no-repeat center top;color:red;text-align:center}
+				.goal_t { position:absolute;top:-25px;font:12px Arial, Helvetica, sans-serif;left:200px;width:16px;height:26px; background: url(../images/p_goal.gif) no-repeat center bottom;z-index:100;color:red;}
+				.goal_d { position:absolute;top:12px;font:12px Arial, Helvetica, sans-serif;left:160px;width:16px;height:16px;padding-top:12px;z-index:100;background: url(../images/p_goal.gif) no-repeat center top;color:red;}
 	
 			.ds_top { background:url(../images/ds_top_bg.jpg) no-repeat;height:56px;position:relative;padding:0;margin:10px 0 0 0;}
 				.live_name { position:absolute;top:12px;left:10px;color:#3c567c;height:20px;line-height:20px;font-size:14px;font-weight:bold;}
@@ -161,6 +170,11 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 			.other_list {padding:5px;border:1px #778097 solid;display:none;}
 			.tab_show {display:block;}
 			.play_list_frame {padding-top:15px;}
+			.play_list_frame .game{position:relative}			
+			.play_list_frame .lock_layout { position:absolute;top:0;left:auto;right:0; background: url(../images/lock_32.gif) no-repeat center center #000;filter:alpha(opacity=40);-moz-opacity:0.4;-khtml-opacity: 0.4;opacity: 0.4;height:65px;width:420px;z-index:100;color:red;}
+			
+
+			
 			.play_list_tit {height:25px; background:url(../images/gq_list_tit.gif) no-repeat left center;border-bottom:2px #778097 solid;padding-left:60px;}
 			.play_list_tit .floatleft {color:#4e5a78;font-weight:bold;font-size:14px;line-height:25px;}
 			.play_list_tit_all {height:25px; background:url(../images/ds_list_tit.gif) no-repeat 5px top;border-bottom:2px #778097 solid;padding-left:40px;}
@@ -171,18 +185,27 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 			.play_list_ul {margin-top:5px;border-top:1px #e3e3e3 solid;}
 			.play_list_ul li { position:relative;height:32px;line-height:32px;border-bottom:1px #e3e3e3 solid;padding-left:2px;}
 			.play_list_ul li:hover { background:#FFC}
-			.play_list_frame .pk_th {position:absolute;height:24px;width:80px;white-space:nowrap;top:8px;right:420px; text-align:center;line-height:24px;color:#4e5a78;font-weight:bold;}
+			.play_list_frame .pk_th {position:absolute;height:24px;width:150px;white-space:nowrap;top:8px;right:480px; text-align:right;line-height:24px;color:#4e5a78;font-weight:bold;}
 			.play_list_frame .pk_xm {position:absolute;height:24px;width:200px;white-space:nowrap;top:8px;left:15px; text-align:left;line-height:24px;color:#4e5a78;font-weight:bold;}
 			.play_list_frame .other_th {position:absolute;height:24px;width:90px;white-space:nowrap;top:8px;right:350px;padding-right:5px;text-align:right;line-height:24px;color:#4e5a78;font-weight:bold; }
 			.play_list_frame .buy_th { position:absolute;height:24px;width:168px;top:8px;right:170px;text-align:right;line-height:24px;color:#4e5a78;font-weight:bold;}
 			.play_list_frame .sell_th { position:absolute;height:24px;width:168px;top:8px;right:0;line-height:24px;color:#4e5a78;font-weight:bold;}
 			.play_list_frame .player {padding-left:10px;}
 			.play_list_frame .buy { position:absolute;height:28px;width:168px;top:1px;right:170px; text-align:right; font-family:sans-serif}
-			.play_list_frame .other_pk { position:absolute;height:28px;line-height:28px;width:80px;top:2px;right:420px;text-align: center;}
+			.play_list_frame .other_pk { position:absolute;height:28px;line-height:28px;width:80px;top:2px;right:480px;text-align:right;}
 			.play_list_frame .other_data { background:url(../images/arrow_right.gif) no-repeat right center;position:absolute;height:28px;line-height:28px;width:55px;top:2px;right:350px;color:#060;text-align:right;padding-right:15px;}
 			.play_list_frame .other_data:hover {color:#f60;}
+			.play_list_frame .other_data_grn {background:url(../images/flash_grn.gif);position:absolute;height:28px;line-height:28px;width:55px;top:2px;right:350px;color:#060;text-align:right;padding-right:15px;}
+			.play_list_frame .other_data_red {background:url(../images/flash_red.gif);position:absolute;height:28px;line-height:28px;width:55px;top:2px;right:350px;color:#060;text-align:right;padding-right:15px;}
+			.play_list_frame .other_data_yel {background:url(../images/flash_yel.gif);position:absolute;height:28px;line-height:28px;width:55px;top:2px;right:350px;color:#060;text-align:right;padding-right:15px;}
 			.play_list_frame .buy .span {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background: #eceded;display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .buy .span_grn {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_grn.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .buy .span_red {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_red.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .buy .span_yel {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_yel.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
 			.play_list_frame .sell .span {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background: #eceded;display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .sell .span_grn {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_grn.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .sell .span_red {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_red.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
+			.play_list_frame .sell .span_yel {color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px; background:url(../images/flash_yel.gif);display:inline-block;line-height:14px;overflow:hidden; text-decoration:none; cursor:pointer;}
 			.play_list_frame .buy a b {display:block;width:48px;color:#000;}
 			.play_list_frame .buy a:hover b {color:#39f;}
 			.play_list_frame .buy .ons {background:#DDE9FF;color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px;display:inline-block;line-height:14px;overflow:hidden; text-decoration:none;cursor:pointer;}
@@ -191,9 +214,9 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 			.play_list_frame .sell a:hover b {color:red;}
 			.play_list_frame .sell .ons {background: #FFE1E1;color:#666;text-align:center;width:54px;height:27px;margin-left:2px;padding-top:3px;display:inline-block;line-height:14px;overflow:hidden;text-decoration:none;cursor:pointer;}
 			.play_list_frame .buy .flicker,.play_list_ul li .sell .flicker{background-color:#FFFF99;}
-			.play_list_frame .game{position:relative}			
-			.play_list_frame .lock_layout { position:absolute;top:0;left:auto;right:0; background: url(../images/lock_32.gif) no-repeat center center #000;filter:alpha(opacity=40);-moz-opacity:0.4;-khtml-opacity: 0.4;opacity: 0.4;height:65px;width:420px;z-index:100;color:red;}
-
+			
+			
+			
 			
 			
 
@@ -211,6 +234,8 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.table_1 th { background: #EFEFEF;border-bottom:1px #ccc solid;border-right:1px #ccc solid; font-weight:normal;padding:3px 5px;}
 		.table_1 th.ddd { background:#ddded9;}
 		.table_1 td { background:#fff;border-bottom:1px #ccc solid;border-right:1px #ccc solid;white-space:nowrap;padding:3px 5px;}
+		.table_1 tr.buybg th { background:#dcf0f7}
+		.table_1 tr.sellbg th { background:#fce5e4}
 		
 		.table_1_2 { border-collapse:collapse;width:100%;text-align:center;}
 		.table_1_2 th { background:#ececec;border-bottom:1px #ccc solid;border-right:1px #ccc solid; font-weight:normal;padding:3px;}
@@ -284,7 +309,7 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.err_frame .err_bewrite {width:300px;height:120px;padding:5px 10px;margin:10px 0;float:left;display:inline;border-left:1px  #FC9 solid;line-height:16px;}
 		.err_frame .err_bewrite div {padding:5px 0;}
 		
-		.list_grid {margin-top:12px;clear:both;}
+		.list_grid {margin-top:12px;clear:both;_position:relative;_width:100%;}
 		.list_line {clear:both;border-bottom:1px #e3e3e3 solid;padding:2px;margin-bottom:1px;height:24px;line-height:24px;}
 		
 		.list_table_1 {margin-top:1px;border-collapse:collapse;border:1px #ccc solid; border-collapse:collapse;width:100%;font-size:12px;}
@@ -292,7 +317,7 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.list_table_1 th { background:#ececec;border-bottom:1px #ccc solid;border-right:1px #ccc solid;padding:5px 3px; text-align:center;color: #039;}
 		.list_table_1 tr { background:#fff;color:#000;}
 		.list_table_1 tr:hover td { background: #FFC;color:#000;}
-		.list_table_1 td { border-bottom:1px #ccc solid;border-right:1px #ccc solid;padding:3px;line-height:20px; white-space:nowrap;}
+		.list_table_1 td { border-bottom:1px #ccc solid;border-right:1px #ccc solid;padding:3px;line-height:20px; white-space:nowrap; }
 		
 		.list_table_3 {margin-top:1px;border-collapse:collapse;border:1px #c2c6cf solid; border-collapse:collapse;width:100%;font-size:12px;}
 		/* Firefox */@-moz-document url-prefix(){.list_table_3 {margin-top:2px;border-collapse:collapse;border:1px #ccc solid; border-collapse:collapse;width:100%;font-size:12px;}}
@@ -350,7 +375,8 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 		.list_table_2 td { border-bottom:1px #ccc solid;border-right:1px #ccc solid;padding:3px 2px; text-align:center;line-height:20px;}
 		
 		/*赛事选择*/
-		.paly_select_c {padding:15px 6px 5px 6px;color:red;border:1px #369 solid;margin-bottom:2px;}
+		#play_info_playlist {height: 28px;line-height: 28px;padding: 0 10px;margin:5px 0;overflow: hidden;background: url(../images/gq_top_bg.jpg) left center;border: 1px #66C16C solid;}
+		.paly_select_c {padding:5px 10px;color:red;border:1px #369 solid;margin-bottom:2px;}
 			.paly_select_c label:hover { cursor:pointer;color: #f60}
 			.paly_select_c input:hover { cursor:pointer;color:#F30}
 			
@@ -362,5 +388,15 @@ body.sub_body { background:#fff;padding:0;margin:0;}
 			.paly_select_d ul.locklist li:hover {color:#666; background:none;}
 		
 		.none_bewrite {border:1px #ccc solid;padding:5px;margin:5px; background:#E7FCFE;}
-
+		
+		/*tips*/
+		a.ptips {padding:0;margin:0;text-decoration:none;position:relative;}
+		a.ptips img {border:2px #fff dashed;padding:0;margin:0;}
+		a.ptips:hover img {border:2px #999 solid;padding:0;margin:0;}
+		a.ptips span{ position:absolute;left:16px;bottom:10px;_bottom:20px;line-height:20px;padding:5px 10px;width:360px;visibility:hidden; background:#fff;border:2px #999 solid; white-space:normal;text-decoration:none; }
+		a.ptips:hover span { visibility:visible}
+		
+		.bt_refurbish { text-align:left;background:url(../images/button_h25.gif) no-repeat left center;padding:0 8px 0 28px;line-height:20px;_line-height:18px;height:22px;_height:18px;border:none;border:1px #ccc solid; cursor:pointer; /*ie6*/ width:86px;_width:0;overflow:visible;/**/}
+		.bt_refurbish:hover {border:1px #090 solid;}
+		
 	.foot {display:none;clear:both;padding:4px 8px; text-align:left;line-height:18px;color:#999;}

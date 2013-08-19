@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-19 11:41:41
+ *@date:2013-08-19 17:46:51
  */
 (function($, window) {
 	//多币种处理
@@ -356,9 +356,8 @@
 		},
 
 		setGameStatus: function(gameStatusArr) {
-			var gameId, gameStatus, gStatus, gm;
-			var gmChange=false;
-			for (var i = gameStatusArr.length; i--;) {
+			var gameId, gameStatus, gStatus, gm,i,gmChange=false;
+			for (i = gameStatusArr.length; i--;) {
 				gameId = gameStatusArr[i][0];
 				gStatus = gameStatusArr[i][1];
 				gm = allGameModels.getById(gameId);
@@ -375,15 +374,16 @@
 		setPk: function(pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			if (!pk) return;
-			var tm, pkArr, tradeId, attrs, tradeAttr, tradeObj, pkVal, attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
+			var i,j,pkLen,tm, pkArr, tradeId, attrs, tradeAttr, tradeObj, pkVal, 
+			attrs = ['tradeId', 'pdata', 'b2', 'b2n', 'b1', 'b1n', 'b0', 'b0n', 's0', 's0n', 's1', 's1n', 's2', 's2n'],
 			attrsLen = attrs.length;
-			for (var i = 0, pkLen = pk.length; i < pkLen; i++) {
+			for (i = 0, pkLen = pk.length; i < pkLen; i++) {
 				pkArr = pk[i];
 				tradeId = pkArr[0];
 				tm = tradeModels.getById(tradeId);
 				if (tm) {
 					tradeObj = {};
-					for (var j = 0; j < attrsLen; j++) {
+					for (j = 0; j < attrsLen; j++) {
 						tradeAttr = attrs[j];
 						pkVal = pkArr[j];
 						(pkVal == 'n') && (pkVal = "");
@@ -414,7 +414,7 @@
 			_playerModels = playerModels,
 			//缓存外部变量
 			isHost; //p1主客标识
-			if (_playerModels.length == 0 && teamInfo) {
+			if (_playerModels.size() == 0 && teamInfo) {
 				p1 = teamInfo[0];
 				p2 = teamInfo[1];
 				isHost = p1[2]; //取第一个队的主客标识
@@ -448,7 +448,7 @@
 			});
 		},
 		setGames: function(tradeArr) {
-			var game, typeId, //玩法id
+			var i,game, typeId, //玩法id
 			gameId, //游戏id
 			tradeId, //交易项id
 			playerId, //球队id
@@ -466,7 +466,7 @@
 			//原来的数据与全量对比，找出在全量中不存在的游戏并删除之
 			gameTypeModels.delNotExistGame(tradeArr);
 
-			for (var i = 0, len = tradeArr.length; i < len; i++) {
+			for (i = 0, len = tradeArr.length; i < len; i++) {
 				//解析交易项数组
 				trade = tradeArr[i];
 				name = trade[0];
@@ -524,23 +524,8 @@
 				}
 			};
 		},
-		firstAddType: function(json) {
-			if (json.c == 0) {
-				ds._addType(json.d);
-				ds.gecth(opt);
-			}
-		},
-        /**
-         * 添加类型的包装方法
-         * @param json
-         */
-		addType: function(json) {
-			if (json.c == 0) {
-				ds._addType(json.d);
-			}
-		},
 		_addType: function(d) {
-			var typeId, gameTypeModel,
+			var i,typeId, gameTypeModel,
 			_opt = opt,
 			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
@@ -550,7 +535,7 @@
 					gts.setCurrentGameType(d[0]);
 				};
 				_opt.currentGameType = _opt.currentGameType || d[0];
-				for (var i = 0, len = d.length; i < len; i++) {
+				for (i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gts.getById(typeId);
 					if (!gameTypeModel) {
@@ -566,9 +551,8 @@
 	},
 	dc = {
 		stopTimeout: function() {
-			var timeoutIndex = dr.timeoutIndex,
-			method;
-			for (var name in timeoutIndex) {
+			var name,timeoutIndex = dr.timeoutIndex,method;
+			for (name in timeoutIndex) {
 				timeoutIndex[name] && clearTimeout(timeoutIndex[name]);
 				method = 'get' + name.replace(/\w/, name.charAt(0).toUpperCase());
 				dr[method] && (dr[method].v = undefined)
@@ -659,8 +643,8 @@
 			this.destroy();
 		},
 		destroyTades:function(){
-			var trades=this.trades;
-			for(var i=trades.length;i--;){
+			var i,trades=this.trades;
+			for(i=trades.length;i--;){
 				trades[i].destroy();
 			}
 		}
@@ -742,12 +726,12 @@
 		},
 		reset: function() {
 			this.render();
-			var left, width = this.getTimebarWidth(),
+			var i,left, width = this.getTimebarWidth(),
 			m, time,isFirst, fragment, first = document.createDocumentFragment(),
 			second = document.createDocumentFragment(),
 			arr = this.model.toArr();
 			width-=12;//修正偏移
-			for (var i = arr.length; i--;) {
+			for (i = arr.length; i--;) {
 				m = arr[i];
 				time = m.get("time");
 				isFirst=m.get("isFirst");
@@ -840,8 +824,8 @@
 		},
 		statusChange:function(name,oldVal,newVal){
 			if(newVal && !/^4?[123]$/.test(newVal)){
-				var gms=gameTypeModels.getCurrentGameModels();
-				for(var i=gms.length;i--;){
+				var i,gms=gameTypeModels.getCurrentGameModels();
+				for(i=gms.length;i--;){
 					gms[i].destroyAll();
 				}
 				if(typeof opt.matchEnd==='function'){
@@ -946,7 +930,7 @@
 			});
 		},
 		ratioClick: function(e) {
-			var view, model, pos, action, tid, bors, site, r, q, qs, isFirstsd;
+			var i,view, model, pos, action, tid, bors, site, r, q, qs, isFirstsd;
 			view = e.data.view;
 			model = view.model;
 			pos = $(this).attr('pos');
@@ -960,7 +944,7 @@
 			isFirstsd = false;
 			qs = 0;
 			if (site >= 0) {
-				for (var i = site; i >= 0; i--) {
+				for (i = site; i >= 0; i--) {
 					qs = Utils.add(qs, model.get(action + i + 'n') || 0);
 				}
 				qs = Utils.getMaxBets(qs); //过多位数处理
@@ -997,7 +981,6 @@
 			this.show();
 			var tv= new TradeView({model: m});
 			var order=m.get('order');
-			tv.$.attr('order',order);
 			//为了排序码
 			for(var i=0,len=this.order.length;i<len;i++){
 				if(order<this.order[i]){
@@ -1069,12 +1052,9 @@
 		},
 		freshEvent: function(fresh) {
 			fresh.countdown({
-				time: 30,
-				//倒计时
-				freeze: 3,
-				//冻结时间
-				circulation: true,
-				//是否循环
+				time: 30, //倒计时
+				freeze: 3, //冻结时间
+				circulation: true, //是否循环
 				timeEnd: function() {
 					$(".bt_refurbish:visible").countdown("restart");
 					dr.getAll();
@@ -1088,7 +1068,7 @@
 		},
 		showhide: function(isShow) {
 			if (isShow) {
-				if (this.model.length > 0) {
+				if (this.model.size() > 0) {
 					this.show();
 					this.freshEvent(this.fresh);
 				}
@@ -1098,7 +1078,7 @@
 			}
 		},
 		removeView: function() {
-			if (this.model.length == 0) {
+			if (this.model.size() == 0) {
 				this.hide();
 			}
 		}

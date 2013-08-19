@@ -2,7 +2,7 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time :2013-07-02 18:00:52
+ *@time :2013-08-19 17:47:01
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
@@ -81,9 +81,7 @@
 	};
 //对象集合类
 	_.Models = function (settings) {
-		var models = {};
-		//取得集合大小
-		this.length =0;
+		var models = {},_models = [];
 		//集合类型
 		this.model = null;
 		//初始化方法
@@ -96,12 +94,15 @@
 				});
 			return _add.call(this,m);
 		};
+		this.size=function(){
+			return _models.length;
+		}
 		//添加指定的model进入该集合
 		var _add = function (m) {
 			var id = m.get(m.idArr);
 			if (!models[id]) {
 				models[id] = m;				
-				this.length++;
+				_models.push(m);
 				this.listenTo(m,"destroy",function(){
 					this.del(m);
 				});
@@ -113,25 +114,22 @@
 		};
 		//删除指定的model
 		this.del = function (m) {
-			var id = m.get(m.idArr);
+			var i=0,id = m.get(m.idArr);
 			if (models[id]) {
 				delete models[id];
-				this.length--;
+				while(_models[i++]!==m);
+				_models.splice(--i,1);
 			}
 			return this;
 		};
 		//清空该集合
 		this.empty = function () {
 			models = {};
-			this.length = 0;
+			_models=[];
 		};
 		//转换此集合成数组
 		this.toArr = function () {
-			var m,arr = [];
-			for (m in models) {
-				arr.push(models[m]);
-			}
-			return arr;
+			return _models;
 		};
 		//通过model Id取得model
 		this.getById = function (id) {
@@ -139,12 +137,7 @@
 		};
 		//通过集合的索引取得model，很耗性能
 		this.get = function (index) {
-			var m,i = 0;
-			for (m in models) {
-				if (i++ === index) {
-					return models[m];
-				}
-			}
+			return models[index];
 		};
 		this.reset=function(mArrs){
 			this.empty();

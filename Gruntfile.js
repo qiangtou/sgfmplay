@@ -5,6 +5,7 @@ module.exports = function(grunt) {
 			//文件头部输出信息
 			options: {
 				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+				report:'min',
 				beautify:{
 					ascii_only:true
 				}

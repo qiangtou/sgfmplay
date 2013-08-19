@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-12 17:31:38
+ *@date:2013-08-19 11:41:41
  */
 (function($, window) {
 	//多币种处理
@@ -244,7 +244,6 @@
 		setStatus: function(status) {
             //如果状态数组为空的话，则不处理
             if (!status || status.toString().indexOf(',,,,,,,')!=-1) return;
-	    //console.log('状态：',status);
 			//赛事状态信息，[0]赛事下的各游戏的进球红牌[5]以及状态[6](状态：1待开市、2开市待审核、3集合竞价中、4结束竞价待审核、5待开盘、6开盘待审核、7开盘中、8暂停中、9收盘待审核、
 			//10已收盘、11停盘待审核、12已停盘、13赛果待审核、14待结算、15待发送、16已发送、17已结束、18交易已停止,99状态需要锁定)
 			var s = status,
@@ -696,9 +695,10 @@
 			$(this).hide();
 		},
 		render: function() {
-			var time = this.model.get("time");
+			var m=this.model,
+			time = m.get("time"),
 			//下半场时间处理
-			var isFirst=this.model.get("isFirst");
+			isFirst=m.get("isFirst");
 			!isFirst&&(time=45+parseInt(time));
 			this.$.html(time + "'");
 			return this;
@@ -774,12 +774,15 @@
 			return reg.test(mStatus);
 		},
 		isRoll:function(mStatus){
+			mStatus=mStatus||this.get('mStatus');
 			return this.checkStatus(/4[123]/,mStatus);
 		},
 		is2nd:function(mStatus){
+			mStatus=mStatus||this.get('mStatus');
 			return this.checkStatus(/43/,mStatus);
 		},
 		isHalfAnd2nd:function(mStatus){
+			mStatus=mStatus||this.get('mStatus');
 			return this.checkStatus(/4[23]/,mStatus);
 		},
 		end:function(){
@@ -790,12 +793,13 @@
 	TopView = sgfmmvc.View.extend({
 		model: matchModel,
 		init: function() {
+			var m=this.model;
 			this.i18n = opt.i18n.top;
-			this.listenTo(this.model, "change:isRollingBall", this._init);
-			this.listenTo(this.model, "change:playTime", this.setPlayTime);
-			this.listenTo(this.model, "change:p2name", this.setMatchName);
-			this.listenTo(this.model, "change:mStatus", this.statusChange);
-			this.listenTo(this.model, "update", this.render);
+			this.listenTo(m, "change:isRollingBall", this._init);
+			this.listenTo(m, "change:playTime", this.setPlayTime);
+			this.listenTo(m, "change:p2name", this.setMatchName);
+			this.listenTo(m, "change:mStatus", this.statusChange);
+			this.listenTo(m, "update", this.render);
 		},
 		_init: function(key, oldV, isRollingBall) {
 			//isRollingBall:0是单式;1是滚球;
@@ -817,8 +821,11 @@
 			this.timebar && this.timebar.showTimeLine(playTime,matchModel.get("totalTime"));
 		},
 		render: function() {
-			var timebar,isRollingBall, html = sgfmmvc.replace(this.template, $.extend({}, this.model.getAttrs(), this.i18n));
-			isRollingBall= this.model.get('isRollingBall');
+			var timebar,m=this.model,
+			isRollingBall= m.get('isRollingBall'),
+			showHalfScore = m.get("showHalfScore"),
+			html = sgfmmvc.replace(this.template, $.extend({}, m.getAttrs(), this.i18n));
+
 			if(isRollingBall){
 				timebar=this.timebar.$.detach();
 			}
@@ -826,7 +833,6 @@
 			if(isRollingBall){
 				this.$.append(timebar);
 			}
-			var showHalfScore = this.model.get("showHalfScore");
 			if (!showHalfScore) {
 				this.$.find('.p_helf_ac').hide();
 			};
@@ -844,9 +850,9 @@
 			}
 		},
 		setMatchName: function() {
-			var p1, p2, p1vsp2;
-			p1 = this.model.get('p1name');
-			p2 = this.model.get('p2name');
+			var p1, p2, p1vsp2,m=this.model;
+			p1 = m.get('p1name');
+			p2 = m.get('p2name');
 			p1vsp2 = p1 + ' VS ' + p2;
 			$('#matchName').html(p1vsp2);
 		}
@@ -975,15 +981,16 @@
 		cls: "game",
 		template: $("#game_tmpl").html(),
 		init: function() {
+			var m=this.model;
 			this.hide();
 			this.order=[];
-			this.listenTo(this.model, "addTrade", this.addTrade);
-			this.listenTo(this.model, "change:gStatus", this.changeGStatus);
+			this.listenTo(m, "addTrade", this.addTrade);
+			this.listenTo(m, "change:gStatus", this.changeGStatus);
 		},
 		render: function() {
 			this.$.html(this.template);
 			this.ul = this.$.find(".play_list_ul");
-			this.lock = this.$.find(".lock_layout");
+			this.lock = this.$.find(".lock_layout").height('100%');
 			return this;
 		},
 		addTrade: function(m) {
@@ -1003,14 +1010,13 @@
 			this.order.push(order);
 		},
 		changeGStatus: function(k, oldStatus, status) {
-			var _opt, gameId,mo;
-			_opt = opt;
-			mo=this.model;
-			gameId = mo.get('gameId');
+			var m=this.model,
+			_opt = opt,
+			gameId = m.get('gameId');
 			if (this.$.is(':visible')) {
-				if (mo.isRemoved(status)) { //不是需要显示的游戏状态删除
+				if (m.isRemoved(status)) { //不是需要显示的游戏状态删除
 					this.remove(gameId);
-				} else if (mo.isUnlocked(status)) { //正常游戏状态需要解锁
+				} else if (m.isUnlocked(status)) { //正常游戏状态需要解锁
 					this.unlockGame(gameId);
 				} else { //其它状态都锁定
 					this.lockGame(gameId);
@@ -1018,7 +1024,6 @@
 			}
 		},
 		remove: function(gameId) {
-            //console.log('要移除的游戏:',gameId);
 			this.model.destroyAll();
 			this.$.remove();
 			opt.typeChange([{
@@ -1043,9 +1048,10 @@
 		cls: "play_list_frame",
 		template: $("#playlist_tmpl").html(),
 		init: function() {
-			this.listenTo(this.model, "create", this.addGame);
-			this.listenTo(this.model, "showhide", this.showhide);
-			this.listenTo(this.model, "del", this.removeView);
+			var m=this.model;
+			this.listenTo(m, "create", this.addGame);
+			this.listenTo(m, "showhide", this.showhide);
+			this.listenTo(m, "del", this.removeView);
 		},
 		render: function() {
 			var i18n = $.extend(opt.i18n.playlist, this.i18n);
@@ -1054,8 +1060,8 @@
 			return this;
 		},
 		addGame: function(m) {
-			var md = this.model.getById(m.gameId);
-			var gv = new GameView({
+			var md = this.model.getById(m.gameId),
+			gv = new GameView({
 				model: md
 			});
 			allGameModels.add(md);
@@ -1092,9 +1098,7 @@
 			}
 		},
 		removeView: function() {
-		//console.log(this.$.find('.floatleft').html(),'剩余游戏数：',this.model.length);
 			if (this.model.length == 0) {
-			//console.log('移除玩法');
 				this.hide();
 			}
 		}
@@ -1140,7 +1144,7 @@
 			for(i=gms.length;i--;){
 				gm=gms[i];
 				gId=gm.get('gameId');
-				for(var j=tradeArr.length;j--;){
+				for(j=tradeArr.length;j--;){
 					ga=tradeArr[j];
 					_gId=ga[2];
 					if(gId==_gId){
@@ -1195,37 +1199,38 @@
 		model: gameTypeModels,
 		cls: 'other_play',
 		init: function() {
+			var m=this.model;
 			this.i18n = opt.i18n.gameType;
 			this.hide();
 			this.currenTab = null;
-			this.listenTo(this.model, "create", this.addTypeTab);
-			this.listenTo(this.model, "showhide", this.showhide);
+			this.listenTo(m, "create", this.addTypeTab);
+			this.listenTo(m, "showhide", this.showhide);
 		},
 		events: {
 			'li click': 'toggleTab'
 		},
 		toggleTab: function(e) {
-			var currenTab = $(this),
+			var id,typeId,md,currenTab = $(this),
 			v = e.data.view;
 			//把先前的选项卡样式去掉
 			if (v.currenTab) {
 				//如果是同一个标签就不操作
 				if(v.currenTab[0]===this)return;
-				var id = v.currenTab.children().attr('typeId');
+				id = v.currenTab.children().attr('typeId');
 				v.model.getById(id).set('isShow', false);
 			}
 			//将新的选项卡样式加上
-			var typeId = currenTab.children().attr('typeId');
+			typeId = currenTab.children().attr('typeId');
 			v.currenTab = currenTab;
-			var md = v.model.getById(typeId).set('isShow', true);
+			md = v.model.getById(typeId).set('isShow', true);
 
 			gameTypeModels.setCurrentGameType(typeId);
 			dr.firstGetPlaylist();
 		},
 		addTypeTab: function(m) {
-			var typeId = m.typeId;
-			var gameTypeModel = this.model.getById(typeId);
-			var tv = new TabView({
+			var typeId = m.typeId,
+			gameTypeModel = this.model.getById(typeId),
+			tv = new TabView({
 				model: gameTypeModel
 			});
 			this.ul.append(tv.render().$);
@@ -1255,8 +1260,8 @@
 			}
 		},
 		addGameType: function(m) {
-			var typeId = m.typeId || m.get('typeId');
-			var type = opt.typeHolder[typeId];
+			var typeId = m.typeId || m.get('typeId'),
+			type = opt.typeHolder[typeId];
 			type && this[type](typeId, type);
 			return this;
 		},
@@ -1265,17 +1270,18 @@
 		},
 		//让球
 		concedepoints: function(typeId, title) {
+			var whole,half,md;
 			title = this.i18n[title];
-			var whole = new PlayListView({
+			whole = new PlayListView({
 				model: new GameModels
 			});
 			whole.i18n={title: this.i18n.whole + '-' + title};
-			var half = new PlayListView({
+			half = new PlayListView({
 				model: new GameModels
 			});
 			half.i18n={title: this.i18n.half + '-' + title};
 			
-			var md = this.model.getById(typeId);
+			md = this.model.getById(typeId);
 			md.half = half.model;
 			md.whole = whole.model;
 			this.$.append(whole.render().$, half.render().$);
@@ -1393,8 +1399,7 @@
 		};
 		//通过交易项ID获取交易项的让球指标
 		t.isGiveBall = function(tradeId) {
-			var tm;
-			tm = tradeModels.getById(tradeId);
+			var tm = tradeModels.getById(tradeId);
 			return tm.get('concedeId');
 		};
 		//通过交易项ID获取交易项名称,(大小为:大或小，让球为球队名)
@@ -1444,6 +1449,11 @@
 		t.getNowQty = function(bet) {
 			return Utils.getBets(bet);
 		};
+		//通过交易项id获取队id，交易项数组的第一个元素
+		t.getAttenderId=function(tradeId){
+			var tm = tradeModels.getById(tradeId);
+			return tm.get('name');
+		};
 		return t;
 	})(window.tmatch || {});
 })(jQuery, window);
@@ -1452,11 +1462,11 @@
  *倒计时插件
  */
 (function($) {
-	var $this;
-	$.fn.countdown = function(settings) {
-		var $this, fun;
+	var $this,defaults,init,start,clear,restart,control,checkVisible;
 
-		for (var i = this.length; i--;) {
+	$.fn.countdown = function(settings) {
+		var i,$this, fun;
+		for (i = this.length; i--;) {
 			$this = this.eq(i);
 			if (typeof settings == 'string') {
 				fun = control[settings];
@@ -1467,7 +1477,8 @@
 		}
 		return this;
 	};
-	var defaults = {
+
+	defaults = {
 		time: 10,
 		freeze: 3,
 		circulation: false,
@@ -1475,13 +1486,13 @@
 		click: $.noop
 	};
 
-	var init = function(settings) {
+
+	init = function(settings) {
 		var opt, _opt, $this;
 		$this = this;
 		if (!$this.is('input') || $this.data("countdown")) return;
 		$this.data("countdown", true);
-		opt = $.extend({},
-		defaults, settings);
+		opt = $.extend({},defaults, settings);
 		_opt = $this.data("opt");
 		opt.originVal = (_opt && _opt.originVal) || $this.val();
 		$this.data("opt", opt);
@@ -1491,8 +1502,8 @@
 		start.call($this, opt);
 	};
 
-	var start = function(opt) {
-		var $this, time, freeze, timeEnd, freezeTime, originVal, circulation;
+	start = function(opt) {
+		var $this, time, freeze, timeEnd, freezeTime, originVal, circulation,arr;
 
 		$this = this;
 		time = opt.time;
@@ -1504,7 +1515,7 @@
 
 		$this.val(time + originVal).attr("disabled", true);
 
-		var arr = $this.data("intervalIndex"); 
+		arr = $this.data("intervalIndex"); 
 		! arr && $this.data("intervalIndex", arr = []);
 		arr.push(setInterval(function() {
 			time--;
@@ -1519,30 +1530,31 @@
 			} else {
 				clear.call($this);
 				$this.val(originVal);
-				var end = timeEnd();
-				end && opt.circulation && start.call($this, opt);
+				timeEnd() && opt.circulation && start.call($this, opt);
 			}
 		},
 		1000));
 	};
-	var clear = function() {
-		var arr = this.data("intervalIndex") || [];
-		while (arr.length)
-		clearInterval(arr.pop());
-		var opt = this.data("opt");
+
+	clear = function() {
+		var opt=this.data('opt'),arr = this.data("intervalIndex") || [];
+		while(arr.length)clearInterval(arr.pop());
 		opt && this.val(opt.originVal).data("countdown", false);
 		return false;
-	};
-	var restart = function() {
+	}; 
+
+	restart = function() {
 		clear.call(this);
 		start.call(this, this.data("opt"));
 
 	};
-	var control = {
+
+	control = {
 		'stop': clear,
 		'restart': restart
 	};
-	var checkVisible = function($this) {
+
+	checkVisible = function($this) {
 		return $this && $this.is(':visible');
 	};
 })(jQuery);

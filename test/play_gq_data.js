@@ -68,7 +68,7 @@ var initData={
 'frameInfoUrl':{"c":0,"d":[null,null,null],"v":35040,"o":[0,0],"t":0},
 'gameInfoUrl':'',
 'marketInfoUrl':{"c":0,"d":null,"v":2509,"o":[3,0],"t":1},
-'playlistUrl':{"c":0,"d":[1,4],"v":1218,"o":[2,0],"t":1}
+'playlistUrl':{"c":0,"d":[1,2,3,4,5],"v":1218,"o":[2,0],"t":1}
 };
 
 $.setReturnData({

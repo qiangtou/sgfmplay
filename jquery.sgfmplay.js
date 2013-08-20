@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-19 17:46:51
+ *@date:2013-08-20 15:38:28
  */
 (function($, window) {
 	//多币种处理
@@ -448,7 +448,7 @@
 			});
 		},
 		setGames: function(tradeArr) {
-			var i,game, typeId, //玩法id
+			var i,len,game, typeId, //玩法id
 			gameId, //游戏id
 			tradeId, //交易项id
 			playerId, //球队id
@@ -525,7 +525,7 @@
 			};
 		},
 		_addType: function(d) {
-			var i,typeId, gameTypeModel,
+			var i,len,typeId, gameTypeModel,
 			_opt = opt,
 			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
@@ -1034,10 +1034,10 @@
 			var m=this.model;
 			this.listenTo(m, "create", this.addGame);
 			this.listenTo(m, "showhide", this.showhide);
-			this.listenTo(m, "del", this.removeView);
+			this.listenTo(m, "empty", function(){ this.hide(); });
 		},
 		render: function() {
-			var i18n = $.extend(opt.i18n.playlist, this.i18n);
+			var i18n = $.extend({},opt.i18n.playlist, this.i18n);
 			this.$.hide().html(sgfmmvc.replace(this.template, i18n));
 			this.fresh = this.$.find('.bt_refurbish');
 			return this;
@@ -1075,11 +1075,6 @@
 			} else {
 				this.hide();
 				this.fresh.countdown('stop');
-			}
-		},
-		removeView: function() {
-			if (this.model.size() == 0) {
-				this.hide();
 			}
 		}
 	}),
@@ -1246,21 +1241,24 @@
 			return this;
 		},
 		standard: function(typeId,title) {
-			this.concedepoints(typeId, title);
+			var pk='';
+			this.concedepoints(typeId,title,pk);
 		},
 		//让球
-		concedepoints: function(typeId, title) {
+		concedepoints: function(typeId,title,pk) {
 			var whole,half,md;
 			title = this.i18n[title];
 			whole = new PlayListView({
-				model: new GameModels
+				model: new GameModels,
+				i18n:{title:this.i18n.whole + '-' + title}
 			});
-			whole.i18n={title: this.i18n.whole + '-' + title};
 			half = new PlayListView({
-				model: new GameModels
+				model: new GameModels,
+				i18n:{title:this.i18n.half + '-' + title}
 			});
-			half.i18n={title: this.i18n.half + '-' + title};
-			
+			if(arguments.length>=3){//pk是否传进来
+				whole.i18n.pk=half.i18n.pk=pk;
+			}
 			md = this.model.getById(typeId);
 			md.half = half.model;
 			md.whole = whole.model;

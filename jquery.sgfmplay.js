@@ -1,10 +1,10 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-20 15:38:28
+ *@date:2013-08-23 15:49:53
  */
 (function($, window) {
 	//多币种处理
-	var multCurr, 
+	var play,multCurr, 
 	opt = {},
 	defaults = {
 		ratioPromptTime:3,//赔率变化闪动时间
@@ -68,11 +68,7 @@
 						ds._addType(json.d);
 						dr.getAll();
 					} else {
-					if(json.c==1){
-						//$('#matchName').html('该赛事没有游戏');
-						$('#matchName').html('');
-					}
-						dr.timeoutIndex['firstplaylist'] = setTimeout(fun, refreshCycle);
+						//TODO 跳转至今日赛事页面
 					}
 				}
 			});
@@ -163,7 +159,7 @@
 				}
 			});
 		},
-		//取盘口信息
+		//取盘口信息,刷新参考赔率
 		getMarketInfo: function(v) {
 			var fun = arguments.callee,
 			url = opt.marketInfo[0],
@@ -177,7 +173,7 @@
 				},
 				success: function(json) {
 					if (json.c == 0) {
-						json.d && ds.setPk(json.d);
+						ds.setPdata(json.d);
 						fun.v = json.v;
 						dr.timeoutIndex['marketInfo'] = setTimeout(fun, refreshCycle);
 					}
@@ -285,7 +281,7 @@
 				//滚球时间
 				if(typeof(s[7])==="number" && typeof(mStatus)==="number"){
 					o.playTime = (s[7] / 60000) | 0;
-					if(tp.is2nd(mStatus)){o.playTime=parseInt(o.playTime)+45;}
+					if(tp.is2nd(mStatus)){o.playTime=o.playTime+45;}
 				}
 				o['p1goal'] = playerModels.host.get('goal');
 				o['p2goal'] = playerModels.custom.get('goal');
@@ -354,7 +350,6 @@
 			};
 			return events;
 		},
-
 		setGameStatus: function(gameStatusArr) {
 			var gameId, gameStatus, gStatus, gm,i,gmChange=false;
 			for (i = gameStatusArr.length; i--;) {
@@ -370,7 +365,18 @@
 			//game若有变化则重新请求框架
 			gmChange && dr.getFrameInfo();
 		},
-
+		//只设置参考赔率
+		setPdata:function(pk){
+			if (!pk) return;
+			var i,pkArr,tradeId,pdata,tm;
+			for (i = pk.length; i--;) {
+				pkArr = pk[i];
+				tradeId = pkArr[0];
+				pdata=pkArr[1]||'--';
+				tm = tradeModels.getById(tradeId);
+				tm && tm.set('pdata',pdata);
+			}
+		},
 		setPk: function(pk) {
 			//每个交易项的盘口信息，[交易项ID,参考赔率,买1赔率,买1数量,买2赔率,买2数量,买3赔率,买3数量,卖1赔率,卖1数量,卖2赔率,卖2数量,卖3赔率,卖3数量]
 			if (!pk) return;
@@ -459,7 +465,7 @@
 			typeName, //玩法名
 			tradeIndexType, //指标类型
 			order,//排序码
-			player,gameTypeModel,gamemodels,
+			trade,player,gameTypeModel,gamemodels,
 			i18n = opt.i18n.gameType,
 			_defaultType = gameTypeModels.getCurrentGameType();
 
@@ -531,10 +537,10 @@
 			i18n = _opt.i18n.gameType;
 
 			if (d) {
-				if (!gts.getCurrentGameType()) {
+				var currentgt=gts.getCurrentGameType();
+				if (!currentgt) {
 					gts.setCurrentGameType(d[0]);
 				};
-				_opt.currentGameType = _opt.currentGameType || d[0];
 				for (i = 0, len = d.length; i < len; i++) {
 					typeId = d[i];
 					gameTypeModel = gts.getById(typeId);
@@ -542,8 +548,10 @@
 						gameTypeModel = gts.create({
 							'typeId': typeId,
 							'typeName': i18n[opt.typeHolder[typeId]],
-							'isShow': i == 0
+							'isShow': currentgt?false:i==0
 						});
+					}else{
+						gameTypeModel.set('close',false);
 					}
 				}
 			}
@@ -565,7 +573,7 @@
 			var result, PRECISION = 1000;
 			num1 = num1 * PRECISION | 0;
 			num2 = num2 * PRECISION | 0;
-			result = (num1 + num2) / PRECISION;
+			result = (num1 + num2) / PRECISION|0;
 			return result;
 		},
 		getBets: function(bet) {
@@ -716,7 +724,11 @@
 				timeLine.css("width", barWidth); //填满上半场
 				timeLine = this.second.children(".time_line"); //切换到下半场
 				_time-=halfTime;
+				if(playTime>totalTime)playTime=totalTime+'+';
+			}else{
+				if(playTime>halfTime)playTime=halfTime+'+';
 			}
+			if(_time>halfTime)_time=halfTime;
 			var width = (_time / halfTime * barWidth) | 0; //计算时间条比例
 			if(width>15) timeLine.html(playTime + "'");
 			timeLine.css("width", width);
@@ -805,10 +817,18 @@
 			this.timebar && this.timebar.showTimeLine(playTime,matchModel.get("totalTime"));
 		},
 		render: function() {
-			var timebar,m=this.model,
+			var html,timebar,m=this.model,
 			isRollingBall= m.get('isRollingBall'),
 			showHalfScore = m.get("showHalfScore"),
-			html = sgfmmvc.replace(this.template, $.extend({}, m.getAttrs(), this.i18n));
+			attrs=m.getAttrs(),
+			time=attrs.playTime,
+			totalTime=matchModel.get("totalTime"),
+			compareTime;
+			if(isRollingBall){
+				compareTime=showHalfScore?totalTime:totalTime/2|0;
+				if(time>compareTime)attrs.playTime=compareTime+'+';
+			}
+			html = sgfmmvc.replace(this.template, $.extend({}, attrs, this.i18n));
 
 			if(isRollingBall){
 				timebar=this.timebar.$.detach();
@@ -849,7 +869,7 @@
 		},
 		handleName:function(){
 			var name=this.get('name');
-			var nameStr;
+			var nameStr,playerModel;
 			if (this.containBigSmall(name)) {
 				nameStr=opt.i18n.trade[name];
 			}else if(name=='e'){
@@ -981,6 +1001,7 @@
 			this.show();
 			var tv= new TradeView({model: m});
 			var order=m.get('order');
+			tv.$.attr('order',order);
 			//为了排序码
 			for(var i=0,len=this.order.length;i<len;i++){
 				if(order<this.order[i]){
@@ -1034,13 +1055,21 @@
 			var m=this.model;
 			this.listenTo(m, "create", this.addGame);
 			this.listenTo(m, "showhide", this.showhide);
-			this.listenTo(m, "empty", function(){ this.hide(); });
+			this.listenTo(m, "empty", this.removeTab);
 		},
 		render: function() {
 			var i18n = $.extend({},opt.i18n.playlist, this.i18n);
 			this.$.hide().html(sgfmmvc.replace(this.template, i18n));
 			this.fresh = this.$.find('.bt_refurbish');
 			return this;
+		},
+		removeTab:function(){
+				this.hide(); 
+				var gms,tabs=play.tabs;
+				gms=gameTypeModels.getCurrentGameModels();
+				if(gms.length===0){
+					gameTypeModels.closeCurrent();
+				}
 		},
 		addGame: function(m) {
 			var md = this.model.getById(m.gameId),
@@ -1111,7 +1140,11 @@
 		},
 		getCurrentGameModels:function(){
 			var gtm=this.getById(this.currentGameType);
-			return gtm.getAllGameModels();
+			return gtm && gtm.getAllGameModels()||[];
+		},
+		closeCurrent:function(){
+			var m= this.getById(this.currentGameType);
+			m && m.set('close',true);
 		},
 		delNotExistGame:function(tradeArr){
 			var ga,gm,gmId,_gmId,i,j,arr=[],gms=this.getCurrentGameModels();
@@ -1135,11 +1168,11 @@
 	}),
 	TabView = sgfmmvc.View.extend({
 		template: $('#tab_tmpl').html(),
-		tag: 'li',
 		init: function() {
 			this.cls = 'selectTag';
 			this._init();
 			this.listenTo(this.model, "change:isShow", this.showhide);
+			//this.listenTo(this.model, "change:close", this.close);
 		},
 		_init: function() {
 			var html = sgfmmvc.replace(this.template, this.model.getAttrs());
@@ -1167,10 +1200,23 @@
 		showhide: function(name, o, isShow) {
 			this.render();
 			this.model.showhide(isShow);
+		},
+		//收盘操作
+		close:function(name,o,close){
+		if(close){
+			this.hide();
+			var next=this.$.next()||this.$.prev();
+			if(next){
+				next.click();
+			}
+			}else{
+			!o && this.show();
+			}
 		}
 	}),
 	//玩法选项卡视图
 	TabsView = sgfmmvc.View.extend({
+		template: $('#tabs_tmpl').html()||'<ul><li></li><li></li><li></li></ul>',
 		model: gameTypeModels,
 		cls: 'other_play',
 		init: function() {
@@ -1178,6 +1224,7 @@
 			this.i18n = opt.i18n.gameType;
 			this.hide();
 			this.currenTab = null;
+			this.type=[];
 			this.listenTo(m, "create", this.addTypeTab);
 			this.listenTo(m, "showhide", this.showhide);
 		},
@@ -1192,31 +1239,38 @@
 				//如果是同一个标签就不操作
 				if(v.currenTab[0]===this)return;
 				id = v.currenTab.children().attr('typeId');
-				v.model.getById(id).set('isShow', false);
+				var h=v.currenTab.html();
+				prev=v.model.getById(id);
+				prev && prev.set('isShow', false);
 			}
 			//将新的选项卡样式加上
 			typeId = currenTab.children().attr('typeId');
 			v.currenTab = currenTab;
-			md = v.model.getById(typeId).set('isShow', true);
+			md = v.model.getById(typeId);
+			md && md.set('isShow', true);
 
 			gameTypeModels.setCurrentGameType(typeId);
-			dr.firstGetPlaylist();
+			//dr.firstGetPlaylist();
+						dr.getAll();
 		},
 		addTypeTab: function(m) {
-			var typeId = m.typeId,
-			gameTypeModel = this.model.getById(typeId),
-			tv = new TabView({
-				model: gameTypeModel
-			});
-			this.ul.append(tv.render().$);
+			var typeId,gameTypeModel,type,li;
+			typeId = m.typeId;
+			gameTypeModel = this.model.getById(typeId);
+			li=this.li.eq(typeId-1);
+			new TabView({ 
+				model: gameTypeModel,
+				$:li
+			}).render();
 			this.show();
 			if (m.isShow) {
-				this.currenTab = tv.$;
+				this.currenTab = li;
 			}
 		},
 		render: function() {
-			this.ul = $('<ul/>');
-			this.$.append(this.ul);
+			var html = sgfmmvc.replace(this.template,{});
+			this.$.html(html);
+			this.li=this.$.find('li');
 			return this;
 		},
 		showhide: function(name, old, isShow) {
@@ -1306,9 +1360,7 @@
 		},
 		/**显示赛事*/
 		show: function() {
-			new Play({
-				$: this
-			});
+			play=new Play({ $: this });
 		}
 	};
 	$.fn.sgfmplay = function(settings) {
@@ -1432,6 +1484,14 @@
 			var tm = tradeModels.getById(tradeId);
 			return tm.get('name');
 		};
+		//获取比分
+		t.getScore=function(tradeId,splitStr){
+			var s1,s2;
+			splitStr=splitStr||':';
+			s1= playerModels.host.get('goal')||0;
+			s2= playerModels.custom.get('goal')||0;
+			return s1+splitStr+s2;
+		}
 		return t;
 	})(window.tmatch || {});
 })(jQuery, window);

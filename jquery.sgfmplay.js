@@ -68,7 +68,7 @@
 						ds._addType(json.d);
 						dr.getAll();
 					} else {
-						//TODO 跳转至今日赛事页面
+						opt.getAlldataError(json)
 					}
 				}
 			});

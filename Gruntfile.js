@@ -1,6 +1,9 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		qunit:{
+			all:['test/model.html']
+		},
 		uglify: {
 			//文件头部输出信息
 			options: {
@@ -27,6 +30,7 @@ module.exports = function(grunt) {
 	});
 	 // 加载指定插件任务
     grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
  
     // 默认执行的任务
     grunt.registerTask('default', ['uglify:sgfmplay','uglify:mvc']);

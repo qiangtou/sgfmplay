@@ -2,12 +2,12 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		qunit:{
-			all:['test/model.html']
+			all:['test/test.html']
 		},
 		uglify: {
 			//文件头部输出信息
 			options: {
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+				banner: '/*! <%= grunt.template.today("yyyy-mm-dd") %> */\n',
 				report:'min',
 				beautify:{
 					ascii_only:true
@@ -15,15 +15,17 @@ module.exports = function(grunt) {
 			},
 			//具体任务配置
 			sgfmplay: {
-				//源文件
+				options: {
+					banner: '/* jquery.sgfmplay.js <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */\n',
+				},
 				src: 'jquery.sgfmplay.js',
-				//目标文件
 				dest: 'build/jquery.sgfmplay.js'
 			},
 			mvc: {
-				//源文件
+				options: {
+					banner: '/*! sgfmmvc.js <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */\n',
+				},
 				src: 'sgfmmvc.js',
-				//目标文件
 				dest: 'build/sgfmmvc.js'
 			}
 		}
@@ -33,6 +35,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
  
     // 默认执行的任务
-    grunt.registerTask('default', ['uglify:sgfmplay','uglify:mvc']);
+    grunt.registerTask('default', ['uglify:sgfmplay','uglify:mvc','qunit:all']);
 };
 

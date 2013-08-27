@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-23 15:49:53
+ *@date:2013-08-27 10:07:06
  */
 (function($, window) {
 	//多币种处理
@@ -86,9 +86,8 @@
 					if (json.c == 0) {
 						ds.all(json.d);
 						dr.getIncrease(json.v);
-					}else if(json.c==1){
-						//赛事已收盘
-						matchModel.end();
+					}else {
+						opt.getAlldataError(json)
 					}
 				}
 			});
@@ -111,6 +110,8 @@
 				success: function(json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
+					}else{
+						opt.getAlldataError(json)
 					}
 				}
 			});

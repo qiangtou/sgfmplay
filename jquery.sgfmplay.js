@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-08-27 10:07:06
+ *@date:2013-08-30 16:57:14
  */
 (function($, window) {
 	//多币种处理
@@ -93,9 +93,10 @@
 			});
 		},
 		getIncrease: function(v) {
+			//增量的框架和市场请求都不用了
 			//dr.getFrameInfo(v);
 			dr.getGameInfo(v);
-			dr.getMarketInfo(v);
+			//dr.getMarketInfo(v);
 			dr.getPlaylist();
 		},
 		getPlaylist: function() {

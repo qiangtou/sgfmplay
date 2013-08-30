@@ -40,7 +40,7 @@ $('div').sgfmplay({
 		
 		'trade_big' : '大球',
 		'trade_small' : '小球',
-		'trade_trade' : '和局',
+		'trade_draw' : '和局',
 		
 		'top_first' : "上半场",
 		'top_second' : "下半场",

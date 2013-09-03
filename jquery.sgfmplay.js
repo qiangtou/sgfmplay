@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-02 18:02:55
+ *@date:2013-09-03 14:21:36
  */
 (function($, window) {
 	//多币种处理
@@ -86,8 +86,6 @@
 					if (json.c == 0) {
 						ds.all(json.d);
 						dr.getIncrease(json.v);
-					}else {
-						opt.getAlldataError(json)
 					}
 				}
 			});
@@ -111,8 +109,6 @@
 				success: function(json) {
 					if (json.c == 0) {
 						ds._addType(json.d);
-					}else{
-						opt.getAlldataError(json)
 					}
 				}
 			});
@@ -845,13 +841,13 @@
 			return this;
 		},
 		statusChange:function(name,oldVal,newVal){
-			if(newVal && !/^4?[123]$/.test(newVal)){
+			if(newVal && !/^3|4?[123]$/.test(newVal)){
 				var i,gms=gameTypeModels.getCurrentGameModels();
 				for(i=gms.length;i--;){
 					gms[i].destroyAll();
 				}
 				if(typeof opt.matchEnd==='function'){
-					opt.matchEnd.call(null,newVal);
+					opt.matchEnd();
 				}
 			}
 		},

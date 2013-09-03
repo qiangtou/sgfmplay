@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-03 14:21:36
+ *@date:2013-09-03 17:43:53
  */
 (function($, window) {
 	//多币种处理
@@ -676,7 +676,7 @@
 			var m = this.model,
 			location = ["t", "d"]; //主队客队红黄牌上下位置标识
 			var cls = m.get("action") + "_" + location[m.get("type")];
-			this.$.addClass(cls).css("left", m.get("left"));
+			this.$.css('text-align','center').addClass(cls).css("left", m.get("left"));
 		},
 		showTime: function() {
 			$(this).show();
@@ -690,7 +690,7 @@
 			//下半场时间处理
 			isFirst=m.get("isFirst");
 			!isFirst&&(time=45+parseInt(time));
-			this.$.html(time + "'");
+			this.$.data('time',time + "'");
 			return this;
 		}
 	}),
@@ -703,12 +703,22 @@
 			this.render();
 			this.listenTo(this.model, "reset", this.reset);
 		},
+		events:{
+			'span mouseenter':'showTime',
+			'span mouseleave':'hideTime'
+		},
 		render: function() {
 			this.$.html(this.template);
 			var c = this.$.children();
 			this.first = c.eq(0);
 			this.second = c.eq(1);
 			this.showTimeLine(matchModel.get('playTime'),matchModel.get('totalTime'));
+		},
+		hideTime:function(){
+			this.innerHTML='';
+		},
+		showTime:function(){
+			this.innerHTML=$.data(this,'time')||'';
 		},
 		/** 设置时间条颜色
 		*@pram playTime 滚球进行时间，相对全场

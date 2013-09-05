@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-03 17:43:53
+ *@date:2013-09-05 11:29:50
  */
 (function($, window) {
 	//多币种处理
@@ -466,10 +466,8 @@
 			trade,player,gameTypeModel,gamemodels,
 			i18n = opt.i18n.gameType,
 			_defaultType = gameTypeModels.getCurrentGameType();
-
 			//原来的数据与全量对比，找出在全量中不存在的游戏并删除之
 			gameTypeModels.delNotExistGame(tradeArr);
-
 			for (i = 0, len = tradeArr.length; i < len; i++) {
 				//解析交易项数组
 				trade = tradeArr[i];
@@ -533,7 +531,6 @@
 			_opt = opt,
 			gts = gameTypeModels,
 			i18n = _opt.i18n.gameType;
-
 			if (d) {
 				var currentgt=gts.getCurrentGameType();
 				if (!currentgt) {
@@ -791,6 +788,13 @@
 		},
 		end:function(){
 			this.set('mStatus',6);
+		},
+		getMatchName:function(){
+			var p1, p2, p1vsp2;
+			p1 = this.get('p1name');
+			p2 = this.get('p2name');
+			p1vsp2 = p1 + ' VS ' + p2;
+			return p1vsp2;
 		}
 	}),
 	//头部视图，用于显示滚球比分红牌进球等信息
@@ -837,7 +841,6 @@
 				if(time>compareTime)attrs.playTime=compareTime+'+';
 			}
 			html = sgfmmvc.replace(this.template, $.extend({}, attrs, this.i18n));
-
 			if(isRollingBall){
 				timebar=this.timebar.$.detach();
 			}
@@ -862,10 +865,7 @@
 			}
 		},
 		setMatchName: function() {
-			var p1, p2, p1vsp2,m=this.model;
-			p1 = m.get('p1name');
-			p2 = m.get('p2name');
-			p1vsp2 = p1 + ' VS ' + p2;
+			var p1vsp2=this.model.getMatchName();
 			$('#matchName').html(p1vsp2);
 		}
 	}),
@@ -1256,7 +1256,6 @@
 			v.currenTab = currenTab;
 			md = v.model.getById(typeId);
 			md && md.set('isShow', true);
-
 			gameTypeModels.setCurrentGameType(typeId);
 			//dr.firstGetPlaylist();
 						dr.getAll();
@@ -1377,7 +1376,6 @@
 		instence.show.call(this);
 		return this;
 	};
-
 	//外部api扩展
 	window.tmatch = (function(t) {
 		//通过交易项ID获取游戏ID
@@ -1503,13 +1501,11 @@
 		return t;
 	})(window.tmatch || {});
 })(jQuery, window);
-
 /**
  *倒计时插件
  */
 (function($) {
 	var $this,defaults,init,start,clear,restart,control,checkVisible;
-
 	$.fn.countdown = function(settings) {
 		var i,$this, fun;
 		for (i = this.length; i--;) {
@@ -1523,7 +1519,6 @@
 		}
 		return this;
 	};
-
 	defaults = {
 		time: 10,
 		freeze: 3,
@@ -1531,7 +1526,6 @@
 		timeEnd: $.noop,
 		click: $.noop
 	};
-
 
 	init = function(settings) {
 		var opt, _opt, $this;
@@ -1547,10 +1541,8 @@
 		});
 		start.call($this, opt);
 	};
-
 	start = function(opt) {
 		var $this, time, freeze, timeEnd, freezeTime, originVal, circulation,arr;
-
 		$this = this;
 		time = opt.time;
 		freeze = opt.freeze;
@@ -1558,9 +1550,7 @@
 		originVal = opt.originVal;
 		circulation = opt.circulation;
 		freezeTime = Math.max(time - freeze, 0);
-
 		$this.val(time + originVal).attr("disabled", true);
-
 		arr = $this.data("intervalIndex"); 
 		! arr && $this.data("intervalIndex", arr = []);
 		arr.push(setInterval(function() {
@@ -1581,30 +1571,24 @@
 		},
 		1000));
 	};
-
 	clear = function() {
 		var opt=this.data('opt'),arr = this.data("intervalIndex") || [];
 		while(arr.length)clearInterval(arr.pop());
 		opt && this.val(opt.originVal).data("countdown", false);
 		return false;
 	}; 
-
 	restart = function() {
 		clear.call(this);
 		start.call(this, this.data("opt"));
-
 	};
-
 	control = {
 		'stop': clear,
 		'restart': restart
 	};
-
 	checkVisible = function($this) {
 		return $this && $this.is(':visible');
 	};
 })(jQuery);
-
 /**一个延时插件,支持链式调用
  *@example
  *$(obj).w(t).n(fun);延时t秒执行fun

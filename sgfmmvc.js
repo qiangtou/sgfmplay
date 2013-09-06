@@ -2,35 +2,79 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time :2013-09-02 18:02:22
+ *@time :2013-09-06 17:43:55
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
 	var uniqueId=0;
+	var e={
+		/**监听model的相关事件,
+		*@param model 需要监听的model
+		*@param event 监听model的事件名。"change:attr",可以监听model的'attr'属性改变事件
+		*@param callback 监听的回调函数
+		*/
+		listenTo:function (model, event, callback) {
+			if (!model){ return;}
+			var originEvent=event.split(':')[0],//处理change:attr中的change
+			funs=model._listenFuns=model._listenFuns||{};
+
+			funs[event]=funs[event]||[];
+			funs[event].push({c:callback,ctx:this});
+
+			if(!funs[originEvent]){
+				if(model[originEvent]){
+					funs[originEvent]=[{c:model[originEvent],ctx:model}];
+				}
+			}
+			model[originEvent]=function(){
+				var i,len,cbs,cb,ret,_ret,attrEvents;
+				attrEvents=this._listenFuns['change:'+arguments[0]];
+				if(attrEvents){
+					for(i=0,len=attrEvents.length;i<len;i++){
+						cb=attrEvents[i];
+						cb.c.apply(cb.ctx,arguments);
+					}
+				}
+				cbs=this._listenFuns[originEvent]||[];
+				for(i=0,len=cbs.length;i<len;i++){
+					cb=cbs[i];
+					_ret=cb.c.apply(cb.ctx,arguments);
+					if(i==0)ret=_ret;
+				}
+				return ret;
+			}
+		}
+	}
 	//Model类
 	_.Model = function (settings) {
 		settings = settings || {};
-		var attrs = settings.defaults || {};
+		var attrs = this.attrs=settings.defaults || {};
 		// 指定Model的id属性
-		this.idArr = "id";
-		this.hasChange = $.noop;
+		$.extend(this, settings);
+		if(!attrs[this.idArr]){
+			attrs[this.idArr]=uniqueId++;
+		}
+	};
+	$.extend(_.Model.prototype,e,{
+		idArr : "id",
+		hasChange : function(){},
 		//通过属性名取得属性值
-		this.get = function (key) {
-			return attrs[key];
-		};
+		get : function (key) {
+			return this.attrs[key];
+		},
 		//取得属性集合对象
-		this.getAttrs = function () {
-			return attrs;
-		};
+		getAttrs : function () {
+			return this.attrs;
+		},
 		//重置Model的属性
-		this.reset=function(json){
-			attrs={};
+		reset:function(json){
+			this.attrs={};
 			return this.set(json);
-		};
-		
-		var _set = function (k, v) {
+		},
+		_set : function (k, v) {
 			if(!k){return;}
-			var objs,oldVal,newVal,key,changed = false;
+			var objs,oldVal,newVal,key,
+			attrs=this.attrs,changed = false;
 			if (typeof k === "string") {
 				(objs={})[k]=v;
 			}else{
@@ -49,13 +93,16 @@
 				this.hasChange.call(this);
 			}
 			return this;
-		};
+		},
 		//设置Model属性，支持单个key-value,也支持对象集合
-		this.set=this.update=function(k,v){
-			return _set.call(this,k,v);
-		};
+		update:function(k,v){
+			return this._set(k,v);
+		},
+		set:function(k,v){
+			return this._set(k,v);
+		},
 		//向服务器拉数据callback暴露给外部处理响应
-		this.fetch = function (callback) {
+		fetch:function (callback) {
 			var self = this,
 			url = this.url,
 			cb = callback || function (json) {
@@ -66,88 +113,90 @@
 				$.ajax({
 					url : url,
 					success : function (json) {
-						if (typeof callback === "function") {
+						if (typeof cb === "function") {
 							cb.call(self, json);
 						}
 					},
 					dataType : "json"
 				});
 			}
-		};
-		$.extend(this, settings);
-		if(!attrs[this.idArr]){
-			attrs[this.idArr]=uniqueId++;
 		}
-	};
+	});
 //对象集合类
 	_.Models = function (settings) {
-		var models = {},_models = [];
+		this.models = {};
+		this._models = [];
+		//覆盖默认配置
+		$.extend(this, settings);
+		//调用初始化方法
+		this.init.call(this, settings);
+	};
+	$.extend(_.Models.prototype,e,{
 		//集合类型
-		this.model = null;
+		model : null,
 		//初始化方法
-		this.init = $.noop;
-		
+		init:function(){},
 		//创建一个新的model并加入当前集合
-		this.create = function (json) {
+		create:function(json){
 			var m = new this.model({
-					defaults : json
+					defaults:json
 				});
-			return _add.call(this,m);
-		};
-		this.size=function(){
-			return _models.length;
-		}
+			return this._add(m);
+		},
+		size:function(){
+			return this._models.length;
+		},
 		//添加指定的model进入该集合
-		var _add = function (m) {
+		_add : function (m) {
 			var id = m.get(m.idArr);
-			if (!models[id]) {
-				models[id] = m;				
-				_models.push(m);
+			if (!this.models[id]) {
+				this.models[id] = m;				
+				this._models.push(m);
 				this.listenTo(m,"destroy",function(){
 					this.del(m);
 				});
 			}
 			return m;
-		};
-		this.add=function(m){
-			return _add.call(this,m);
-		};
+		},
+		add:function(m){
+			return this._add(m);
+		},
 		//删除指定的model
-		this.del = function (m) {
+		del:function (m) {
 			var i=0,id = m.get(m.idArr);
-			if (models[id]) {
-				delete models[id];
-				while(_models[i++]!==m);
-				_models.splice(--i,1);
+			if (this.models[id]) {
+				delete this.models[id];
+				while(this._models[i++]!==m);
+				this._models.splice(--i,1);
 			}
-			if(_models.length==0)this.empty();
+			if(this._models.length==0)this.empty();
 			return this;
-		};
-		this.empty = function(){
-			_models=[];
-			models={};
-		};
+		},
+		empty : function(){
+			this._models=[];
+			this.models={};
+		},
 		//转换此集合成数组
-		this.toArr = function () {
-			return _models;
-		};
+		toArr : function () {
+			return this._models;
+		},
 		//通过model Id取得model
-		this.getById = function (id) {
-			return models[id];
-		};
+		getById : function (id) {
+			return this.models[id];
+		},
 		//通过集合的索引取得model，很耗性能
-		this.get = function (index) {
-			return models[index];
-		};
-		this.reset=function(mArrs){
+		get : function (index) {
+			return this.models[index];
+		},
+		reset:function(mArrs){
 			this.empty();
 			for(var i=mArrs.length;i--;){
 				this.create(mArrs[i]);
 			}
 			return this;
-		};
+		},
 		//向服务器拉取数据，callback暴露给外部处理响应json
-		this.fetch = function (callback) {
+		fetch : function (callback) {
 			var self = this,
 			url = this.url;
 			if (url) {
@@ -161,84 +210,38 @@
 					dataType : "json"
 				});
 			}
-		};
-		
-		this.listenTo=function(md,method,callback){
-				var id,origin,self;
-				id = md.get(md.idArr);
-				self=this;
-				if (models[id]) {//检测存在否在model
-					origin=md[method]||$.noop;
-					md[method]=function(){
-						var ret=origin.apply(this,arguments);
-						callback.apply(self,arguments);
-						return ret;
-					};
-				}
-		};
+		}
+	});
+	_.View = function (settings) {
+		var tag,cls;
 		//覆盖默认配置
 		$.extend(this, settings);
-		//调用初始化方法
-		this.init.call(this, settings);
-	},
-
-	_.View = function (settings) {
-		var self = this,
-		oldFuns = {},
-		listenFuns = {},
-		changeListenFun;
-		//初始化方法
-		this.init = $.noop;
 		//默认绑定一个空的div给当前视图
-		this.$= $('<div></div>');
-		//默认的渲染方法
-		this.render = $.noop;
+		this.$=this.$||$('<div/>');
+		this.events=this.events||{};
+		//调用初始化方法和添加事件处理
+		//覆盖默认的jquery对象
+		tag=this.tag;
+		tag && (this.$=$("<"+tag+"></"+tag+">"));
+		cls=this.cls;
+		cls && this.$.addClass(cls);
+		this.template=this.template.replace(/[\r\n\t]/g,'');
+		this.init(settings);
+		this.addEvents(settings);
+		this.listenTo(this.model,'destroy',function(keepHtml){ !keepHtml && this.$.remove(); });	
+	};
+	$.extend(_.View.prototype,e,{
+		init:function(){},
+		template:'',
 		//默认的事件集合
-		this.events = {};
-		this.show=function(){
+		show:function(){
 			return this.$.show();
-		};
-		this.hide=function(){
+		},
+		hide:function(){
 			return this.$.hide();
-		};
-		
-		/**监听model的相关事件,
-		*@param model 需要监听的model
-		*@param event 监听model的事件名。"change:attr",可以监听model的'attr'属性改变事件
-		*@param callback 监听的回调函数
-		*/
-		this.listenTo = function (model, event, callback) {
-			if (!model){ return;}
-			var attrArr,
-			attr,
-			oldFun;
-			attrArr = event.split(":");
-			event = attrArr[0];
-			if (event === 'change') {
-				attr = attrArr[1];
-				if (attr) {
-					listenFuns[attr] = callback;
-				}else{
-					changeListenFun=callback;
-				}
-			}
-			oldFun = oldFuns[event] || (oldFuns[event] = model[event]||$.noop);
-			model[event] = function () {
-				var ret,
-				listenFun,
-				key = arguments[0];
-				ret = oldFun && oldFun.apply(model, arguments);
-				if (event === "change") {
-					listenFun = listenFuns[key]||changeListenFun;
-				} else {
-					listenFun = callback;
-				}
-				listenFun && listenFun.apply(self, arguments);
-				return ret;
-			};
-		};
+		},
 		//为视图添加事件处理
-		this.addEvents = function () {
+		addEvents : function () {
 			var es,eventType,selector,eventsStr,fun,
 			events = this.events;
 			for (eventsStr in events) {
@@ -251,30 +254,17 @@
 				}
 				this.$.delegate(selector, eventType, {'view':this},fun);
 			}
-		};
-
-		//覆盖默认配置
-		$.extend(self, settings);
-		//调用初始化方法和添加事件处理
-		//覆盖默认的jquery对象
-		var tag=this.tag;
-		tag && (this.$=$("<"+tag+"></"+tag+">"));
-		var cls=this.cls;
-		cls && this.$.addClass(cls);
-		if(this.template){
-			this.template=this.template.replace(/[\r\n\t]/g,'');
 		}
-		this.init.call(this, settings);
-		this.addEvents.call(this, settings);
-		this.listenTo(this.model,'destroy',function(keepHtml){ !keepHtml && this.$.remove(); });	
-	};
-	//为Model,Models,View添加扩展方法，类似于继承
+	});
 	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
-		var self = this;
-		return function (settings) {
-			return new self($.extend(opt, settings));
+		var parent = this;
+		var child= function () {
+			return parent.apply(this,arguments);
 		};
+		$.extend(child.prototype,parent.prototype,opt);
+		return child;
 	};
+	
 	/** 模板替换函数
 	 *  var tem='{name}<div>{age}</div><span>{score}</span>';
 	 *  var json={name:'tom',age:10,score:99}

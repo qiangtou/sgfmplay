@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-05 11:29:50
+ *@date:2013-09-06 17:57:39
  */
 (function($, window) {
 	//多币种处理
@@ -661,7 +661,7 @@
 		}
 	}),
 	//暴露在外的所有游戏集合
-	allGameModels = GameModels(),
+	allGameModels =new GameModels(),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 		model: sgfmmvc.Model.extend()

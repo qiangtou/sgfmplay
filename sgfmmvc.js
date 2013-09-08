@@ -2,7 +2,7 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time :2013-09-06 17:43:55
+ *@time :2013-09-08 15:54:06
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
@@ -14,34 +14,26 @@
 		*@param callback 监听的回调函数
 		*/
 		listenTo:function (model, event, callback) {
-			if (!model){ return;}
-			var originEvent=event.split(':')[0],//处理change:attr中的change
-			funs=model._listenFuns=model._listenFuns||{};
-
-			funs[event]=funs[event]||[];
-			funs[event].push({c:callback,ctx:this});
-
-			if(!funs[originEvent]){
-				if(model[originEvent]){
-					funs[originEvent]=[{c:model[originEvent],ctx:model}];
+			if (model){
+				var funs=model._listenFuns=model._listenFuns||{},
+				colonIndex=event.indexOf(':');
+				funs[event]=funs[event]||(typeof model[event]=='function'?[{c:model[event],ctx:model}]:[]);
+				funs[event].push({c:callback,ctx:this});
+				if(colonIndex>-1){
+					event=event.slice(0,colonIndex);//提取change:attr中的change
+					funs[event]=funs[event]||(typeof model[event]=='function'?[{c:model[event],ctx:model}]:[]);
 				}
-			}
-			model[originEvent]=function(){
-				var i,len,cbs,cb,ret,_ret,attrEvents;
-				attrEvents=this._listenFuns['change:'+arguments[0]];
-				if(attrEvents){
-					for(i=0,len=attrEvents.length;i<len;i++){
-						cb=attrEvents[i];
-						cb.c.apply(cb.ctx,arguments);
+				model[event]=function(){
+					var i,len,callbacks,cb,ret,_ret,attrEvents;
+					attrEvents=this._listenFuns['change:'+arguments[0]]||[];
+					callbacks=attrEvents.concat(this._listenFuns[event]||[]);
+					for(i=0,len=callbacks.length;i<len;i++){
+						cb=callbacks[i];
+						_ret=cb.c.apply(cb.ctx,arguments);
+						if(attrEvents.length==i)ret=_ret;
 					}
+					return ret;
 				}
-				cbs=this._listenFuns[originEvent]||[];
-				for(i=0,len=cbs.length;i<len;i++){
-					cb=cbs[i];
-					_ret=cb.c.apply(cb.ctx,arguments);
-					if(i==0)ret=_ret;
-				}
-				return ret;
 			}
 		}
 	}
@@ -56,7 +48,7 @@
 		}
 	};
 	$.extend(_.Model.prototype,e,{
-		idArr : "id",
+		idArr:'id',
 		hasChange : function(){},
 		//通过属性名取得属性值
 		get : function (key) {

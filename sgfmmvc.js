@@ -2,7 +2,7 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time :2013-09-08 15:54:06
+ *@time :2013-09-09 17:35:41
  */
 (function ($, window) {
 	var _ = window.sgfmmvc = window.sgfmmvc || {};
@@ -15,24 +15,27 @@
 		*/
 		listenTo:function (model, event, callback) {
 			if (model){
-				var funs=model._listenFuns=model._listenFuns||{},
-				colonIndex=event.indexOf(':');
+				var _event,isAttr,es,funs=model._listenFuns=model._listenFuns||{};
+				isAttr=event.indexOf('change:')==0;
+				es=funs[event];
 				funs[event]=funs[event]||(typeof model[event]=='function'?[{c:model[event],ctx:model}]:[]);
 				funs[event].push({c:callback,ctx:this});
-				if(colonIndex>-1){
-					event=event.slice(0,colonIndex);//提取change:attr中的change
+				if(isAttr){
+					event='change';//提取change:attr中的change
 					funs[event]=funs[event]||(typeof model[event]=='function'?[{c:model[event],ctx:model}]:[]);
 				}
-				model[event]=function(){
-					var i,len,callbacks,cb,ret,_ret,attrEvents;
-					attrEvents=this._listenFuns['change:'+arguments[0]]||[];
-					callbacks=attrEvents.concat(this._listenFuns[event]||[]);
-					for(i=0,len=callbacks.length;i<len;i++){
-						cb=callbacks[i];
-						_ret=cb.c.apply(cb.ctx,arguments);
-						if(attrEvents.length==i)ret=_ret;
+				if(!es){
+					model[event]=function(){
+						var i,len,callbacks,cb,ret,_ret,attrEvents;
+						attrEvents=this._listenFuns['change:'+arguments[0]]||[];
+						callbacks=attrEvents.concat(this._listenFuns[event]||[]);
+						for(i=0,len=callbacks.length;i<len;i++){
+							cb=callbacks[i];
+							_ret=cb.c.apply(cb.ctx,arguments);
+							if(attrEvents.length==i)ret=_ret;
+						}
+						return ret;
 					}
-					return ret;
 				}
 			}
 		}
@@ -54,6 +57,8 @@
 		get : function (key) {
 			return this.attrs[key];
 		},
+		change:function(){},
+		destroy:function(){},
 		//取得属性集合对象
 		getAttrs : function () {
 			return this.attrs;

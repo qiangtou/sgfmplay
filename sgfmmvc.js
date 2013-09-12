@@ -2,10 +2,10 @@
  *轻量级的mvc框架,backbone的简单实现
  *model与view的分离，html代码使用模板统一管理
  *@see http://backbonejs.org/
- *@time :2013-09-09 17:35:41
+ *@time :2013-09-12 10:05:14
  */
 (function ($, window) {
-	var _ = window.sgfmmvc = window.sgfmmvc || {};
+	var _ = window.sgfmmvc||(window.sgfmmvc={});
 	var uniqueId=0;
 	var e={
 		/**监听model的相关事件,
@@ -41,7 +41,7 @@
 		}
 	}
 	//Model类
-	_.Model = function (settings) {
+	var m=_.Model = function (settings) {
 		settings = settings || {};
 		var attrs = this.attrs=settings.defaults || {};
 		// 指定Model的id属性
@@ -50,7 +50,7 @@
 			attrs[this.idArr]=uniqueId++;
 		}
 	};
-	$.extend(_.Model.prototype,e,{
+	$.extend(m.prototype,e,{
 		idArr:'id',
 		hasChange : function(){},
 		//通过属性名取得属性值
@@ -120,7 +120,7 @@
 		}
 	});
 //对象集合类
-	_.Models = function (settings) {
+	var ms=_.Models = function (settings) {
 		this.models = {};
 		this._models = [];
 		//覆盖默认配置
@@ -128,9 +128,9 @@
 		//调用初始化方法
 		this.init.call(this, settings);
 	};
-	$.extend(_.Models.prototype,e,{
+	$.extend(ms.prototype,e,{
 		//集合类型
-		model : null,
+		model : m,
 		//初始化方法
 		init:function(){},
 		//创建一个新的model并加入当前集合
@@ -209,7 +209,7 @@
 			}
 		}
 	});
-	_.View = function (settings) {
+	var v=_.View = function (settings) {
 		var tag,cls;
 		//覆盖默认配置
 		$.extend(this, settings);
@@ -227,7 +227,7 @@
 		this.addEvents(settings);
 		this.listenTo(this.model,'destroy',function(keepHtml){ !keepHtml && this.$.remove(); });	
 	};
-	$.extend(_.View.prototype,e,{
+	$.extend(v.prototype,e,{
 		init:function(){},
 		template:'',
 		//默认的事件集合
@@ -253,7 +253,7 @@
 			}
 		}
 	});
-	_.Model.extend = _.Models.extend = _.View.extend = function (opt) {
+	m.extend = ms.extend = v.extend = function (opt) {
 		var parent = this;
 		var child= function () {
 			return parent.apply(this,arguments);

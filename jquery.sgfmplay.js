@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-10 15:38:02
+ *@date:2013-09-17 17:05:37
  */
 (function($, window) {
 	//多币种处理
@@ -209,7 +209,7 @@
 						       }
 					       }catch(e){
 						       if(typeof(console)==="object"){
-							       conslole.log("errorInfo:["+jqXHR+"]");
+							       console.log("errorInfo:["+jqXHR+"]");
 						       }
 					       }
 				       }
@@ -283,7 +283,7 @@
 				//滚球时间
 				if(typeof(s[7])==="number" && typeof(mStatus)==="number"){
 					o.playTime = (s[7] / 60000) | 0;
-					if(tp.is2nd(mStatus)){o.playTime=o.playTime+45;}
+					tp.is2nd(mStatus)&&(o.playTime+=45);
 				}
 				o['p1goal'] = playerModels.host.get('goal');
 				o['p2goal'] = playerModels.custom.get('goal');
@@ -360,13 +360,9 @@
 				gm = allGameModels.getById(gameId);
 				if(gm){
 					gm.set({ 'gStatus': gStatus });
-				}else{
-					gmChange=true;
 				}
-			}
-			//game若有变化则重新请求框架
-			gmChange && dr.getFrameInfo();
-		},
+				}
+			},
 		//只设置参考赔率
 		setPdata:function(pk){
 			if (!pk) return;

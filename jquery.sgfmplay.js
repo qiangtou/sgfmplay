@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-17 17:05:37
+ *@date:2013-09-18 14:34:19
  */
 (function($, window) {
 	//多币种处理
@@ -579,9 +579,9 @@
 			//新的注额
 			var nBet = Math.ceil(Math.round(bet / multCurr.multRate * 100) / 100);
 			//印尼盾特殊处理
-			if (multCurr.currencyFlag == "IDR") {
-				nBet = Math.ceil(nBet / 1000);
-			}
+			//if (multCurr.currencyFlag == "IDR") {
+			//	nBet = Math.ceil(nBet / 1000);
+			//}
 			return nBet;
 		},
 		getMaxBets: function(bet) {

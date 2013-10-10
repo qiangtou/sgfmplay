@@ -1,6 +1,6 @@
 /**
  *@description: 单场赛事js,包括单式和滚球。
- *@date:2013-09-18 14:34:19
+ *@date:2013-10-10 14:51:01
  */
 (function($, window) {
 	//多币种处理
@@ -154,6 +154,7 @@
 					if(json.d==null){
 						dr.getAll(function(json){
 							if(json.c==1 && typeof opt.matchEnd==='function'){
+								console.log('取状态为空，再取全量');
 								opt.matchEnd();
 							}
 						});
@@ -237,6 +238,8 @@
 			if (matchModel.checkMatch(matchId)) {
 				ds.setTop(frame);
 				tradeArr && ds.setGames(tradeArr);
+				//检测将只有一个交易项的游戏给除掉
+				allGameModels.checkGame();
 			}
 		},
 		setStatus: function(status) {
@@ -661,7 +664,14 @@
 		}
 	}),
 	//暴露在外的所有游戏集合
-	allGameModels =new GameModels(),
+	allGameModels =new GameModels({
+		checkGame:function(){
+				var game,gs=allGameModels.toArr();
+				for(var i=gs.length;i--;){
+					(game=gs[i]) && game.trades.length==1 && game.destroy();
+				}
+		}
+	}),
 	//进球红牌的集合
 	matchEvents = new sgfmmvc.Models({
 		model: sgfmmvc.Model.extend()
@@ -860,6 +870,7 @@
 					gms[i].destroyAll();
 				}
 				if(typeof opt.matchEnd==='function'){
+				console.log('状态变化',newVal);
 					opt.matchEnd();
 				}
 			}
